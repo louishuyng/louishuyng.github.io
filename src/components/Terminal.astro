@@ -1,0 +1,495 @@
+<!-- Right: light-theme terminal panel -->
+<div style="
+  display:flex; flex-direction:column; height:100%;
+  background:#1A1917;
+">
+
+  <!-- ① Window title bar -->
+  <div style="
+    display:flex; align-items:center; gap:8px;
+    padding:10px 16px;
+    background:#262624;
+    border-bottom:1px solid #38352F;
+    flex-shrink:0; user-select:none;
+  ">
+    <span style="width:12px;height:12px;border-radius:50%;background:#FF5F57;flex-shrink:0;"></span>
+    <span style="width:12px;height:12px;border-radius:50%;background:#FFBD2E;flex-shrink:0;"></span>
+    <span style="width:12px;height:12px;border-radius:50%;background:#28C840;flex-shrink:0;"></span>
+    <span style="font-family:'JetBrains Mono';font-size:12px;color:#6B6355;margin-left:10px;letter-spacing:0.02em;">
+      Dev Terminal
+    </span>
+    <div style="margin-left:auto;display:flex;gap:14px;align-items:center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3F3B33" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3F3B33" stroke-width="1.8" stroke-linecap="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+    </div>
+  </div>
+
+  <!-- ② Tab bar -->
+  <div style="
+    display:flex; align-items:stretch;
+    background:#262624; border-bottom:1px solid #38352F;
+    flex-shrink:0; overflow-x:auto;
+  ">
+    <div style="display:flex;align-items:center;gap:2px;padding:0 10px;border-right:1px solid #38352F;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A4640" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A4640" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div style="
+      display:flex; align-items:center; gap:7px;
+      padding:8px 18px;
+      background:#1E1C1A;
+      border-right:1px solid #38352F;
+      border-top:2px solid #5B6AD0;
+      position:relative; flex-shrink:0;
+    ">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6B6355" stroke-width="2" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      <span style="font-family:'JetBrains Mono';font-size:12px;color:#9A9080;white-space:nowrap;">
+        fish
+      </span>
+    </div>
+    <div style="display:flex;align-items:center;padding:0 12px;color:#4A4640;font-size:18px;line-height:1;cursor:default;">+</div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:2px;padding:0 10px;border-left:1px solid #38352F;">
+      <div style="padding:4px 6px;color:#4A4640;font-family:'JetBrains Mono';font-size:11px;">⊞</div>
+      <div style="padding:4px 6px;color:#4A4640;font-family:'JetBrains Mono';font-size:11px;">⊡</div>
+    </div>
+  </div>
+
+  <!-- ③ Breadcrumb -->
+  <div style="
+    padding:5px 20px; background:#1E1C1A;
+    border-bottom:1px solid #38352F;
+    font-family:'JetBrains Mono'; font-size:11px;
+    color:#4A4640; flex-shrink:0;
+    display:flex; align-items:center; gap:6px;
+  ">
+    <span>louishuyng</span>
+    <span style="color:#38352F;">›</span>
+    <span>dev</span>
+    <span style="color:#38352F;">›</span>
+    <span style="color:#6B6355;">experience.go</span>
+  </div>
+
+  <!-- ④ Terminal output -->
+  <div id="term-output" style="
+    flex:1; overflow-y:auto; padding:18px 22px 8px;
+    font-family:'JetBrains Mono'; font-size:13.5px; line-height:1.85;
+    color:#CFC8BA; background:#1A1917;
+  "></div>
+
+  <!-- ⑤ Input area -->
+  <div style="background:#1A1917; padding:0 22px 12px; flex-shrink:0; border-top:1px solid #2C2A26;">
+    <div id="term-sugg" style="
+      display:none; flex-wrap:wrap; gap:5px;
+      margin-bottom:7px; padding-top:7px;
+      border-top:1px solid #38352F;
+    "></div>
+    <div style="display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono'; font-size:13.5px;">
+      <span style="color:#5B6AD0; flex-shrink:0; font-size:14px;">❯</span>
+      <div style="display:flex; align-items:center; flex:1; min-width:0;">
+        <span id="term-typed" style="color:#E8E2D5; white-space:pre;"></span>
+        <span id="term-ghost" style="color:#3F3B33; white-space:pre;"></span>
+        <span id="term-cur" style="color:#5B6AD0; flex-shrink:0; animation:blink 1.1s step-end infinite;">█</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ Status bar -->
+  <div style="
+    display:flex; align-items:center;
+    padding:4px 14px;
+    background:#262624; border-top:1px solid #38352F;
+    font-family:'JetBrains Mono'; font-size:11px; color:#5A5449;
+    flex-shrink:0; gap:18px; user-select:none;
+  ">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5A5449" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+      <span>try-fail-loop</span>
+    </div>
+    <span style="color:#38352F;">·</span>
+    <span>Tab: autocomplete</span>
+    <span style="color:#38352F;">·</span>
+    <span>↑↓: history</span>
+    <div style="margin-left:auto;display:flex;gap:14px;">
+      <span>utf-8</span>
+      <span style="color:#38352F;">LF</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { animate } from 'motion';
+
+  const out    = document.getElementById('term-output')!;
+  const typed  = document.getElementById('term-typed')!;
+  const ghost  = document.getElementById('term-ghost')!;
+  const suggEl = document.getElementById('term-sugg')!;
+
+  let buf   = '';
+  let hist: string[] = [];
+  let hIdx  = -1;
+  let tabIdx = -1;
+  let tabBase = '';
+
+  // ── color helpers ─────────────────────────────────────────────
+  const esc = (s: string) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const C = (col: string, s: string) => `<span style="color:${col};">${esc(s)}</span>`;
+  const g  = (s: string) => C('#87BA87', s);   // green  — success / active
+  const bl = (s: string) => C('#78AAD6', s);   // blue   — functions / vars
+  const p  = (s: string) => C('#B08FD0', s);   // purple — keywords
+  const r  = (s: string) => C('#D97070', s);   // red    — errors
+  const y  = (s: string) => C('#D4A96A', s);   // yellow — types / constants
+  const cy = (s: string) => C('#5AACB8', s);   // cyan   — operators
+  const w  = (s: string) => C('#E8E2D5', s);   // bright text
+  const d  = (s: string) => C('#5A5449', s);   // comments / dim
+  const m  = (s: string) => C('#CFC8BA', s);   // normal text
+  const cu = (s: string) => C('#5B6AD0', s);   // accent / prompt
+  const link = (url: string, label: string) =>
+    `<a href="${esc(url)}" target="_blank" rel="noopener" style="color:#78AAD6;text-decoration:underline;text-underline-offset:3px;" onmouseover="this.style.color='#87BA87'" onmouseout="this.style.color='#78AAD6'">${esc(label)}</a>`;
+
+  // ── line renderer ─────────────────────────────────────────────
+  async function addLine(html = '', delayS = 0) {
+    const div = document.createElement('div');
+    div.style.cssText = 'line-height:1.85; opacity:0;';
+    div.innerHTML = html;
+    out.appendChild(div);
+    await animate(div, { opacity:[0,1], x:[-4,0] },
+      { duration:0.10, delay:delayS, easing:[0.16,1,0.3,1] }).finished;
+    out.scrollTop = out.scrollHeight;
+  }
+
+  const blank   = () => addLine('');
+  const sep     = () => addLine(`${d('─'.repeat(58))}`);
+  const divider = () => addLine(`<span style="color:#E4E4E7;user-select:none;">${'─'.repeat(58)}</span>`);
+  const echo    = (cmd: string) => addLine(`${cu('❯')} ${m(cmd)}`);
+
+  // ── data ─────────────────────────────────────────────────────
+  const JOBS = [
+    { role:'Solution Architect',     co:'Regask',        coKey:'regask',  period:'Jul 2025 → Present', active:true, bullets:[
+      'Knative + K8s: infra costs ↓30%, scaled to 100K RPS',
+      'Grafana Cloud: SLO baselines + anomaly detection alerts',
+      'Redis write-behind caching: 10K → 100K RPS throughput',
+      'Crossplane + Terraform: unified K8s provisioning',
+      'Internal mesh simulator: issue resolution time ↓20%',
+    ]},
+    { role:'Senior Software Engineer', co:'Regask',      coKey:'regask',  period:'Feb 2024 — Jul 2025', active:false, bullets:[
+      'Azure HA fault-tolerant system with full redundancy',
+      'Okta SSO (SAML + OIDC) across all enterprise services',
+      'Go rewrites of Node.js services: memory usage ↓50–60%',
+      'Technical Solution Docs: reduced review back-and-forth',
+    ]},
+    { role:'Senior Software Engineer', co:'PerxTech',    coKey:'perxtech', period:'Jan 2022 — Sept 2023', active:false, bullets:[
+      'Led 5-person team: Kafka + AWS Step Functions orchestration',
+      'Ruby servers: 10K req/s throughput',
+      'Traefik API Gateway: centralized routing + load balancing',
+      'ETL pipeline: 5h → 15 min/GB — 95% reduction',
+    ]},
+    { role:'Full Stack Engineer',    co:'Oivan',          coKey:'oivan',   period:'Jan 2021 — Jan 2022', active:false, bullets:[
+      'Led 2–3 engineers on Saudi real estate microservices platform',
+      'gRPC for low-latency internal communication',
+      'Query latency: 3s → 500ms',
+    ]},
+    { role:'Full Stack Engineer',    co:'Nucleus Studio', coKey:'nucleus', period:'Jan 2020 — Jan 2021', active:false, bullets:[
+      'React Native apps with Firebase + GCP + AWS',
+      'NestJS backend + RTC livestream / video call features',
+    ]},
+    { role:'Platform Developer',     co:'Aleph Labs',     coKey:'aleph',   period:'Jan 2018 — Jan 2020', active:false, bullets:[
+      'Reusable component library used across multiple teams',
+      'Auth API design + SDK for front-end/back-end integration',
+    ]},
+  ];
+
+  const STACKS: [string,string][] = [
+    ['BACKEND',       'Go · Ruby · Node.js · NestJS · gRPC'],
+    ['CLOUD',         'AWS · Azure · GCP'],
+    ['DEVOPS',        'Kubernetes · Knative · Terraform · Crossplane'],
+    ['DATA',          'Kafka · Redis · PostgreSQL · ETL Pipelines'],
+    ['OBSERVABILITY', 'Grafana · SLO · Anomaly Detection'],
+    ['ARCHITECTURE',  'Microservices · Event-Driven · API Design'],
+    ['MOBILE',        'React Native · Angular'],
+  ];
+
+  const CERTS = [
+    { name:'Claude Code In Action', issuer:'Anthropic / Skilljar', url:'https://verify.skilljar.com/c/jfnifed5mprf' },
+    { name:'Cloud Badges (AWS · Azure · GCP)', issuer:'Credly', url:'https://www.credly.com/users/nguyen-louis/badges#credly' },
+  ];
+
+  const LINKS = [
+    { label:'GitHub',   url:'https://github.com/louishuyng',           disp:'github.com/louishuyng' },
+    { label:'LinkedIn', url:'https://www.linkedin.com/in/louishuyng/', disp:'linkedin.com/in/louishuyng' },
+    { label:'Raycast',  url:'https://www.raycast.com/louishuyng',      disp:'raycast.com/louishuyng' },
+    { label:'Certificates', url:'https://www.credly.com/users/nguyen-louis/badges#credly', disp:'credly.com/users/nguyen-louis' },
+    { label:'Email',    url:'mailto:huynguyennbk@gmail.com',           disp:'huynguyennbk@gmail.com' },
+  ];
+
+  // ── command handlers ─────────────────────────────────────────
+  async function cmdHelp() {
+    await blank();
+    await addLine(g('Commands'));
+    await sep();
+    const rows: [string,string][] = [
+      ['help',              'Show this message'],
+      ['info',              'About Louis Huy Nguyen'],
+      ['exp job <company>', 'Detailed view for a company'],
+      ['exp stacks',        'Tech stack by category'],
+      ['exp years',         'Career timeline 2018 → present'],
+      ['certs',             'Professional certifications'],
+      ['links',             'GitHub · LinkedIn · Raycast · Certificates'],
+      ['download',          'Download CV / cover letter'],
+      ['clear',             'Clear terminal'],
+    ];
+    for (const [cmd, desc] of rows) {
+      await addLine(`  ${p(cmd.padEnd(22))} ${d('─')}  ${m(desc)}`);
+    }
+    await blank();
+  }
+
+  async function cmdInfo() {
+    await blank();
+    await addLine(`${w('Louis Huy Nguyen')}  ${d('·')}  ${bl('Software Architect')}`);
+    await addLine(d('Vietnam  ·  huynguyennbk@gmail.com'));
+    await blank();
+    await addLine(m('8+ years designing scalable cloud architectures.'));
+    await addLine(`${m('Built systems handling')} ${g('100K RPS')}${m('. Passionate')}`);
+    await addLine(m('about Kubernetes, open source, and infra at scale.'));
+    await blank();
+  }
+
+  // exp job <company> — detailed
+  async function cmdExpJobCompany(query: string) {
+    const q = query.toLowerCase().trim();
+    const matches = JOBS.filter(j => j.coKey.includes(q) || j.co.toLowerCase().includes(q));
+    if (!matches.length) {
+      await blank();
+      await addLine(`${r('no match for')} ${w(query)}`);
+      await addLine(`  ${d('try:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>p(k)).join('  ')}`);
+      await blank();
+      return;
+    }
+    await blank();
+    for (let i = 0; i < matches.length; i++) {
+      const j = matches[i];
+      const dot = j.active
+        ? `<span style="color:#98c379;animation:blink 2s ease infinite;">●</span>`
+        : `<span style="color:#3e4451;">○</span>`;
+      await addLine(`${dot} ${j.active ? g(j.role) : w(j.role)}`);
+      await addLine(`  ${d('@')} ${bl(j.co)}  ${d('·')}  ${d(j.period)}`);
+      await blank();
+      for (const bul of j.bullets) {
+        await addLine(`  ${d('▸')} ${m(bul)}`);
+      }
+      if (i < matches.length - 1) {
+        await blank();
+        await addLine(`  ${d('· · ·')}`);
+      }
+      await blank();
+    }
+  }
+
+  async function cmdExpStacks() {
+    await blank();
+    await addLine(g('Tech Stack'));
+    await sep();
+    for (const [cat, val] of STACKS) {
+      await addLine(`  ${cy(cat.padEnd(15))} ${d(val)}`);
+    }
+    await blank();
+  }
+
+  async function cmdExpYears() {
+    await blank();
+    await addLine(`  ${d('2018')} ${d('─────────────────────────────────')} ${g('now')}`);
+    await blank();
+    for (const [date, role, co] of [
+      ['Jan 2018','Platform Developer',   'Aleph Labs'],
+      ['Jan 2020','Full Stack Engineer',  'Nucleus Studio'],
+      ['Jan 2021','Full Stack Engineer',  'Oivan'],
+      ['Jan 2022','Senior SWE',           'PerxTech'],
+      ['Feb 2024','Senior SWE',           'Regask'],
+      ['Jul 2025','Solution Architect',   'Regask  ← current'],
+    ]) {
+      await addLine(`  ${d(date)}  ${p('→')}  ${w(role)}  ${d('@ ')}${bl(co)}`);
+    }
+    await blank();
+  }
+
+  async function cmdExp(args: string) {
+    const sub = args.trim().toLowerCase();
+    if (sub === 'stacks')            return cmdExpStacks();
+    if (sub === 'years')             return cmdExpYears();
+    if (sub.startsWith('job '))      return cmdExpJobCompany(sub.slice(4));
+    if (!sub) {
+      await blank();
+      await addLine(`${d('Usage:')}  ${p('exp job <company>')}  ${d('·')}  ${p('exp stacks')}  ${d('·')}  ${p('exp years')}`);
+      await addLine(`  ${d('Companies:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>p(k)).join(d('  ·  '))}`);
+      await blank();
+      return;
+    }
+    // fallback: treat as company name
+    return cmdExpJobCompany(sub);
+  }
+
+  async function cmdCerts() {
+    await blank();
+    await addLine(g('Certifications'));
+    await sep();
+    for (const c of CERTS) {
+      await addLine(`  ${y('●')} ${w(c.name)}`);
+      await addLine(`    ${d(c.issuer)}  ${link(c.url, '↗ view credential')}`);
+      await blank();
+    }
+  }
+
+  async function cmdDownload() {
+    await blank();
+    await addLine(g('Download'));
+    await sep();
+    const files = [
+      { label:'CV / Resume',    file:'cv.pdf',           name:'Louis_Nguyen_Software_Engineer.pdf' },
+      { label:'Cover Letter',   file:'cover-letter.pdf', name:'Louis_Huy_Nguyen_Cover_Letter.pdf'  },
+    ];
+    for (const f of files) {
+      await addLine(`  ${p('●')} ${w(f.label.padEnd(14))}  <a href="/${f.file}" download="${f.name}" style="color:#61afef;text-decoration:underline;text-underline-offset:3px;" onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#61afef'">↓ download</a>`);
+    }
+    await blank();
+  }
+
+  async function cmdLinks() {
+    await blank();
+    await addLine(g('Links'));
+    await sep();
+    for (const l of LINKS) {
+      await addLine(`  ${p('●')} ${w(l.label.padEnd(10))}  ${link(l.url, l.disp + ' ↗')}`);
+    }
+    await blank();
+  }
+
+  // ── execute ──────────────────────────────────────────────────
+  async function withDivider(fn: () => Promise<void>) {
+    await fn();
+    await divider();
+    await blank();
+  }
+
+  async function execute(raw: string) {
+    const cmd = raw.trim().toLowerCase();
+    await echo(raw.trim());
+    if (!cmd) return;
+    if (cmd === 'clear') { out.innerHTML = ''; return; }
+    if (cmd === 'help')                          return withDivider(cmdHelp);
+    if (cmd === 'info')                          return withDivider(cmdInfo);
+    if (cmd === 'certs')                         return withDivider(cmdCerts);
+    if (cmd === 'links')                         return withDivider(cmdLinks);
+    if (cmd === 'download')                      return withDivider(cmdDownload);
+    if (cmd === 'exp' || cmd.startsWith('exp ')) return withDivider(() => cmdExp(cmd.slice(3)));
+    await blank();
+    await addLine(`${r('command not found:')} ${d(raw.trim())}  ${d('— try')} ${p('help')}`);
+    await blank();
+    await divider();
+    await blank();
+  }
+
+  // ── autocomplete ─────────────────────────────────────────────
+  const ALL = [
+    'help','info','certs','links','download','clear',
+    'exp','exp stacks','exp years',
+    'exp job regask','exp job perxtech','exp job oivan','exp job nucleus','exp job aleph',
+  ];
+
+  function getMatches(b: string) {
+    if (!b) return [];
+    return ALL.filter(c => c.startsWith(b) && c !== b);
+  }
+  function ghostText(b: string) {
+    const ms = getMatches(b);
+    return ms.length === 1 ? ms[0].slice(b.length) : '';
+  }
+  function renderSugg(b: string) {
+    const ms = getMatches(b);
+    if (ms.length <= 1 || !b) { suggEl.style.display = 'none'; return; }
+    suggEl.innerHTML = ms.map(c =>
+      `<span class="sc" data-c="${esc(c)}" style="
+        font-family:'JetBrains Mono';font-size:11px;padding:3px 9px;
+        border:1px solid #38352F;color:#5B6AD0;cursor:pointer;background:#262624;
+        border-radius:4px;transition:all 0.12s;
+      ">${esc(c)}</span>`
+    ).join('');
+    suggEl.style.display = 'flex';
+    animate(suggEl, { opacity:[0,1], y:[3,0] }, { duration:0.15, easing:[0.16,1,0.3,1] });
+    suggEl.querySelectorAll<HTMLElement>('.sc').forEach(ch => {
+      ch.onmouseover = () => { ch.style.background='rgba(218,119,86,0.12)'; ch.style.borderColor='#5B6AD0'; };
+      ch.onmouseout  = () => { ch.style.background='#262624'; ch.style.borderColor='#38352F'; };
+      ch.onclick     = () => { buf = ch.dataset.c!; render(); };
+    });
+  }
+
+  function render() {
+    typed.textContent = buf;
+    ghost.textContent = ghostText(buf);
+    renderSugg(buf);
+  }
+
+  // ── keyboard ─────────────────────────────────────────────────
+  window.addEventListener('keydown', async e => {
+    // Ctrl+L — reset terminal to boot state
+    if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+      e.preventDefault();
+      out.innerHTML = '';
+      buf = ''; hIdx = -1; render();
+      suggEl.style.display = 'none';
+      boot();
+      return;
+    }
+    if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      buf += e.key; hIdx = -1; tabIdx = -1; tabBase = '';
+      animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
+      render();
+    } else if (e.key === 'Backspace') {
+      buf = buf.slice(0,-1); hIdx = -1; tabIdx = -1; tabBase = ''; render();
+    } else if (e.key === 'Enter') {
+      const cmd = buf;
+      if (cmd.trim()) hist.unshift(cmd.trim());
+      buf = ''; hIdx = -1; tabIdx = -1; tabBase = ''; render();
+      suggEl.style.display = 'none';
+      await execute(cmd);
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      // On first Tab, snapshot the base; on subsequent Tabs, cycle from that base
+      if (tabIdx === -1) tabBase = buf;
+      const ms = getMatches(tabBase);
+      if (!ms.length) { render(); return; }
+      tabIdx = (tabIdx + 1) % ms.length;
+      buf = ms[tabIdx];
+      render();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (hIdx < hist.length-1) { buf = hist[++hIdx]; render(); }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      hIdx > 0 ? (buf = hist[--hIdx]) : (hIdx = -1, buf = '');
+      render();
+    }
+  });
+
+  // ── boot ─────────────────────────────────────────────────────
+  const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
+
+  async function boot() {
+    const lines = [
+      `<img src="/avatar.jpg" onerror="this.style.display='none'" style="width:96px;height:96px;object-fit:cover;display:block;border-radius:4px;border:1px solid #3e4451;margin-bottom:4px;" />`,
+      ``,
+      `${bl('Software Architect')}  ${d('·')}  ${m('Vietnam')}  ${d('·')}  ${g('8+ yrs')}`,
+      `${bl('Go')}  ${d('·')}  ${r('Ruby')}  ${d('·')}  ${g('Node.js')}  ${d('·')}  ${y('AWS')}  ${d('·')}  ${p('K8s')}  ${d('·')}  ${cu('Azure')}`,
+      ``,
+      `${d('type')} ${p('help')} ${d('to explore')}`,
+    ];
+
+    for (const html of lines) {
+      await addLine(html);
+    }
+    await blank();
+    await sep();
+    await blank();
+  }
+
+  boot();
+</script>

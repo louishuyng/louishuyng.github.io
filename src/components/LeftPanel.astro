@@ -1,0 +1,252 @@
+<!-- Left identity panel — Zen browser light aesthetic -->
+<aside id="left-panel" style="
+  display:flex; flex-direction:column; justify-content:space-between;
+  height:100%; padding:2.5rem 2.75rem;
+  background:#F0EBE0;
+  overflow-y:hidden; position:relative;
+  border-right:1px solid #D9D0C0;
+">
+
+  <div style="position:relative;">
+
+    <!-- Logo + hire me -->
+    <div id="lp-logo" style="opacity:0; display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem;">
+      <span style="
+        font-family:'JetBrains Mono'; font-size:11px;
+        letter-spacing:0.18em; color:#9A9080; text-transform:uppercase;
+      ">louishuyng<span style="color:#5B6AD0; animation:blink 1s step-end infinite;">_</span></span>
+
+      <a href="mailto:huynguyennbk@gmail.com" class="hire-btn" style="
+        font-family:'DM Sans'; font-size:11px; font-weight:500;
+        letter-spacing:0.06em; text-transform:uppercase;
+        color:#3A332A; background:#E3DDD0;
+        padding:7px 18px; text-decoration:none; border-radius:100px;
+        border:1px solid #CFC6B2; transition:all 0.2s;
+      ">Hire me →</a>
+    </div>
+
+    <!-- Availability pill -->
+    <div id="lp-avail" style="opacity:0; display:inline-flex; align-items:center; gap:7px; margin-bottom:2.5rem;
+      padding:5px 13px; border-radius:100px; border:1px solid #CFC6B2; background:#E3DDD0;">
+      <span style="
+        width:6px; height:6px; border-radius:50%; flex-shrink:0;
+        background:#22c55e; box-shadow:0 0 5px rgba(34,197,94,0.7);
+        animation:breathe-bright 2.4s ease infinite;
+      "></span>
+      <span style="font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; color:#7A7060;">
+        Open to opportunities
+      </span>
+    </div>
+
+    <!-- Name -->
+    <h1 id="lp-name" style="opacity:1; line-height:0.9; margin-bottom:1.5rem;">
+      <span id="name-line1" style="
+        display:block; font-family:'JetBrains Mono',monospace; font-weight:600;
+        font-size:clamp(3rem,5.2vw,5rem); color:#1A1512; letter-spacing:-0.02em;
+      "></span>
+      <span id="name-line2" style="
+        display:block; font-family:'JetBrains Mono',monospace; font-weight:600;
+        font-size:clamp(3rem,5.2vw,5rem); color:#5B6AD0; letter-spacing:-0.02em;
+      "></span>
+    </h1>
+
+    <!-- Divider -->
+    <div id="lp-rule" style="
+      opacity:0; height:1px; max-width:160px; margin-bottom:1.25rem;
+      background:linear-gradient(90deg, #CFC6B2 0%, transparent 100%);
+    "></div>
+
+    <!-- Morphing role -->
+    <div id="lp-role" style="opacity:0; position:relative; height:26px; overflow:hidden; margin-bottom:1.75rem;">
+      <span id="morph-a" style="
+        position:absolute; inset:0; display:flex; align-items:center;
+        font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.06em; color:#7A7060;
+      ">Software Architect</span>
+      <span id="morph-b" style="
+        position:absolute; inset:0; display:flex; align-items:center;
+        font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.06em; color:#7A7060;
+        transform:translateY(110%); opacity:0; filter:blur(4px);
+      ">Cloud Engineer</span>
+    </div>
+
+    <!-- Bio -->
+    <p id="lp-bio" style="
+      opacity:0; font-family:'DM Sans'; font-size:16px; line-height:1.8; font-weight:400;
+      color:#5A4E3E; max-width:300px; margin-bottom:2.5rem;
+    ">
+      <span id="bio-text"></span><span id="bio-cursor" style="color:#5B6AD0; animation:blink 1s step-end infinite; display:none;">▌</span>
+    </p>
+
+    <!-- Stats -->
+    <div id="lp-stats" style="opacity:0; display:flex; gap:1rem; margin-bottom:2.5rem;">
+      {[
+        { n:'8+', l:'Years' },
+        { n:'∞',  l:'Scale' },
+      ].map(s => (
+        <div style="
+          padding:0.9rem 1.4rem; background:#E3DDD0;
+          border:1px solid #CFC6B2; border-radius:10px;
+        ">
+          <div style="font-family:'JetBrains Mono'; font-weight:600; font-size:1.9rem; color:#0F0F0F; line-height:1;">{s.n}</div>
+          <div style="font-family:'JetBrains Mono'; font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:#9A8E7A; margin-top:5px;">{s.l}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Links -->
+  <div id="lp-links" style="opacity:0;">
+    <div style="font-family:'JetBrains Mono'; font-size:8.5px; letter-spacing:0.26em; text-transform:uppercase; color:#B5A898; margin-bottom:12px;">
+      Find me at
+    </div>
+    <div style="display:flex; flex-direction:column; gap:7px;">
+      {[
+        { href:'https://github.com/louishuyng',           label:'GitHub'       },
+        { href:'https://www.linkedin.com/in/louishuyng/', label:'LinkedIn'     },
+        { href:'https://www.raycast.com/louishuyng',      label:'Raycast'      },
+        { href:'https://www.credly.com/users/nguyen-louis/badges#credly', label:'Certificates' },
+      ].map(l => (
+        <a
+          href={l.href}
+          target={l.href.startsWith('http') ? '_blank' : undefined}
+          rel="noopener"
+          class="lp-link"
+          style="
+            font-family:'DM Sans'; font-size:14px; font-weight:400;
+            color:#7A7060; text-decoration:none;
+            display:flex; align-items:center; gap:10px;
+            width:fit-content; transition:color 0.18s;
+          "
+        >
+          <span class="lp-tick" style="
+            width:12px; height:1px; background:#CFC6B2; flex-shrink:0;
+            transition:width 0.25s cubic-bezier(0.16,1,0.3,1), background 0.18s;
+          "></span>
+          {l.label}
+        </a>
+      ))}
+    </div>
+
+    <div style="margin-top:2rem; font-family:'JetBrains Mono'; font-size:11px; color:#B5A898; letter-spacing:0.03em;">
+      Type <span style="color:#5B6AD0;">help</span> in the terminal →
+    </div>
+  </div>
+</aside>
+
+<style>
+  .hire-btn:hover { background:#5B6AD0 !important; color:#fff !important; border-color:#5B6AD0 !important; }
+  .lp-link:hover  { color:#1A1512 !important; }
+  .lp-link:hover .lp-tick { width:24px !important; background:#5B6AD0 !important; }
+</style>
+
+<script>
+  import { animate } from 'motion';
+
+  const ease = [0.16, 1, 0.3, 1] as [number,number,number,number];
+  const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
+
+  // ── Scramble animation ────────────────────────────────────────
+  const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@!$%';
+  function scrambleTo(el: HTMLElement, target: string, duration = 1.1): Promise<void> {
+    return new Promise(resolve => {
+      const total = Math.ceil(duration * 60);
+      let frame = 0;
+      function tick() {
+        const progress = frame / total;
+        let result = '';
+        for (let i = 0; i < target.length; i++) {
+          if (target[i] === ' ') {
+            result += ' ';
+          } else if (progress >= (i + 1) / target.length) {
+            result += target[i];
+          } else {
+            result += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          }
+        }
+        el.textContent = result;
+        frame++;
+        if (frame <= total) requestAnimationFrame(tick);
+        else { el.textContent = target; resolve(); }
+      }
+      el.textContent = GLYPHS[0];
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // ── Typewriter animation ──────────────────────────────────────
+  async function typewriter(textEl: HTMLElement, cursorEl: HTMLElement, segments: {text: string, style?: string}[], speed = 28) {
+    cursorEl.style.display = 'inline';
+    for (const seg of segments) {
+      const span = document.createElement('span');
+      if (seg.style) span.setAttribute('style', seg.style);
+      textEl.appendChild(span);
+      for (const ch of seg.text) {
+        span.textContent += ch;
+        await sleep(speed);
+      }
+    }
+    await sleep(600);
+    cursorEl.style.display = 'none';
+  }
+
+  // ── Fade-in sequence ─────────────────────────────────────────
+  const fadeItems: [string, number][] = [
+    ['#lp-logo',   0],
+    ['#lp-avail',  120],
+    ['#lp-rule',   1500],
+    ['#lp-role',   1600],
+    ['#lp-stats',  1800],
+    ['#lp-links',  1950],
+  ];
+
+  fadeItems.forEach(([sel, delay]) => {
+    const el = document.querySelector<HTMLElement>(sel);
+    if (!el) return;
+    animate(el, { opacity:[0,1], y:[18,0] }, { duration:0.65, delay:delay/1000, easing:ease });
+  });
+
+  // ── Name scramble ─────────────────────────────────────────────
+  const line1 = document.getElementById('name-line1') as HTMLElement;
+  const line2 = document.getElementById('name-line2') as HTMLElement;
+
+  setTimeout(async () => {
+    await Promise.all([
+      scrambleTo(line1, 'LOUIS HUY', 1.0),
+      scrambleTo(line2, 'NGUYEN', 0.85),
+    ]);
+
+    // Bio typewriter after name settles
+    const bioEl   = document.getElementById('lp-bio') as HTMLElement;
+    const bioText = document.getElementById('bio-text') as HTMLElement;
+    const bioCur  = document.getElementById('bio-cursor') as HTMLElement;
+    animate(bioEl, { opacity:[0,1] }, { duration:0.3, easing:ease });
+    await typewriter(bioText, bioCur, [
+      { text:'Senior engineer with ' },
+      { text:'8+ years', style:'color:#1A1512;font-weight:600;' },
+      { text:' designing scalable cloud architectures. Built systems handling ' },
+      { text:'100K RPS', style:'color:#1A1512;font-weight:600;' },
+      { text:'. Passionate about Kubernetes and open source.' },
+    ], 22);
+  }, 200);
+
+  // ── Role morph ────────────────────────────────────────────────
+  const roles = ['Software Architect','Cloud Engineer','System Designer','Open Source Dev','K8s Enthusiast'];
+  let idx = 0;
+  const a = document.getElementById('morph-a')!;
+  const b = document.getElementById('morph-b')!;
+  let active = a, incoming = b;
+
+  async function morph() {
+    idx = (idx + 1) % roles.length;
+    incoming.textContent = roles[idx];
+    await Promise.all([
+      animate(active,   { y:[0,-110], opacity:[1,0], filter:['blur(0px)','blur(5px)'] },
+        { duration:0.36, easing:[0.4,0,0.6,1] }).finished,
+      animate(incoming, { y:[110,0],  opacity:[0,1], filter:['blur(5px)','blur(0px)'] },
+        { duration:0.44, easing:ease }).finished,
+    ]);
+    [active, incoming] = [incoming, active];
+    setTimeout(morph, 3200);
+  }
+  setTimeout(morph, 3400);
+</script>

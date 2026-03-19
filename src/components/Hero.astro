@@ -1,0 +1,146 @@
+<section id="hero" class="relative min-h-screen flex flex-col justify-center bg-[#F8F7F4] pt-20 overflow-hidden">
+
+  <!-- Subtle grid lines (architectural) -->
+  <div class="absolute inset-0 pointer-events-none opacity-[0.035]"
+    style="background-image: linear-gradient(#0A0A0A 1px, transparent 1px), linear-gradient(90deg, #0A0A0A 1px, transparent 1px); background-size: 80px 80px;">
+  </div>
+
+  <!-- Large ghosted year marker -->
+  <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[18vw] font-black text-[#0A0A0A] opacity-[0.03] leading-none select-none pointer-events-none font-sans tracking-tighter">
+    7+
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 w-full py-16">
+
+    <!-- Eyebrow -->
+    <div id="hero-eyebrow" class="font-mono text-xs tracking-[0.22em] uppercase text-[#64748B] mb-8 opacity-0" style="animation: slideIn 0.5s ease 0.1s forwards;">
+      <span class="inline-flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" style="animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>
+        Software Architect · Vietnam · Open to opportunities
+      </span>
+    </div>
+
+    <!-- Name — editorial stacked -->
+    <h1 class="font-black leading-[0.88] tracking-[-0.03em] text-[#0A0A0A] mb-0 select-none">
+      <span class="block text-[13vw] md:text-[11vw] lg:text-[9.5vw] reveal-line" data-delay="150">LOUIS HUY</span>
+      <div class="flex items-end justify-between flex-wrap gap-4">
+        <span class="block text-[13vw] md:text-[11vw] lg:text-[9.5vw] reveal-line" data-delay="250">NGUYEN</span>
+        <!-- Social links — vertical, top-right aligned with last name -->
+        <div id="hero-links" class="hidden md:flex flex-col gap-2 pb-3 opacity-0" style="animation: slideIn 0.5s ease 0.9s forwards;">
+          {[
+            { href: 'https://github.com/louishuyng', label: 'GitHub ↗' },
+            { href: 'https://www.linkedin.com/in/louishuyng/', label: 'LinkedIn ↗' },
+            { href: 'https://www.raycast.com/louishuyng', label: 'Raycast ↗' },
+            { href: 'https://www.credly.com/users/nguyen-louis/badges#credly', label: 'Credly ↗' },
+          ].map(l => (
+            <a
+              href={l.href}
+              target="_blank" rel="noopener"
+              class="font-mono text-xs tracking-[0.1em] uppercase text-[#64748B] hover:text-[#5B4EFF] transition-colors"
+            >{l.label}</a>
+          ))}
+        </div>
+      </div>
+    </h1>
+
+    <!-- Divider -->
+    <div class="reveal-line h-px bg-[#0A0A0A] my-8 max-w-3xl" data-delay="400"></div>
+
+    <!-- Role morphing + bio row -->
+    <div class="flex flex-col md:flex-row md:items-start gap-6 md:gap-16 max-w-4xl">
+
+      <!-- Morphing role -->
+      <div class="reveal-line shrink-0" data-delay="500">
+        <div class="text-xs font-mono tracking-[0.15em] uppercase text-[#64748B] mb-2">Currently</div>
+        <div class="relative h-10 overflow-hidden w-64">
+          <span id="morph-a" class="absolute inset-0 flex items-center text-2xl font-black text-[#5B4EFF] leading-none" style="transform:translateY(0); opacity:1;">Software Architect</span>
+          <span id="morph-b" class="absolute inset-0 flex items-center text-2xl font-black text-[#5B4EFF] leading-none" style="transform:translateY(110%); opacity:0;">Cloud Engineer</span>
+        </div>
+      </div>
+
+      <!-- Bio -->
+      <div class="reveal-line text-[#3F3F3F] text-base leading-relaxed font-light max-w-lg" data-delay="600">
+        Senior engineer with <strong class="font-semibold text-[#0A0A0A]">7+ years</strong> designing scalable cloud architectures. Built systems from 10K to 100K RPS. Passionate about Kubernetes, open source, and infrastructure that just works.
+      </div>
+    </div>
+
+    <!-- Mobile social links -->
+    <div class="flex flex-wrap gap-5 mt-10 md:hidden reveal-line" data-delay="700">
+      {[
+        { href: 'https://github.com/louishuyng', label: 'GitHub ↗' },
+        { href: 'https://www.linkedin.com/in/louishuyng/', label: 'LinkedIn ↗' },
+        { href: 'https://www.raycast.com/louishuyng', label: 'Raycast ↗' },
+        { href: 'mailto:huynguyennbk@gmail.com', label: 'Email ↗' },
+      ].map(l => (
+        <a
+          href={l.href}
+          target={l.href.startsWith('http') ? '_blank' : undefined}
+          rel="noopener"
+          class="font-mono text-xs tracking-[0.1em] uppercase text-[#64748B] hover:text-[#5B4EFF] transition-colors"
+        >{l.label}</a>
+      ))}
+    </div>
+
+    <!-- Stats row -->
+    <div class="grid grid-cols-3 gap-8 max-w-sm mt-14 reveal-line" data-delay="750">
+      {[
+        { n: '7+', l: 'Years' },
+        { n: '6',  l: 'Companies' },
+        { n: '∞',  l: 'Scale' },
+      ].map(s => (
+        <div>
+          <div class="text-3xl font-black text-[#0A0A0A]">{s.n}</div>
+          <div class="text-xs font-mono text-[#64748B] tracking-[0.1em] uppercase mt-0.5">{s.l}</div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-6 text-xs font-mono text-[#64748B] tracking-[0.15em] uppercase flex items-center gap-2">
+    <span style="animation: pulse 2s ease infinite;">↓ scroll</span>
+  </div>
+</section>
+
+<script>
+  // ── Line reveal on load ──────────────────────────────────────────
+  document.querySelectorAll<HTMLElement>('.reveal-line').forEach(el => {
+    const delay = parseInt(el.dataset.delay ?? '0');
+    setTimeout(() => el.classList.add('visible'), delay);
+  });
+
+  // ── Role morph ───────────────────────────────────────────────────
+  const roles = ['Software Architect', 'Cloud Engineer', 'System Designer', 'Open Source Dev'];
+  let idx = 0;
+  const a = document.getElementById('morph-a')!;
+  const b = document.getElementById('morph-b')!;
+  let active = a, incoming = b;
+
+  function morphRole() {
+    idx = (idx + 1) % roles.length;
+    incoming.textContent = roles[idx];
+
+    // Animate out active
+    active.style.transition = 'transform 0.45s cubic-bezier(0.4,0,0.6,1), opacity 0.45s ease';
+    active.style.transform = 'translateY(-110%)';
+    active.style.opacity = '0';
+
+    // Animate in incoming
+    incoming.style.transition = 'none';
+    incoming.style.transform = 'translateY(110%)';
+    incoming.style.opacity = '0';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        incoming.style.transition = 'transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease';
+        incoming.style.transform = 'translateY(0)';
+        incoming.style.opacity = '1';
+      });
+    });
+
+    [active, incoming] = [incoming, active];
+    setTimeout(morphRole, 2800);
+  }
+
+  setTimeout(morphRole, 2800);
+</script>

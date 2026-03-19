@@ -1,0 +1,280 @@
+---
+const agents = [
+  {
+    id: "solution-architect",
+    company: "regask",
+    role: "Solution Architect",
+    period: "Jul 2025 — Present",
+    status: "running",
+    outputs: [
+      "Redesigned arch with Knative + K8s → infra costs ↓30%, scaled to 100K RPS",
+      "Instrumented with Grafana Cloud: SLO baselines + anomaly detection",
+      "Redis write-behind caching: 10K → 100K RPS throughput",
+      "Internal mesh simulator: issue resolution time ↓20%",
+      "Unified K8s provisioning with Terraform + Crossplane",
+    ],
+  },
+  {
+    id: "senior-swe-regask",
+    company: "regask",
+    role: "Senior Software Engineer",
+    period: "Feb 2024 — Jul 2025",
+    status: "completed",
+    outputs: [
+      "Azure HA fault-tolerant system with full redundancy",
+      "Okta SSO (SAML + OIDC) across all enterprise services",
+      "Go rewrites of Node.js bottlenecks → memory ↓50-60%",
+      "Technical Solution Documents process → fewer back-and-forth reviews",
+    ],
+  },
+  {
+    id: "senior-swe-perxtech",
+    company: "perxtech",
+    role: "Senior Software Engineer",
+    period: "Jan 2022 — Sept 2023",
+    status: "completed",
+    outputs: [
+      "Led 5-person cross-functional team with Kafka + AWS Step Functions",
+      "Ruby servers: 10K req/s throughput",
+      "Traefik API Gateway: centralized routing + load balancing",
+      "ETL pipeline: 5h → 15min per GB (95% faster)",
+    ],
+  },
+  {
+    id: "fullstack-oivan",
+    company: "oivan",
+    role: "Full Stack Engineer",
+    period: "Jan 2021 — Jan 2022",
+    status: "completed",
+    outputs: [
+      "Led 2-3 engineers, microservices for Saudi real estate platform",
+      "gRPC for low-latency internal comms",
+      "Query latency: 3s → 500ms",
+    ],
+  },
+  {
+    id: "fullstack-nucleus",
+    company: "nucleus-studio",
+    role: "Full Stack Engineer",
+    period: "Jan 2020 — Jan 2021",
+    status: "completed",
+    outputs: [
+      "React Native mobile apps with Firebase + GCP + AWS",
+      "NestJS backend architecture",
+      "Livestream + video call with RTC protocol",
+    ],
+  },
+  {
+    id: "platform-aleph",
+    company: "aleph-labs",
+    role: "Platform Developer",
+    period: "Jan 2018 — Jan 2020",
+    status: "completed",
+    outputs: [
+      "Reusable front-end component library across teams",
+      "Auth-focused API design + security hardening",
+      "SDK library for front-end / back-end integration",
+    ],
+  },
+];
+---
+
+<section id="experience" class="bg-[#0C0E12] py-24 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- Section label -->
+    <div class="flex items-center gap-4 mb-10 opacity-0" id="exp-label">
+      <span class="font-mono text-xs tracking-[0.2em] uppercase text-[#4ADE80]">$ career run --all-agents</span>
+      <span class="h-px flex-1 bg-[#1E2530]"></span>
+    </div>
+
+    <!-- Terminal window -->
+    <div id="terminal-window" class="rounded-xl overflow-hidden border border-[#1E2530] opacity-0">
+      <!-- Chrome -->
+      <div class="flex items-center gap-2 px-4 py-3 bg-[#161B24] border-b border-[#1E2530]">
+        <span class="w-3 h-3 rounded-full bg-[#FF5F57]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#FFBD2E]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#28C840]"></span>
+        <span class="font-mono text-xs text-[#3D4D5C] ml-3">career@louishuyng ~/experience</span>
+      </div>
+
+      <!-- Body -->
+      <div id="terminal-body" class="font-mono text-sm p-5 md:p-8 space-y-0 min-h-[420px]" style="background:#0C0E12;">
+
+        <!-- Command line (typed in) -->
+        <div class="flex items-center gap-2 mb-6">
+          <span class="text-[#5B4EFF]">❯</span>
+          <span id="cmd-line" class="text-[#94A3B8]"></span>
+          <span id="cmd-cursor" class="text-[#5B4EFF]" style="animation: blink 1s step-end infinite;">▋</span>
+        </div>
+
+        <!-- Agents container -->
+        <div id="agents-container" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Agent template data -->
+<script define:vars={{ agents }}>
+  // ── Intersection observer to boot terminal ─────────────────────
+  const section = document.getElementById('experience');
+  const label   = document.getElementById('exp-label');
+  const win     = document.getElementById('terminal-window');
+  const cmdLine = document.getElementById('cmd-line');
+  const cmdCur  = document.getElementById('cmd-cursor');
+  const agentsCont = document.getElementById('agents-container');
+
+  let booted = false;
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function typeText(el, text, speed = 38) {
+    for (const ch of text) {
+      el.textContent += ch;
+      await sleep(speed + Math.random() * 20);
+    }
+  }
+
+  function makeSpinner() {
+    const frames = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
+    let i = 0;
+    const el = document.createElement('span');
+    el.className = 'text-[#4ADE80] mr-2';
+    el.textContent = frames[0];
+    const id = setInterval(() => { el.textContent = frames[++i % frames.length]; }, 100);
+    el.dataset.intervalId = String(id);
+    return el;
+  }
+
+  async function bootTerminal() {
+    if (booted) return;
+    booted = true;
+
+    // Fade in label + window
+    label.style.transition = 'opacity 0.5s ease';
+    label.style.opacity = '1';
+    await sleep(300);
+    win.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+    win.style.transform = 'translateY(16px)';
+    win.style.opacity = '1';
+    win.style.transform = 'translateY(0)';
+
+    await sleep(500);
+
+    // Type command
+    const cmd = 'career run --all-agents --mode=sequential';
+    await typeText(cmdLine, cmd, 32);
+    await sleep(300);
+    cmdCur.style.display = 'none';
+
+    await sleep(400);
+
+    // "Spawning agents..." line
+    const spawning = document.createElement('div');
+    spawning.className = 'text-[#3D4D5C] text-xs mb-6 mt-1';
+    spawning.textContent = 'Spawning 6 agents...';
+    agentsCont.appendChild(spawning);
+    await sleep(500);
+
+    // Render each agent
+    for (let i = 0; i < agents.length; i++) {
+      const ag = agents[i];
+      const isRunning = ag.status === 'running';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'border border-[#1E2530] rounded-lg overflow-hidden';
+      wrapper.style.opacity = '0';
+      wrapper.style.transform = 'translateX(-12px)';
+      agentsCont.appendChild(wrapper);
+
+      // Animate in
+      requestAnimationFrame(() => {
+        wrapper.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1)';
+        wrapper.style.opacity = '1';
+        wrapper.style.transform = 'translateX(0)';
+      });
+
+      // Header
+      const header = document.createElement('div');
+      header.className = `flex items-center gap-3 px-4 py-3 ${isRunning ? 'bg-[#0F1A12]' : 'bg-[#0E1117]'} text-xs flex-wrap`;
+      wrapper.appendChild(header);
+
+      if (isRunning) {
+        const spin = makeSpinner();
+        header.appendChild(spin);
+      } else {
+        const check = document.createElement('span');
+        check.className = 'text-[#3D4D5C] mr-2';
+        check.textContent = '✓';
+        header.appendChild(check);
+      }
+
+      const agId = document.createElement('span');
+      agId.className = isRunning ? 'text-[#4ADE80] font-medium' : 'text-[#64748B]';
+      agId.textContent = `[agent:${ag.id}]`;
+      header.appendChild(agId);
+
+      const sep = document.createElement('span');
+      sep.className = 'hidden sm:inline text-[#1E2530]';
+      sep.textContent = '──';
+      header.appendChild(sep);
+
+      const co = document.createElement('span');
+      co.className = isRunning ? 'text-[#7C8FA6]' : 'text-[#3D4D5C]';
+      co.textContent = ag.company;
+      header.appendChild(co);
+
+      const spacer = document.createElement('span');
+      spacer.className = 'ml-auto';
+      header.appendChild(spacer);
+
+      const status = document.createElement('span');
+      status.className = isRunning
+        ? 'text-[#4ADE80] font-mono tracking-widest'
+        : 'text-[#3D4D5C] font-mono tracking-widest';
+      status.textContent = isRunning ? '● RUNNING' : '● DONE';
+      header.appendChild(status);
+
+      const period = document.createElement('span');
+      period.className = 'text-[#3D4D5C] ml-4 hidden sm:inline';
+      period.textContent = ag.period;
+      header.appendChild(period);
+
+      // Output lines
+      const outputDiv = document.createElement('div');
+      outputDiv.className = `px-4 py-3 space-y-1.5 ${isRunning ? 'border-t border-[#1A2A1A]' : 'border-t border-[#1E2530]'}`;
+      wrapper.appendChild(outputDiv);
+
+      const lineDelay = isRunning ? 60 : 20;
+      for (const line of ag.outputs) {
+        await sleep(lineDelay);
+        const li = document.createElement('div');
+        li.className = `flex items-start gap-2 text-xs ${isRunning ? 'text-[#94A3B8]' : 'text-[#475569]'}`;
+        li.innerHTML = `<span class="${isRunning ? 'text-[#5B4EFF]' : 'text-[#2D3748]'} mt-0.5 shrink-0">▸</span><span>${line}</span>`;
+        li.style.opacity = '0';
+        li.style.transform = 'translateX(-6px)';
+        outputDiv.appendChild(li);
+        requestAnimationFrame(() => {
+          li.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+          li.style.opacity = '1';
+          li.style.transform = 'translateX(0)';
+        });
+      }
+
+      await sleep(isRunning ? 400 : 120);
+    }
+
+    // Footer
+    await sleep(400);
+    const footer = document.createElement('div');
+    footer.className = 'flex items-center gap-2 mt-6 text-xs text-[#3D4D5C]';
+    footer.innerHTML = `<span class="text-[#5B4EFF]">❯</span><span>All 6 agents loaded. 7+ years of experience ready.</span><span style="animation:blink 1s step-end infinite;" class="text-[#5B4EFF]">▋</span>`;
+    agentsCont.appendChild(footer);
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) { bootTerminal(); obs.disconnect(); }
+  }, { threshold: 0.15 });
+  obs.observe(section);
+</script>

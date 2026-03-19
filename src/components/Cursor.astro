@@ -1,0 +1,71 @@
+<!-- Glowing orb cursor — single smooth element, no ring/dot split -->
+<script>
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const ACCENT  = '#5B6AD0';
+    const LERP    = 0.28;
+
+    const orb = document.createElement('div');
+    orb.style.cssText = `
+      position:fixed; z-index:9999; pointer-events:none; border-radius:50%;
+      width:14px; height:14px; top:0; left:0;
+      background:${ACCENT};
+      box-shadow: 0 0 10px 3px rgba(91,106,208,0.55),
+                  0 0 24px 6px rgba(91,106,208,0.22);
+      transform:translate(-50%,-50%);
+      will-change:transform,width,height,box-shadow;
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1),
+                  height 0.3s cubic-bezier(0.16,1,0.3,1),
+                  background 0.25s, opacity 0.25s,
+                  box-shadow 0.3s;
+    `;
+    document.body.appendChild(orb);
+
+    let mx = -200, my = -200;
+    let cx = -200, cy = -200;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    (function tick() {
+      cx += (mx - cx) * LERP;
+      cy += (my - cy) * LERP;
+      orb.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+      requestAnimationFrame(tick);
+    })();
+
+    // Hover — orb swells and brightens
+    document.addEventListener('mouseover', e => {
+      const t = e.target as HTMLElement;
+      if (t.closest('a, button, [data-hover], .sc, .lp-link, .hire-btn')) {
+        orb.style.width  = '22px';
+        orb.style.height = '22px';
+        orb.style.boxShadow = `0 0 14px 5px rgba(91,106,208,0.75),
+                               0 0 36px 12px rgba(91,106,208,0.32)`;
+        orb.style.opacity = '0.85';
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      const t = e.target as HTMLElement;
+      if (t.closest('a, button, [data-hover], .sc, .lp-link, .hire-btn')) {
+        orb.style.width  = '14px';
+        orb.style.height = '14px';
+        orb.style.boxShadow = `0 0 10px 3px rgba(91,106,208,0.55),
+                               0 0 24px 6px rgba(91,106,208,0.22)`;
+        orb.style.opacity = '1';
+      }
+    });
+
+    // Click — quick flash
+    document.addEventListener('mousedown', () => {
+      orb.style.width  = '9px';
+      orb.style.height = '9px';
+      orb.style.boxShadow = `0 0 18px 7px rgba(91,106,208,0.9),
+                             0 0 40px 14px rgba(91,106,208,0.45)`;
+    });
+    document.addEventListener('mouseup', () => {
+      orb.style.width  = '14px';
+      orb.style.height = '14px';
+      orb.style.boxShadow = `0 0 10px 3px rgba(91,106,208,0.55),
+                             0 0 24px 6px rgba(91,106,208,0.22)`;
+    });
+  }
+</script>

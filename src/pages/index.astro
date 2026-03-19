@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import Cursor from '../components/Cursor.astro';
+import LeftPanel from '../components/LeftPanel.astro';
+import Terminal from '../components/Terminal.astro';
+---
+
+<Layout title="Louis Huy Nguyen — Software Architect">
+  <Cursor />
+
+  <!-- Single-page split layout -->
+  <div style="
+    display: grid;
+    grid-template-columns: 38% 6px 62%;
+    height: 100vh;
+    overflow: hidden;
+  " id="layout">
+
+    <!-- Left: identity panel -->
+    <div style="
+      position: relative;
+      overflow: hidden;
+    ">
+      <!-- Subtle vertical accent line far left -->
+      <div aria-hidden="true" style="
+        position:absolute; left:0; top:0; bottom:0; width:2px;
+        background: linear-gradient(180deg, transparent 0%, rgba(109,40,217,0.6) 40%, rgba(109,40,217,0.6) 60%, transparent 100%);
+      "></div>
+      <LeftPanel />
+    </div>
+
+    <!-- Resize handle -->
+    <div id="resize-handle" style="
+      position: relative;
+      background: #262624;
+      border-left: 1px solid #38352F;
+      border-right: 1px solid #38352F;
+      cursor: col-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      z-index: 10;
+    ">
+      <!-- Grip dots -->
+      <div id="resize-grip" style="
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        opacity: 0.35;
+        transition: opacity 0.2s;
+        pointer-events: none;
+      ">
+        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
+        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
+        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
+        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
+        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
+      </div>
+    </div>
+
+    <!-- Right: terminal -->
+    <div style="overflow:hidden; display:flex; flex-direction:column;">
+      <Terminal />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  #resize-handle:hover {
+    background: #2e2c29 !important;
+  }
+  #resize-handle:hover #resize-grip {
+    opacity: 0.75 !important;
+  }
+  #resize-handle.dragging {
+    background: #333030 !important;
+  }
+  #resize-handle.dragging #resize-grip {
+    opacity: 1 !important;
+  }
+
+  /* Mobile: stack vertically, hide handle */
+  @media (max-width: 767px) {
+    #layout {
+      grid-template-columns: 1fr !important;
+      grid-template-rows: auto 6px 1fr;
+      height: auto !important;
+      overflow: auto !important;
+    }
+    #resize-handle {
+      display: none !important;
+    }
+    html, body { overflow: auto !important; }
+  }
+</style>
+
+<script>
+  const layout = document.getElementById('layout')!;
+  const handle = document.getElementById('resize-handle')!;
+
+  let dragging = false;
+  let startX = 0;
+  let startLeft = 0;
+
+  const MIN_PCT = 20;
+  const MAX_PCT = 70;
+
+  handle.addEventListener('mousedown', e => {
+    e.preventDefault();
+    dragging = true;
+    startX = e.clientX;
+    startLeft = parseFloat(layout.style.gridTemplateColumns.split(' ')[0]) || 38;
+    handle.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const total = layout.offsetWidth;
+    const delta = e.clientX - startX;
+    const deltaPct = (delta / total) * 100;
+    let newLeft = startLeft + deltaPct;
+    newLeft = Math.max(MIN_PCT, Math.min(MAX_PCT, newLeft));
+    const newRight = 100 - newLeft;
+    layout.style.gridTemplateColumns = `${newLeft}% 6px ${newRight}%`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+</script>

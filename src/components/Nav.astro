@@ -1,0 +1,42 @@
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <a href="#hero" class="font-mono text-sm font-medium tracking-tight text-[#0A0A0A] hover:text-[#5B4EFF] transition-colors">
+      louis.ng<span class="text-[#5B4EFF]" style="animation: blink 1s step-end infinite;">_</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="#terminal" class="text-xs font-mono tracking-[0.1em] uppercase text-[#64748B] hover:text-[#0A0A0A] transition-colors">
+        Terminal
+      </a>
+      <a href="#contact" class="text-xs font-mono tracking-[0.1em] uppercase text-[#64748B] hover:text-[#0A0A0A] transition-colors">
+        Contact
+      </a>
+    </div>
+
+    <a
+      href="mailto:huynguyennbk@gmail.com"
+      class="text-xs font-mono px-4 py-2 border border-[#0A0A0A] text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-[#F8F7F4] transition-all duration-200"
+    >
+      Hire Me →
+    </a>
+  </div>
+</nav>
+
+<script>
+  const nav = document.getElementById('navbar')!;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 30) {
+      nav.style.cssText = 'background:rgba(248,247,244,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);';
+    } else {
+      nav.style.cssText = '';
+    }
+  }, { passive: true });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const id = (e.currentTarget as HTMLAnchorElement).getAttribute('href')!;
+      document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
