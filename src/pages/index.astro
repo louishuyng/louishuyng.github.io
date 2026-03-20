@@ -12,17 +12,13 @@ import Terminal from '../components/Terminal.astro';
   <!-- Single-page split layout -->
   <div style="
     display: grid;
-    grid-template-columns: 38% 6px 62%;
+    grid-template-columns: 38% 14px 62%;
     height: 100vh;
     overflow: hidden;
   " id="layout">
 
     <!-- Left: identity panel -->
-    <div style="
-      position: relative;
-      overflow: hidden;
-    ">
-      <!-- Subtle vertical accent line far left -->
+    <div style="position:relative; overflow:hidden;">
       <div aria-hidden="true" style="
         position:absolute; left:0; top:0; bottom:0; width:2px;
         background: linear-gradient(180deg, transparent 0%, rgba(109,40,217,0.6) 40%, rgba(109,40,217,0.6) 60%, transparent 100%);
@@ -33,32 +29,49 @@ import Terminal from '../components/Terminal.astro';
     <!-- Resize handle -->
     <div id="resize-handle" style="
       position: relative;
-      background: #262624;
-      border-left: 1px solid #38352F;
-      border-right: 1px solid #38352F;
+      background: #1A1917;
       cursor: col-resize;
       display: flex;
       align-items: center;
       justify-content: center;
       user-select: none;
       flex-shrink: 0;
-      transition: background 0.2s;
       z-index: 10;
     ">
-      <!-- Grip dots -->
-      <div id="resize-grip" style="
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        opacity: 0.35;
-        transition: opacity 0.2s;
+      <!-- Animated glow line -->
+      <div id="rh-line" style="
+        position: absolute;
+        top: 0; bottom: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        background: linear-gradient(180deg,
+          transparent 0%,
+          rgba(91,106,208,0.15) 15%,
+          rgba(91,106,208,0.55) 50%,
+          rgba(91,106,208,0.15) 85%,
+          transparent 100%
+        );
         pointer-events: none;
+        transition: width 0.25s, opacity 0.25s;
+      "></div>
+
+      <!-- Pill grip -->
+      <div id="rh-pill" style="
+        position: relative; z-index: 1;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 3.5px;
+        width: 22px; height: 48px;
+        border-radius: 11px;
+        background: #272522;
+        border: 1px solid #3A3733;
+        pointer-events: none;
+        transition: background 0.2s, border-color 0.25s,
+                    box-shadow 0.3s, transform 0.2s;
       ">
-        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
-        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
-        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
-        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
-        <div style="width:3px;height:3px;border-radius:50%;background:#9A9080;"></div>
+        <div class="gh" style="width:8px;height:1.5px;border-radius:2px;background:#5A5449;transition:background 0.2s;"></div>
+        <div class="gh" style="width:8px;height:1.5px;border-radius:2px;background:#5A5449;transition:background 0.2s;"></div>
+        <div class="gh" style="width:8px;height:1.5px;border-radius:2px;background:#5A5449;transition:background 0.2s;"></div>
+        <div class="gh" style="width:8px;height:1.5px;border-radius:2px;background:#5A5449;transition:background 0.2s;"></div>
       </div>
     </div>
 
@@ -70,30 +83,63 @@ import Terminal from '../components/Terminal.astro';
 </Layout>
 
 <style>
-  #resize-handle:hover {
-    background: #2e2c29 !important;
+  /* Idle: subtle pulse on the glow line to attract attention */
+  @keyframes rh-pulse {
+    0%,100% { opacity: 0.5; }
+    50%      { opacity: 1; }
   }
-  #resize-handle:hover #resize-grip {
-    opacity: 0.75 !important;
-  }
-  #resize-handle.dragging {
-    background: #333030 !important;
-  }
-  #resize-handle.dragging #resize-grip {
+  #rh-line { animation: rh-pulse 2.8s ease-in-out infinite; }
+
+  /* Hover */
+  #resize-handle:hover #rh-line {
+    width: 3px !important;
     opacity: 1 !important;
+    animation: none !important;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(91,106,208,0.3) 10%,
+      rgba(91,106,208,0.9) 50%,
+      rgba(91,106,208,0.3) 90%,
+      transparent 100%
+    ) !important;
+  }
+  #resize-handle:hover #rh-pill {
+    background: #2E2B27 !important;
+    border-color: #5B6AD0 !important;
+    box-shadow: 0 0 0 3px rgba(91,106,208,0.15),
+                0 0 16px 4px rgba(91,106,208,0.2) !important;
+    transform: scaleY(1.08) !important;
+  }
+  #resize-handle:hover .gh {
+    background: #9A8FD0 !important;
   }
 
-  /* Mobile: stack vertically, hide handle */
+  /* Dragging */
+  #resize-handle.dragging #rh-line {
+    width: 4px !important;
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  #resize-handle.dragging #rh-pill {
+    background: #333 !important;
+    border-color: #5B6AD0 !important;
+    box-shadow: 0 0 0 4px rgba(91,106,208,0.2),
+                0 0 24px 8px rgba(91,106,208,0.25) !important;
+    transform: scaleY(1.12) !important;
+  }
+  #resize-handle.dragging .gh {
+    background: #7B8AE0 !important;
+  }
+
+  /* Mobile */
   @media (max-width: 767px) {
     #layout {
       grid-template-columns: 1fr !important;
-      grid-template-rows: auto 6px 1fr;
+      grid-template-rows: auto 14px 1fr;
       height: auto !important;
       overflow: auto !important;
     }
-    #resize-handle {
-      display: none !important;
-    }
+    #resize-handle { display: none !important; }
     html, body { overflow: auto !important; }
   }
 </style>
@@ -103,7 +149,7 @@ import Terminal from '../components/Terminal.astro';
   const handle = document.getElementById('resize-handle')!;
 
   let dragging = false;
-  let startX = 0;
+  let startX   = 0;
   let startLeft = 0;
 
   const MIN_PCT = 20;
@@ -111,30 +157,27 @@ import Terminal from '../components/Terminal.astro';
 
   handle.addEventListener('mousedown', e => {
     e.preventDefault();
-    dragging = true;
-    startX = e.clientX;
+    dragging  = true;
+    startX    = e.clientX;
     startLeft = parseFloat(layout.style.gridTemplateColumns.split(' ')[0]) || 38;
     handle.classList.add('dragging');
-    document.body.style.cursor = 'col-resize';
+    document.body.style.cursor     = 'col-resize';
     document.body.style.userSelect = 'none';
   });
 
   document.addEventListener('mousemove', e => {
     if (!dragging) return;
-    const total = layout.offsetWidth;
-    const delta = e.clientX - startX;
-    const deltaPct = (delta / total) * 100;
-    let newLeft = startLeft + deltaPct;
-    newLeft = Math.max(MIN_PCT, Math.min(MAX_PCT, newLeft));
-    const newRight = 100 - newLeft;
-    layout.style.gridTemplateColumns = `${newLeft}% 6px ${newRight}%`;
+    const total    = layout.offsetWidth;
+    const deltaPct = ((e.clientX - startX) / total) * 100;
+    let newLeft    = Math.max(MIN_PCT, Math.min(MAX_PCT, startLeft + deltaPct));
+    layout.style.gridTemplateColumns = `${newLeft}% 14px ${100 - newLeft}%`;
   });
 
   document.addEventListener('mouseup', () => {
     if (!dragging) return;
     dragging = false;
     handle.classList.remove('dragging');
-    document.body.style.cursor = '';
+    document.body.style.cursor     = '';
     document.body.style.userSelect = '';
   });
 </script>
