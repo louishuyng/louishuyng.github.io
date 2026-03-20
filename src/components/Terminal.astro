@@ -388,27 +388,38 @@
     const ms = getMatches(b);
     return ms.length === 1 ? ms[0].slice(b.length) : '';
   }
-  function renderSugg(b: string) {
+  let suggTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function showSugg(b: string) {
     const ms = getMatches(b);
     if (ms.length <= 1 || !b) { suggEl.style.display = 'none'; return; }
     suggEl.innerHTML = ms.map(c =>
       `<span class="sc" data-c="${esc(c)}" style="
         font-family:'JetBrains Mono';font-size:11px;padding:3px 9px;
         border:1px solid #38352F;color:#5B6AD0;cursor:pointer;background:#262624;
-        border-radius:4px;transition:all 0.12s;
+        border-radius:4px;transition:all 0.18s;
       ">${esc(c)}</span>`
     ).join('');
     suggEl.style.display = 'flex';
-    animate(suggEl, { opacity:[0,1], y:[3,0] }, { duration:0.15, easing:[0.16,1,0.3,1] });
+    animate(suggEl, { opacity:[0,1], y:[4,0] }, { duration:0.22, easing:[0.16,1,0.3,1] });
     suggEl.querySelectorAll<HTMLElement>('.sc').forEach(ch => {
-      ch.onmouseover = () => { ch.style.background='rgba(218,119,86,0.12)'; ch.style.borderColor='#5B6AD0'; };
+      ch.onmouseover = () => { ch.style.background='rgba(91,106,208,0.12)'; ch.style.borderColor='#5B6AD0'; };
       ch.onmouseout  = () => { ch.style.background='#262624'; ch.style.borderColor='#38352F'; };
       ch.onclick     = () => { buf = ch.dataset.c!; render(); };
     });
   }
 
+  function renderSugg(b: string) {
+    if (suggTimer) clearTimeout(suggTimer);
+    const ms = getMatches(b);
+    if (ms.length <= 1 || !b) { suggEl.style.display = 'none'; return; }
+    suggTimer = setTimeout(() => showSugg(b), 380);
+  }
+
   function render() {
     typed.textContent = buf;
+    // smooth ghost text transition
+    animate(ghost, { opacity:[0.4, 1] }, { duration: 0.12, easing: [0.16,1,0.3,1] });
     ghost.textContent = ghostText(buf);
     renderSugg(buf);
   }
@@ -491,8 +502,14 @@
       render();
     });
 
-    // Keydown for Backspace / Enter on mobile
-    mobileInput.addEventListener('keydown', handleKey);
+    // Keydown for special keys only on mobile (input event handles character insertion)
+    mobileInput.addEventListener('keydown', (e) => {
+      e.stopPropagation(); // prevent window listener from firing too
+      if (['Backspace', 'Enter', 'Tab', 'ArrowUp', 'ArrowDown'].includes(e.key) ||
+          ((e.ctrlKey || e.metaKey) && e.key === 'l')) {
+        handleKey(e);
+      }
+    });
   }
 
   // ── boot ─────────────────────────────────────────────────────
