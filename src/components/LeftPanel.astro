@@ -1,10 +1,9 @@
-<!-- Left identity panel — Zen browser light aesthetic -->
+<!-- Left identity panel — Vercel dark -->
 <aside id="left-panel" style="
   display:flex; flex-direction:column; justify-content:space-between;
   height:100%; padding:2.5rem 2.75rem;
-  background:#F0EBE0;
+  background:#000000;
   overflow-y:hidden; position:relative;
-  border-right:1px solid #D9D0C0;
 ">
 
   <div style="position:relative;">
@@ -13,27 +12,26 @@
     <div id="lp-logo" style="opacity:0; display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem;">
       <span style="
         font-family:'JetBrains Mono'; font-size:11px;
-        letter-spacing:0.18em; color:#9A9080; text-transform:uppercase;
+        letter-spacing:0.18em; color:#555; text-transform:uppercase;
       ">louishuyng<span style="color:#5B6AD0; animation:blink 1s step-end infinite;">_</span></span>
 
       <a href="mailto:huynguyennbk@gmail.com" class="hire-btn" style="
         font-family:'DM Sans'; font-size:11px; font-weight:500;
         letter-spacing:0.06em; text-transform:uppercase;
-        color:#3A332A; background:#E3DDD0;
-        padding:7px 18px; text-decoration:none; border-radius:100px;
-        border:1px solid #CFC6B2; transition:all 0.2s;
+        color:#A1A1AA; background:transparent;
+        padding:6px 16px; text-decoration:none; border-radius:6px;
+        border:1px solid #333; transition:all 0.2s;
       ">Hire me →</a>
     </div>
 
-    <!-- Availability pill -->
-    <div id="lp-avail" style="opacity:0; display:inline-flex; align-items:center; gap:7px; margin-bottom:2.5rem;
-      padding:5px 13px; border-radius:100px; border:1px solid #CFC6B2; background:#E3DDD0;">
+    <!-- Availability — flat, no box -->
+    <div id="lp-avail" style="opacity:0; display:inline-flex; align-items:center; gap:8px; margin-bottom:2.5rem;">
       <span style="
-        width:6px; height:6px; border-radius:50%; flex-shrink:0;
-        background:#22c55e; box-shadow:0 0 5px rgba(34,197,94,0.7);
+        width:7px; height:7px; border-radius:50%; flex-shrink:0;
+        background:#22c55e; box-shadow:0 0 6px rgba(34,197,94,0.8);
         animation:breathe-bright 2.4s ease infinite;
       "></span>
-      <span style="font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; color:#7A7060;">
+      <span style="font-family:'JetBrains Mono'; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#52525B;">
         Open to opportunities
       </span>
     </div>
@@ -41,54 +39,51 @@
     <!-- Name -->
     <h1 id="lp-name" style="opacity:1; line-height:0.9; margin-bottom:1.5rem;">
       <span id="name-line1" style="
-        display:block; font-family:'JetBrains Mono',monospace; font-weight:600;
-        font-size:clamp(3rem,5.2vw,5rem); color:#1A1512; letter-spacing:-0.02em;
+        display:block; font-family:'JetBrains Mono',monospace; font-weight:700;
+        font-size:clamp(3.2rem,5.6vw,5.5rem); color:#FFFFFF; letter-spacing:-0.03em;
       "></span>
       <span id="name-line2" style="
-        display:block; font-family:'JetBrains Mono',monospace; font-weight:600;
-        font-size:clamp(3rem,5.2vw,5rem); color:#5B6AD0; letter-spacing:-0.02em;
+        display:block; font-family:'JetBrains Mono',monospace; font-weight:700;
+        font-size:clamp(3.2rem,5.6vw,5.5rem); color:#5B6AD0; letter-spacing:-0.03em;
       "></span>
     </h1>
 
     <!-- Divider -->
     <div id="lp-rule" style="
-      opacity:0; height:1px; max-width:160px; margin-bottom:1.25rem;
-      background:linear-gradient(90deg, #CFC6B2 0%, transparent 100%);
+      opacity:0; height:1px; max-width:140px; margin-bottom:1.25rem;
+      background:linear-gradient(90deg, #333 0%, transparent 100%);
     "></div>
 
     <!-- Morphing role -->
-    <div id="lp-role" style="opacity:0; position:relative; height:26px; overflow:hidden; margin-bottom:1.75rem;">
+    <div id="lp-role" style="opacity:0; position:relative; height:28px; overflow:hidden; margin-bottom:1.75rem;">
       <span id="morph-a" style="
         position:absolute; inset:0; display:flex; align-items:center;
-        font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.06em; color:#7A7060;
+        font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em; color:#52525B;
       ">Software Architect</span>
       <span id="morph-b" style="
         position:absolute; inset:0; display:flex; align-items:center;
-        font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.06em; color:#7A7060;
+        font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em; color:#52525B;
         transform:translateY(110%); opacity:0; filter:blur(4px);
       ">Cloud Engineer</span>
     </div>
 
     <!-- Bio -->
     <p id="lp-bio" style="
-      opacity:0; font-family:'DM Sans'; font-size:16px; line-height:1.8; font-weight:400;
-      color:#5A4E3E; max-width:300px; margin-bottom:2.5rem;
+      opacity:0; font-family:'DM Sans'; font-size:17px; line-height:1.8; font-weight:400;
+      color:#71717A; max-width:300px; margin-bottom:2.5rem;
     ">
       <span id="bio-text"></span><span id="bio-cursor" style="color:#5B6AD0; animation:blink 1s step-end infinite; display:none;">▌</span>
     </p>
 
-    <!-- Stats -->
-    <div id="lp-stats" style="opacity:0; display:flex; gap:1rem; margin-bottom:2.5rem;">
+    <!-- Stats — flat, no box -->
+    <div id="lp-stats" style="opacity:0; display:flex; gap:2.5rem; margin-bottom:2.5rem;">
       {[
         { n:'8+', l:'Years' },
         { n:'∞',  l:'Scale' },
       ].map(s => (
-        <div style="
-          padding:0.9rem 1.4rem; background:#E3DDD0;
-          border:1px solid #CFC6B2; border-radius:10px;
-        ">
-          <div style="font-family:'JetBrains Mono'; font-weight:600; font-size:1.9rem; color:#0F0F0F; line-height:1;">{s.n}</div>
-          <div style="font-family:'JetBrains Mono'; font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:#9A8E7A; margin-top:5px;">{s.l}</div>
+        <div>
+          <div style="font-family:'JetBrains Mono'; font-weight:700; font-size:2.2rem; color:#FFFFFF; line-height:1;">{s.n}</div>
+          <div style="font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:0.22em; text-transform:uppercase; color:#3F3F46; margin-top:6px;">{s.l}</div>
         </div>
       ))}
     </div>
@@ -96,10 +91,10 @@
 
   <!-- Links -->
   <div id="lp-links" style="opacity:0;">
-    <div style="font-family:'JetBrains Mono'; font-size:8.5px; letter-spacing:0.26em; text-transform:uppercase; color:#B5A898; margin-bottom:12px;">
+    <div style="font-family:'JetBrains Mono'; font-size:8.5px; letter-spacing:0.26em; text-transform:uppercase; color:#3F3F46; margin-bottom:14px;">
       Find me at
     </div>
-    <div style="display:flex; flex-direction:column; gap:7px;">
+    <div style="display:flex; flex-direction:column; gap:9px;">
       {[
         { href:'https://github.com/louishuyng',           label:'GitHub'       },
         { href:'https://www.linkedin.com/in/louishuyng/', label:'LinkedIn'     },
@@ -112,14 +107,14 @@
           rel="noopener"
           class="lp-link"
           style="
-            font-family:'DM Sans'; font-size:14px; font-weight:400;
-            color:#7A7060; text-decoration:none;
+            font-family:'DM Sans'; font-size:15px; font-weight:400;
+            color:#52525B; text-decoration:none;
             display:flex; align-items:center; gap:10px;
             width:fit-content; transition:color 0.18s;
           "
         >
           <span class="lp-tick" style="
-            width:12px; height:1px; background:#CFC6B2; flex-shrink:0;
+            width:14px; height:1px; background:#333; flex-shrink:0;
             transition:width 0.25s cubic-bezier(0.16,1,0.3,1), background 0.18s;
           "></span>
           {l.label}
@@ -127,7 +122,7 @@
       ))}
     </div>
 
-    <div style="margin-top:2rem; font-family:'JetBrains Mono'; font-size:11px; color:#B5A898; letter-spacing:0.03em;">
+    <div style="margin-top:2rem; font-family:'JetBrains Mono'; font-size:11px; color:#3F3F46; letter-spacing:0.03em;">
       Type <span style="color:#5B6AD0;">help</span> in the terminal →
     </div>
   </div>
@@ -135,8 +130,8 @@
 
 <style>
   .hire-btn:hover { background:#5B6AD0 !important; color:#fff !important; border-color:#5B6AD0 !important; }
-  .lp-link:hover  { color:#1A1512 !important; }
-  .lp-link:hover .lp-tick { width:24px !important; background:#5B6AD0 !important; }
+  .lp-link:hover  { color:#E4E4E7 !important; }
+  .lp-link:hover .lp-tick { width:28px !important; background:#5B6AD0 !important; }
 </style>
 
 <script>
@@ -211,20 +206,19 @@
 
   setTimeout(async () => {
     await Promise.all([
-      scrambleTo(line1, 'LOUIS HUY', 1.0),
-      scrambleTo(line2, 'NGUYEN', 0.85),
+      scrambleTo(line1, 'LOUIS HUY', 2.2),
+      scrambleTo(line2, 'NGUYEN', 1.9),
     ]);
 
-    // Bio typewriter after name settles
     const bioEl   = document.getElementById('lp-bio') as HTMLElement;
     const bioText = document.getElementById('bio-text') as HTMLElement;
     const bioCur  = document.getElementById('bio-cursor') as HTMLElement;
     animate(bioEl, { opacity:[0,1] }, { duration:0.3, easing:ease });
     await typewriter(bioText, bioCur, [
       { text:'Senior engineer with ' },
-      { text:'8+ years', style:'color:#1A1512;font-weight:600;' },
+      { text:'8+ years', style:'color:#E4E4E7;font-weight:600;' },
       { text:' designing scalable cloud architectures. Built systems handling ' },
-      { text:'100K RPS', style:'color:#1A1512;font-weight:600;' },
+      { text:'100K RPS', style:'color:#E4E4E7;font-weight:600;' },
       { text:'. Passionate about Kubernetes and open source.' },
     ], 22);
   }, 200);
@@ -239,7 +233,6 @@
   async function morph() {
     idx = (idx + 1) % roles.length;
     incoming.textContent = roles[idx];
-    incoming.style.color = '#B08FD0';
 
     await Promise.all([
       animate(active,   { y:[0,-110], opacity:[1,0], filter:['blur(0px)','blur(5px)'] },
