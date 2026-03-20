@@ -3,8 +3,30 @@
   display:flex; flex-direction:column; justify-content:space-between;
   height:100%; padding:2.5rem 2.75rem;
   background:#000000;
-  overflow-y:hidden; position:relative;
+  overflow-y:auto; position:relative;
+  scrollbar-width:none;
 ">
+<style>#left-panel::-webkit-scrollbar { display:none; }</style>
+
+<!-- Scroll up arrow -->
+<button id="lp-scroll-up" onclick="document.getElementById('left-panel').scrollBy({top:-160,behavior:'smooth'})" style="
+  display:none; position:fixed; bottom:calc(50% + 24px); left:calc(19% - 22px);
+  width:36px; height:36px; border-radius:50%;
+  background:#1a1a1a; border:1px solid #5B6AD0;
+  color:#5B6AD0; cursor:pointer; align-items:center; justify-content:center;
+  transition:all 0.2s; z-index:10; font-size:16px; line-height:1;
+  box-shadow:0 0 10px rgba(91,106,208,0.3);
+">↑</button>
+
+<!-- Scroll down arrow -->
+<button id="lp-scroll-dn" onclick="document.getElementById('left-panel').scrollBy({top:160,behavior:'smooth'})" style="
+  display:none; position:fixed; bottom:calc(50% - 64px); left:calc(19% - 22px);
+  width:36px; height:36px; border-radius:50%;
+  background:#1a1a1a; border:1px solid #5B6AD0;
+  color:#5B6AD0; cursor:pointer; align-items:center; justify-content:center;
+  transition:all 0.2s; z-index:10; font-size:16px; line-height:1;
+  box-shadow:0 0 10px rgba(91,106,208,0.3);
+">↓</button>
 
   <div style="position:relative;">
 
@@ -133,8 +155,14 @@
   .lp-link:hover  { color:#E4E4E7 !important; }
   .lp-link:hover .lp-tick { width:28px !important; background:#5B6AD0 !important; }
 
+  #lp-scroll-up, #lp-scroll-dn { pointer-events: auto; }
+  @media (pointer: fine) {
+    #lp-scroll-up:hover, #lp-scroll-dn:hover { background: rgba(255,255,255,0.12) !important; color: #aaa !important; }
+  }
+
   /* ── Mobile: compact top bar ────────────────────────────── */
   @media (max-width: 767px) {
+    #lp-scroll-up, #lp-scroll-dn { display: none !important; }
     #left-panel {
       height: auto !important;
       min-height: unset !important;
@@ -293,4 +321,25 @@
     setTimeout(morph, 3200);
   }
   setTimeout(morph, 3400);
+
+  // ── Scroll arrows ─────────────────────────────────────────────
+  const panel  = document.getElementById('left-panel')!;
+  const btnUp  = document.getElementById('lp-scroll-up') as HTMLButtonElement;
+  const btnDn  = document.getElementById('lp-scroll-dn') as HTMLButtonElement;
+
+  function updateArrows() {
+    const canUp = panel.scrollTop > 10;
+    const canDn = panel.scrollTop + panel.clientHeight < panel.scrollHeight - 10;
+    btnUp.style.display = canUp ? 'flex' : 'none';
+    btnDn.style.display = canDn ? 'flex' : 'none';
+  }
+
+  panel.addEventListener('scroll', updateArrows, { passive: true });
+  // Check after animations complete
+  setTimeout(updateArrows, 2500);
+
+  [btnUp, btnDn].forEach(btn => {
+    btn.addEventListener('mouseover', () => { btn.style.background='#5B6AD0'; btn.style.color='#fff'; btn.style.boxShadow='0 0 16px rgba(91,106,208,0.6)'; });
+    btn.addEventListener('mouseout',  () => { btn.style.background='#1a1a1a'; btn.style.color='#5B6AD0'; btn.style.boxShadow='0 0 10px rgba(91,106,208,0.3)'; });
+  });
 </script>
