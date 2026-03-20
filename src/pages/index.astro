@@ -12,7 +12,7 @@ import Terminal from '../components/Terminal.astro';
   <div style="
     display: grid;
     grid-template-columns: 38% 62%;
-    height: 100vh;
+    height: 100svh;
     overflow: hidden;
   " id="layout">
 
@@ -22,20 +22,21 @@ import Terminal from '../components/Terminal.astro';
     </div>
 
     <!-- Right: terminal -->
-    <div style="overflow:hidden; display:flex; flex-direction:column;">
+    <div style="overflow:hidden; display:flex; flex-direction:column; min-height:0;">
       <Terminal />
     </div>
   </div>
 </Layout>
 
 <style>
+  /* ── Mobile: stack vertically ─────────────────────────── */
   @media (max-width: 767px) {
     #layout {
       grid-template-columns: 1fr !important;
-      grid-template-rows: auto 1fr;
-      height: auto !important;
-      overflow: auto !important;
+      grid-template-rows: auto 1fr !important;
+      height: 100svh !important;
+      overflow: hidden !important;
     }
-    html, body { overflow: auto !important; }
+    html, body { height: 100svh; overflow: hidden; }
   }
 </style>

@@ -33,13 +33,19 @@
 
   <!-- Terminal output -->
   <div id="term-output" style="
-    flex:1; overflow-y:auto; padding:12px 14px 8px;
+    flex:1; overflow-y:scroll; overflow-x:hidden; padding:12px 14px 8px;
     font-family:'JetBrains Mono'; font-size:13.5px; line-height:1.85;
-    color:#ABB2BF; background:#282C34;
+    color:#ABB2BF; background:#282C34; word-break:break-word;
+    -webkit-overflow-scrolling:touch;
   "></div>
 
   <!-- Input area -->
-  <div style="background:#282C34; padding:0 14px 10px; flex-shrink:0; border-top:1px solid #3E4451;">
+  <div id="term-input-area" style="background:#282C34; padding:0 14px 10px; flex-shrink:0; border-top:1px solid #3E4451; position:relative;">
+    <!-- Hidden input captures mobile keyboard -->
+    <input id="term-mobile-input" type="text"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;top:0;left:0;"
+    />
     <div id="term-sugg" style="
       display:none; flex-wrap:wrap; gap:5px;
       margin-bottom:7px; padding-top:7px;
@@ -52,6 +58,11 @@
         <span id="term-ghost" style="color:#3E4451; white-space:pre;"></span>
         <span id="term-cur" style="color:#5B6AD0; flex-shrink:0; animation:blink 1.1s step-end infinite;">█</span>
       </div>
+      <!-- Mobile tap-to-type hint -->
+      <span id="term-tap-hint" style="
+        display:none; font-family:'JetBrains Mono'; font-size:11px;
+        color:#4B5263; flex-shrink:0; padding-right:4px;
+      ">tap to type</span>
     </div>
   </div>
 
@@ -61,19 +72,19 @@
     padding:3px 10px;
     background:#21252B; border-top:1px solid #181A1F;
     font-family:'JetBrains Mono'; font-size:10.5px; color:#5C6370;
-    flex-shrink:0; user-select:none;
+    flex-shrink:0; user-select:none; overflow:hidden;
   ">
-    <div style="display:flex;align-items:center;gap:5px;">
+    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5C6370" stroke-width="2" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
       <span>try-fail-loop</span>
     </div>
-    <span style="color:#3E4451;">·</span>
-    <span>Tab: autocomplete</span>
-    <span style="color:#3E4451;">·</span>
-    <span>↑↓: history</span>
-    <span style="color:#3E4451;">·</span>
-    <span>Ctrl+L: reset</span>
-    <div style="margin-left:auto;"><span>utf-8</span></div>
+    <span class="sb-hint" style="color:#3E4451;">·</span>
+    <span class="sb-hint">Tab: autocomplete</span>
+    <span class="sb-hint" style="color:#3E4451;">·</span>
+    <span class="sb-hint">↑↓: history</span>
+    <span class="sb-hint" style="color:#3E4451;">·</span>
+    <span class="sb-hint">Ctrl+L: reset</span>
+    <div style="margin-left:auto;flex-shrink:0;"><span>utf-8</span></div>
   </div>
 </div>
 
@@ -120,8 +131,9 @@
   }
 
   const blank   = () => addLine('');
-  const sep     = () => addLine(`${d('─'.repeat(58))}`);
-  const divider = () => addLine(`<span style="color:#E4E4E7;user-select:none;">${'─'.repeat(58)}</span>`);
+  const sepLen  = () => Math.min(58, Math.floor((out.clientWidth - 28) / 8));
+  const sep     = () => addLine(`<span style="display:block;overflow:hidden;white-space:nowrap;color:#5C5954;user-select:none;line-height:1;">${'─'.repeat(80)}</span>`);
+  const divider = () => addLine(`<span style="display:block;overflow:hidden;white-space:nowrap;color:#3E4451;user-select:none;line-height:1;padding:10px 0;">${'─'.repeat(80)}</span>`);
   const echo    = (cmd: string) => addLine(`${cu('❯')} ${m(cmd)}`);
 
   // ── data ─────────────────────────────────────────────────────
@@ -402,8 +414,7 @@
   }
 
   // ── keyboard ─────────────────────────────────────────────────
-  window.addEventListener('keydown', async e => {
-    // Ctrl+L — reset terminal to boot state
+  async function handleKey(e: KeyboardEvent) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
       e.preventDefault();
       out.innerHTML = '';
@@ -426,7 +437,6 @@
       await execute(cmd);
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      // On first Tab, snapshot the base; on subsequent Tabs, cycle from that base
       if (tabIdx === -1) tabBase = buf;
       const ms = getMatches(tabBase);
       if (!ms.length) { render(); return; }
@@ -441,7 +451,49 @@
       hIdx > 0 ? (buf = hist[--hIdx]) : (hIdx = -1, buf = '');
       render();
     }
-  });
+  }
+
+  window.addEventListener('keydown', handleKey);
+
+  // ── mobile input ─────────────────────────────────────────────
+  const mobileInput = document.getElementById('term-mobile-input') as HTMLInputElement;
+  const inputArea   = document.getElementById('term-input-area')!;
+  const tapHint     = document.getElementById('term-tap-hint')!;
+  const isMobile    = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  if (isMobile()) {
+    tapHint.style.display = 'block';
+
+    // Tap anywhere in output or input area → focus hidden input
+    [out, inputArea].forEach(el => {
+      el.addEventListener('click', () => {
+        mobileInput.style.pointerEvents = 'auto';
+        mobileInput.focus();
+        mobileInput.style.pointerEvents = 'none';
+      });
+    });
+
+    mobileInput.addEventListener('focus', () => {
+      tapHint.style.display = 'none';
+    });
+    mobileInput.addEventListener('blur', () => {
+      if (!buf) tapHint.style.display = 'block';
+    });
+
+    // Capture input events (handles IME, paste, autocorrect etc.)
+    mobileInput.addEventListener('input', () => {
+      const val = mobileInput.value;
+      if (!val) return;
+      buf += val;
+      mobileInput.value = '';
+      hIdx = -1; tabIdx = -1; tabBase = '';
+      animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
+      render();
+    });
+
+    // Keydown for Backspace / Enter on mobile
+    mobileInput.addEventListener('keydown', handleKey);
+  }
 
   // ── boot ─────────────────────────────────────────────────────
   const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
@@ -466,3 +518,24 @@
 
   boot();
 </script>
+
+<style>
+  /* Mobile: hide keyboard hints, bigger touch targets */
+  @media (max-width: 767px) {
+    .sb-hint { display: none !important; }
+
+    #term-output {
+      font-size: 12.5px !important;
+      padding: 10px 12px 6px !important;
+    }
+
+    #term-input-area {
+      padding: 8px 12px 12px !important;
+    }
+
+    #term-input-area div[style*="gap:8px"] {
+      font-size: 14px !important;
+      min-height: 32px;
+    }
+  }
+</style>
