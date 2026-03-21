@@ -139,47 +139,51 @@
   // ── data ─────────────────────────────────────────────────────
   const JOBS = [
     { role:'Solution Architect',     co:'Regask',        coKey:'regask',  period:'Jul 2025 → Present', active:true, bullets:[
-      'Knative + K8s: infra costs ↓30%, scaled to 100K RPS',
-      'Grafana Cloud: SLO baselines + anomaly detection alerts',
-      'Redis write-behind caching: 10K → 100K RPS throughput',
-      'Crossplane + Terraform: unified K8s provisioning',
-      'Internal mesh simulator: issue resolution time ↓20%',
+      'Knative on K8s: throughput ↑40%, infra costs ↓30%',
+      'Grafana Cloud: SLO baselines + anomaly detection → proactive incident response',
+      'Redis improvement: 10K → 100K RPS (×10) for heavy write services',
+      'Internal dev portal: microservice catalog + DORA metrics for management',
+      'Infra/platform collaboration: tooling from planning to delivery',
     ]},
     { role:'Senior Software Engineer', co:'Regask',      coKey:'regask',  period:'Feb 2024 — Jul 2025', active:false, bullets:[
-      'Azure HA fault-tolerant system with full redundancy',
-      'Okta SSO (SAML + OIDC) across all enterprise services',
-      'Go rewrites of Node.js services: memory usage ↓50–60%',
-      'Technical Solution Docs: reduced review back-and-forth',
+      'AKS: highly available, fault-tolerant system with redundancy + failover',
+      'Auth0 SSO (SAML + OIDC): security compliance + PKCE token exchange',
+      'Go rewrites of Node.js: 1.5GB → 400-500MB (↓50–60%) memory',
+      'Technical Solution Docs + ARD: structured code reviews across 5–7 engineers',
     ]},
     { role:'Senior Software Engineer', co:'PerxTech',    coKey:'perxtech', period:'Jan 2022 — Sept 2023', active:false, bullets:[
-      'Led 5-person team: Kafka + AWS Step Functions orchestration',
-      'Ruby servers: 10K req/s throughput',
-      'Traefik API Gateway: centralized routing + load balancing',
+      'Led 5-person cross-functional team, aligned delivery + reduced overhead',
+      'Ruby servers: 10K req/s without infrastructure changes',
+      'Kong API Gateway: centralised routing, load balancing + access control',
       'ETL pipeline: 5h → 15 min/GB — 95% reduction',
     ]},
     { role:'Full Stack Engineer',    co:'Oivan',          coKey:'oivan',   period:'Jan 2021 — Jan 2022', active:false, bullets:[
-      'Led 2–3 engineers on Saudi real estate microservices platform',
-      'gRPC for low-latency internal communication',
-      'Query latency: 3s → 500ms',
+      'Frontend team leadership: project alignment + technical documentation',
+      'Microservice architecture documentation',
+      'Code quality via rigorous testing + optimisation',
+      'Query performance improvements, enhancing user experience',
     ]},
     { role:'Full Stack Engineer',    co:'Nucleus Studio', coKey:'nucleus', period:'Jan 2020 — Jan 2021', active:false, bullets:[
-      'React Native apps with Firebase + GCP + AWS',
-      'NestJS backend + RTC livestream / video call features',
+      'Hybrid mobile app with React Native',
+      'NestJS backend architecture',
+      'Firebase, GCP + AWS integration',
+      'Livestream + video call features via RTC protocol',
     ]},
     { role:'Platform Developer',     co:'Aleph Labs',     coKey:'aleph',   period:'Jan 2018 — Jan 2020', active:false, bullets:[
-      'Reusable component library used across multiple teams',
-      'Auth API design + SDK for front-end/back-end integration',
+      'Authentication APIs: design + implementation for system security',
+      'Core front-end components for cross-team utilisation',
+      'Core SDK microservice maintained across multiple teams',
     ]},
   ];
 
   const STACKS: [string,string][] = [
-    ['BACKEND',       'Go · Ruby · Node.js · NestJS · gRPC'],
-    ['CLOUD',         'AWS · Azure · GCP'],
-    ['DEVOPS',        'Kubernetes · Knative · Terraform · Crossplane'],
-    ['DATA',          'Kafka · Redis · PostgreSQL · ETL Pipelines'],
+    ['BACKEND',       'Go · Ruby · Node.js · NestJS'],
+    ['CLOUD',         'AWS · Azure · GCP · Cloud Solutions'],
+    ['DEVOPS',        'Kubernetes · Knative · Terraform · DevOps'],
+    ['DATA',          'Kafka · Redis · PostgreSQL · Data Pipelines'],
     ['OBSERVABILITY', 'Grafana · SLO · Anomaly Detection'],
-    ['ARCHITECTURE',  'Microservices · Event-Driven · API Design'],
-    ['MOBILE',        'React Native · Angular'],
+    ['ARCHITECTURE',  'Microservices · API Design · Event-Driven'],
+    ['FRONTEND',      'React Native · Angular · React'],
   ];
 
   const CERTS = [
@@ -223,9 +227,9 @@
     await addLine(`${w('Louis Huy Nguyen')}  ${d('·')}  ${bl('Software Architect')}`);
     await addLine(d('Vietnam  ·  huynguyennbk@gmail.com'));
     await blank();
-    await addLine(m('8+ years designing scalable cloud architectures.'));
-    await addLine(`${m('Built systems handling')} ${g('100K RPS')}${m('. Passionate')}`);
-    await addLine(m('about Kubernetes, open source, and infra at scale.'));
+    await addLine(m('Senior SWE with 8+ years designing scalable architectures'));
+    await addLine(m('and optimizing cloud solutions. Passionate about solving'));
+    await addLine(`${m('complex problems that require')} ${g('architect mindsets')}${m('.')}`);
     await blank();
   }
 
