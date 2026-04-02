@@ -84,12 +84,13 @@
     <!-- Hidden mobile input captures keyboard -->
     <input id="term-mobile-input" type="text"
       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      aria-hidden="true"
       style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;top:0;left:0;"
     />
     <span style="color:#4a7a4a; font-size:12px; flex-shrink:0;">$</span>
-    <div style="display:flex; align-items:center; flex:1; min-width:0;">
-      <span id="term-typed" style="color:#98c379; white-space:pre; font-size:12px;"></span>
-      <span id="term-ghost" style="color:#1a3a1a; white-space:pre; font-size:12px;"></span>
+    <div style="display:flex; align-items:center; flex:1; min-width:0; font-size:12px;">
+      <span id="term-typed" style="color:#98c379; white-space:pre;"></span>
+      <span id="term-ghost" style="color:#1a3a1a; white-space:pre;"></span>
       <span id="term-cur" class="gt-cursor"></span>
     </div>
     <span id="term-tap-hint" style="display:none; color:#1a3a1a; font-size:10px; flex-shrink:0; padding-right:4px;">tap to type</span>
