@@ -122,10 +122,9 @@
   const gmu  = (s: string) => C('#3a6a3a', s);   // muted
   const gf   = (s: string) => C('#2a5a2a', s);   // faint
   const gg   = (s: string) => C('#1a3a1a', s);   // ghost
+  const safeUrl = (u: string) => /^(https?:|mailto:)/.test(u) ? u : '#';
   const link = (url: string, label: string) =>
-    `<a href="${esc(url)}" target="_blank" rel="noopener"
-       style="color:#4a7a4a;text-decoration:underline;text-underline-offset:3px;"
-       onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#4a7a4a'">${esc(label)}</a>`;
+    `<a href="${safeUrl(url)}" target="_blank" rel="noopener" class="gt-link">${esc(label)}</a>`;
 
   // ── line renderer ─────────────────────────────────────────────
   async function addLine(html = '', delayS = 0) {
@@ -387,9 +386,7 @@
     const rows = files.map(f =>
       `<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
          <span style="color:#4a7a4a;font-size:10px;min-width:90px;">${esc(f.label)}</span>
-         <a href="/${f.file}" download="${f.name}"
-            style="color:#4a7a4a;text-decoration:underline;text-underline-offset:3px;font-size:10px;"
-            onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#4a7a4a'">↓ download</a>
+         <a href="/${f.file}" download="${f.name}" class="gt-link" style="font-size:10px;">↓ download</a>
        </div>`
     ).join('');
     const inner =
@@ -416,7 +413,7 @@
     if (cmd === 'certs')                         { await cmdCerts();       return; }
     if (cmd === 'links')                         { await cmdLinks();       return; }
     if (cmd === 'download')                      { await cmdDownload();    return; }
-    if (cmd === 'exp' || cmd.startsWith('exp ')) { await cmdExp(cmd.slice(3)); return; }
+    if (cmd === 'exp' || cmd.startsWith('exp ')) { await cmdExp(cmd.slice(4)); return; }
     await blank();
     await addLine(`  ${C('#e06c75','command not found:')} ${gd(raw.trim())}  ${gg('— try')} ${gb('help')}`);
     await blank();

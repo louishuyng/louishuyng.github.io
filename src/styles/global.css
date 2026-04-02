@@ -183,6 +183,14 @@ body {
 }
 .gt-bullet::before { content: '→'; color: #2a5a2a; flex-shrink: 0; }
 
+/* Green terminal link */
+.gt-link {
+  color: #4a7a4a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gt-link:hover { color: #98c379; }
+
 /* Scrollbar for the output panel */
 #term-output::-webkit-scrollbar { width: 3px; }
 #term-output::-webkit-scrollbar-track { background: transparent; }
