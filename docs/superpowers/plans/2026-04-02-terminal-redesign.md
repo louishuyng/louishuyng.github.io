@@ -1,0 +1,886 @@
+# Terminal Redesign Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Rebuild `Terminal.astro` with a Retro Green phosphor palette, sidebar+output two-column layout, and card block output formatting.
+
+**Architecture:** The terminal is a single Astro component with inline HTML, a `<script>` block for all interactivity, and a `<style>` block for responsive overrides. Structural CSS classes (`.gt-*`) live in `global.css`; the component's `<style>` block handles only mobile breakpoints. The sidebar (140px) shows all commands with descriptions; clicking any fires the command. Output renders as animated card blocks.
+
+**Tech Stack:** Astro, TypeScript, Motion (animate), vanilla JS, Tailwind CSS (via global.css)
+
+---
+
+## File Map
+
+| File | Change |
+|---|---|
+| `src/styles/global.css` | Add `.gt-*` CSS classes for sidebar, cards, cursor |
+| `src/components/Terminal.astro` | Full rewrite: HTML shell, `<script>`, `<style>` |
+
+---
+
+## Task 1: Add Green Terminal CSS to global.css
+
+**Files:**
+- Modify: `src/styles/global.css` (append to end of file)
+
+- [ ] **Step 1: Append the `.gt-*` classes to the end of `src/styles/global.css`**
+
+```css
+/* ── Green Terminal (gt-*) ───────────────────────────────────── */
+
+/* Sidebar structural classes */
+.gt-section-label {
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #1a3a1a;
+  margin-bottom: 8px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+.gt-section-label:first-child { margin-top: 0; }
+
+.gt-sidebar-divider {
+  height: 1px;
+  background: #0a180a;
+  margin: 8px 0;
+}
+
+.gt-cmd-item {
+  padding: 4px 8px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.1s, border-color 0.1s;
+}
+.gt-cmd-item:hover {
+  background: #0a180a;
+}
+.gt-cmd-item.active {
+  background: #0f1f0f;
+  border-left-color: #98c379;
+}
+.gt-cmd-name {
+  display: block;
+  font-size: 11px;
+  color: #4a7a4a;
+}
+.gt-cmd-item.active .gt-cmd-name { color: #98c379; }
+.gt-cmd-desc {
+  display: block;
+  font-size: 9px;
+  color: #1a3a1a;
+  margin-top: 1px;
+}
+.gt-cmd-item.active .gt-cmd-desc { color: #2a5a2a; }
+
+/* Blinking block cursor */
+.gt-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: #98c379;
+  box-shadow: 0 0 6px rgba(152,195,121,0.5);
+  vertical-align: middle;
+  border-radius: 1px;
+  flex-shrink: 0;
+  animation: blink 1.1s step-end infinite;
+}
+
+/* Result card */
+.gt-card {
+  background: #030803;
+  border: 1px solid #0f1f0f;
+  border-left: 2px solid #98c379;
+  border-radius: 0 5px 5px 0;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.gt-card-title {
+  color: #98c379;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+.gt-card-role  { color: #4a7a4a; font-size: 10px; margin-top: 2px; }
+.gt-card-period{ color: #2a5a2a; font-size: 10px; }
+.gt-card-divider {
+  height: 1px;
+  background: #0a180a;
+  margin: 6px 0;
+}
+.gt-card-stack {
+  color: #2a5a2a;
+  font-size: 9.5px;
+}
+.gt-card-stack span { color: #4a7a4a; }
+.gt-card-bullets { margin-top: 0; }
+.gt-bullet {
+  font-size: 10px;
+  color: #3a6a3a;
+  display: flex;
+  gap: 6px;
+  margin-top: 3px;
+}
+.gt-bullet::before { content: '→'; color: #2a5a2a; flex-shrink: 0; }
+
+/* Scrollbar for the output panel */
+#term-output::-webkit-scrollbar { width: 3px; }
+#term-output::-webkit-scrollbar-track { background: transparent; }
+#term-output::-webkit-scrollbar-thumb { background: #1a3a1a; border-radius: 2px; }
+#term-output::-webkit-scrollbar-thumb:hover { background: #98c379; }
+
+/* Hide sidebar on mobile */
+@media (max-width: 767px) {
+  #term-sidebar { display: none !important; }
+  #term-hints   { display: none !important; }
+}
+```
+
+- [ ] **Step 2: Verify the site still builds**
+
+```bash
+cd /Users/louishuyng/LX14/repository/github.com/louishuyng/porfolio
+npm run build 2>&1 | tail -5
+```
+Expected: build completes with no errors.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/styles/global.css
+git commit -m "feat: add green terminal CSS classes (gt-*)"
+```
+
+---
+
+## Task 2: Rewrite Terminal.astro HTML Shell
+
+Replace the entire contents of `src/components/Terminal.astro`. Do this in three steps: HTML, script, style.
+
+**Files:**
+- Modify: `src/components/Terminal.astro`
+
+- [ ] **Step 1: Replace the file with the new HTML shell + empty script + style placeholders**
+
+Write the entire file as shown below. The `<script>` block is filled in Task 3–6. Do not omit any line.
+
+```astro
+<!-- Retro Green terminal -->
+<div id="terminal-root" style="
+  display:flex; flex-direction:column; height:100%;
+  background:#050a05; font-family:'JetBrains Mono','Fira Code',monospace;
+  border-radius:8px; overflow:hidden;
+  border:1px solid #0f1f0f;
+  box-shadow:0 0 40px rgba(152,195,121,0.04),0 20px 60px rgba(0,0,0,0.5);
+">
+
+  <!-- Title bar -->
+  <div style="
+    display:flex; align-items:center; gap:8px;
+    background:#060d06; border-bottom:1px solid #0f1f0f;
+    padding:0 14px; height:36px; flex-shrink:0;
+  ">
+    <div style="display:flex;gap:6px;margin-right:8px;">
+      <div style="width:11px;height:11px;border-radius:50%;background:#ff5f57;"></div>
+      <div style="width:11px;height:11px;border-radius:50%;background:#febc2e;"></div>
+      <div style="width:11px;height:11px;border-radius:50%;background:#28c840;"></div>
+    </div>
+    <div style="
+      background:#050a05; color:#98c379; font-size:11px;
+      padding:3px 14px; border:1px solid #142014; border-bottom:none;
+      border-radius:5px 5px 0 0; margin-top:2px; white-space:nowrap;
+    ">louishuyng — fish</div>
+    <div style="margin-left:auto; color:#1a3a1a; font-size:10px; white-space:nowrap;">louishuyng.dev</div>
+  </div>
+
+  <!-- Body: sidebar + output -->
+  <div style="display:flex; flex:1; min-height:0;">
+
+    <!-- Sidebar -->
+    <div id="term-sidebar" style="
+      width:140px; background:#030803; border-right:1px solid #0f1f0f;
+      padding:16px 10px; flex-shrink:0; overflow-y:auto;
+      display:flex; flex-direction:column;
+    ">
+      <div class="gt-section-label">PROFILE</div>
+      <div class="gt-cmd-item" data-cmd="info">
+        <span class="gt-cmd-name">info</span>
+        <span class="gt-cmd-desc">about me</span>
+      </div>
+      <div class="gt-cmd-item" data-cmd="links">
+        <span class="gt-cmd-name">links</span>
+        <span class="gt-cmd-desc">social &amp; contact</span>
+      </div>
+
+      <div class="gt-sidebar-divider"></div>
+
+      <div class="gt-section-label">WORK</div>
+      <div class="gt-cmd-item" data-cmd="exp">
+        <span class="gt-cmd-name">exp</span>
+        <span class="gt-cmd-desc">experience</span>
+      </div>
+      <div class="gt-cmd-item" data-cmd="certs">
+        <span class="gt-cmd-name">certs</span>
+        <span class="gt-cmd-desc">certifications</span>
+      </div>
+
+      <div class="gt-sidebar-divider"></div>
+
+      <div class="gt-section-label">FILES</div>
+      <div class="gt-cmd-item" data-cmd="download">
+        <span class="gt-cmd-name">download</span>
+        <span class="gt-cmd-desc">cv / cover letter</span>
+      </div>
+    </div>
+
+    <!-- Output area -->
+    <div id="term-output" style="
+      flex:1; overflow-y:auto; overflow-x:hidden;
+      padding:16px 18px 8px; word-break:break-word;
+      -webkit-overflow-scrolling:touch; min-width:0;
+      font-size:13px; line-height:1.8; color:#3a6a3a;
+    "></div>
+  </div>
+
+  <!-- Input bar -->
+  <div id="term-input-area" style="
+    background:#030803; border-top:1px solid #0f1f0f;
+    padding:8px 18px; flex-shrink:0; position:relative;
+    display:flex; align-items:center; gap:8px; min-height:44px;
+  ">
+    <!-- Hidden mobile input captures keyboard -->
+    <input id="term-mobile-input" type="text"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;top:0;left:0;"
+    />
+    <span style="color:#4a7a4a; font-size:12px; flex-shrink:0;">$</span>
+    <div style="display:flex; align-items:center; flex:1; min-width:0;">
+      <span id="term-typed" style="color:#98c379; white-space:pre; font-size:12px;"></span>
+      <span id="term-ghost" style="color:#1a3a1a; white-space:pre; font-size:12px;"></span>
+      <span id="term-cur" class="gt-cursor"></span>
+    </div>
+    <span id="term-tap-hint" style="display:none; color:#1a3a1a; font-size:10px; flex-shrink:0; padding-right:4px;">tap to type</span>
+    <div id="term-hints" style="display:flex; gap:10px; color:#142014; font-size:9px; flex-shrink:0;">
+      <span>Tab</span><span>↑↓</span><span>Ctrl+L</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// PLACEHOLDER — filled in Task 3
+</script>
+
+<style>
+/* PLACEHOLDER — filled in Task 7 */
+</style>
+```
+
+- [ ] **Step 2: Verify the site builds and the terminal renders the new structure**
+
+```bash
+npm run build 2>&1 | tail -5
+```
+Expected: no errors. Open `dist/index.html` and search for `term-sidebar` to confirm structure exists.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/components/Terminal.astro
+git commit -m "feat: terminal HTML shell — sidebar+output layout"
+```
+
+---
+
+## Task 3: Data, Color Helpers, and Rendering Primitives
+
+Replace the `<script>` placeholder with the data layer and rendering primitives.
+
+**Files:**
+- Modify: `src/components/Terminal.astro` (the `<script>` block only)
+
+- [ ] **Step 1: Replace the `<script>` placeholder with the following**
+
+```ts
+import { animate } from 'motion';
+
+const out     = document.getElementById('term-output')!;
+const typed   = document.getElementById('term-typed')!;
+const ghost   = document.getElementById('term-ghost')!;
+
+let buf    = '';
+let hist: string[] = [];
+let hIdx   = -1;
+let tabIdx = -1;
+let tabBase = '';
+
+// ── color helpers (green phosphor palette) ────────────────────
+const esc  = (s: string) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const C    = (col: string, s: string) => `<span style="color:${col};">${esc(s)}</span>`;
+const gb   = (s: string) => C('#98c379', s);   // bright green
+const gm   = (s: string) => C('#7ab87a', s);   // mid green
+const gd   = (s: string) => C('#4a7a4a', s);   // dim green
+const gmu  = (s: string) => C('#3a6a3a', s);   // muted
+const gf   = (s: string) => C('#2a5a2a', s);   // faint
+const gg   = (s: string) => C('#1a3a1a', s);   // ghost
+const link = (url: string, label: string) =>
+  `<a href="${esc(url)}" target="_blank" rel="noopener"
+     style="color:#4a7a4a;text-decoration:underline;text-underline-offset:3px;"
+     onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#4a7a4a'">${esc(label)}</a>`;
+
+// ── line renderer ─────────────────────────────────────────────
+async function addLine(html = '', delayS = 0) {
+  const div = document.createElement('div');
+  div.style.cssText = 'line-height:1.8; opacity:0; font-size:13px;';
+  div.innerHTML = html;
+  out.appendChild(div);
+  await animate(div, { opacity:[0,1], x:[-4,0] },
+    { duration:0.10, delay:delayS, easing:[0.16,1,0.3,1] }).finished;
+  out.scrollTop = out.scrollHeight;
+}
+
+const blank = () => addLine('');
+
+// Prompt line: "$ command"
+const echo = (cmd: string) =>
+  addLine(`${gd('$')} ${gb(cmd)}`);
+
+// Render a card block — returns a div already appended to out
+async function renderCard(inner: string) {
+  const card = document.createElement('div');
+  card.className = 'gt-card';
+  card.style.opacity = '0';
+  card.innerHTML = inner;
+  out.appendChild(card);
+  await animate(card, { opacity:[0,1], x:[-6,0] },
+    { duration:0.14, easing:[0.16,1,0.3,1] }).finished;
+  out.scrollTop = out.scrollHeight;
+}
+
+// ── data ─────────────────────────────────────────────────────
+const JOBS = [
+  { role:'Solution Architect',       co:'Regask',        coKey:'regask',  period:'Jul 2025 → Present', active:true, stack:'Go · Kubernetes · Knative · Azure · Grafana', bullets:[
+    'Knative on K8s: throughput ↑40%, infra costs ↓30%',
+    'Grafana Cloud: SLO baselines + anomaly detection → proactive incident response',
+    'Redis improvement: 10K → 100K RPS (×10) for heavy write services',
+    'Internal dev portal: microservice catalog + DORA metrics for management',
+  ]},
+  { role:'Senior Software Engineer', co:'Regask',        coKey:'regask',  period:'Feb 2024 — Jul 2025', active:false, stack:'Go · Node.js · AKS · Auth0 · SAML · OIDC', bullets:[
+    'AKS: highly available, fault-tolerant system with redundancy + failover',
+    'Auth0 SSO (SAML + OIDC): security compliance + PKCE token exchange',
+    'Go rewrites of Node.js: 1.5GB → 400-500MB (↓50–60%) memory',
+    'Technical Solution Docs + ARD: structured code reviews across 5–7 engineers',
+  ]},
+  { role:'Senior Software Engineer', co:'PerxTech',      coKey:'perxtech', period:'Jan 2022 — Sept 2023', active:false, stack:'Ruby · Kong · PostgreSQL · AWS · ETL', bullets:[
+    'Led 5-person cross-functional team, aligned delivery + reduced overhead',
+    'Ruby servers: 10K req/s without infrastructure changes',
+    'Kong API Gateway: centralised routing, load balancing + access control',
+    'ETL pipeline: 5h → 15 min/GB — 95% reduction',
+  ]},
+  { role:'Full Stack Engineer',      co:'Oivan',          coKey:'oivan',   period:'Jan 2021 — Jan 2022', active:false, stack:'React · Node.js · PostgreSQL · Docker', bullets:[
+    'Frontend team leadership: project alignment + technical documentation',
+    'Microservice architecture documentation',
+    'Code quality via rigorous testing + optimisation',
+    'Query performance improvements, enhancing user experience',
+  ]},
+  { role:'Full Stack Engineer',      co:'Nucleus Studio', coKey:'nucleus', period:'Jan 2020 — Jan 2021', active:false, stack:'React Native · NestJS · Firebase · GCP · AWS', bullets:[
+    'Hybrid mobile app with React Native',
+    'NestJS backend architecture',
+    'Firebase, GCP + AWS integration',
+    'Livestream + video call features via RTC protocol',
+  ]},
+  { role:'Platform Developer',       co:'Aleph Labs',     coKey:'aleph',   period:'Jan 2018 — Jan 2020', active:false, stack:'Node.js · React · PostgreSQL · Microservices', bullets:[
+    'Authentication APIs: design + implementation for system security',
+    'Core front-end components for cross-team utilisation',
+    'Core SDK microservice maintained across multiple teams',
+  ]},
+];
+
+const STACKS: [string, string][] = [
+  ['BACKEND',       'Go, Ruby, Node.js, NestJS'],
+  ['CLOUD',         'AWS, Azure, GCP'],
+  ['DEVOPS',        'Kubernetes, Knative, Terraform, Docker, ArgoCD'],
+  ['DATA',          'Kafka, Redis, PostgreSQL, ETL Pipelines'],
+  ['OBSERVABILITY', 'Grafana, SLO, Anomaly Detection, Prometheus'],
+  ['ARCHITECTURE',  'Microservices, API Design, Event-Driven, DDD'],
+  ['FRONTEND',      'React, React Native, Angular'],
+];
+
+const CERTS = [
+  { name:'Claude Code In Action', issuer:'Anthropic / Skilljar', url:'https://verify.skilljar.com/c/jfnifed5mprf' },
+  { name:'Cloud Badges (AWS · Azure · GCP)', issuer:'Credly', url:'https://www.credly.com/users/nguyen-louis/badges#credly' },
+];
+
+const LINKS = [
+  { label:'GitHub',       url:'https://github.com/louishuyng',                                          disp:'github.com/louishuyng' },
+  { label:'LinkedIn',     url:'https://www.linkedin.com/in/louishuyng/',                                disp:'linkedin.com/in/louishuyng' },
+  { label:'Raycast',      url:'https://www.raycast.com/louishuyng',                                     disp:'raycast.com/louishuyng' },
+  { label:'Certificates', url:'https://www.credly.com/users/nguyen-louis/badges#credly',                disp:'credly.com/users/nguyen-louis' },
+  { label:'Email',        url:'mailto:huynguyennbk@gmail.com',                                          disp:'huynguyennbk@gmail.com' },
+];
+
+// ── command handlers ─────────────────────────────────────────
+
+async function cmdHelp() {
+  await blank();
+  const rows: [string, string][] = [
+    ['help',              'Show this message'],
+    ['info',              'About Louis Huy Nguyen'],
+    ['exp jobs',          'List all positions'],
+    ['exp job <company>', 'Full detail for a company'],
+    ['exp stacks',        'Tech stack by category'],
+    ['exp years',         'Career timeline 2018 → present'],
+    ['certs',             'Professional certifications'],
+    ['links',             'GitHub · LinkedIn · Raycast · Certificates'],
+    ['download',          'Download CV / cover letter'],
+    ['clear',             'Clear terminal'],
+  ];
+  for (const [cmd, desc] of rows) {
+    await addLine(`  ${gb(cmd.padEnd(22))}  ${gf(desc)}`);
+  }
+  await blank();
+}
+
+async function cmdInfo() {
+  await blank();
+  const rows: [string, string][] = [
+    ['name',     'Louis Huy Nguyen'],
+    ['role',     'Software Architect'],
+    ['location', 'Vietnam'],
+    ['exp',      '8+ years'],
+    ['email',    'huynguyennbk@gmail.com'],
+  ];
+  const inner = rows.map(([k, v]) =>
+    `<div style="display:flex;gap:0;margin-bottom:3px;">
+       <span style="color:#2a5a2a;font-size:10.5px;min-width:80px;">${esc(k)}</span>
+       <span style="color:#98c379;font-size:10.5px;">${esc(v)}</span>
+     </div>`
+  ).join('') +
+  `<div class="gt-card-divider"></div>
+   <div style="color:#3a6a3a;font-size:10px;line-height:1.7;">
+     Senior SWE with 8+ years designing scalable architectures<br>
+     and optimizing cloud solutions. Passionate about solving<br>
+     complex problems that require architect mindsets.
+   </div>`;
+  await renderCard(inner);
+  await blank();
+}
+
+async function cmdExpJobs() {
+  await blank();
+  for (const j of JOBS) {
+    const dot = j.active
+      ? `<span style="color:#98c379;animation:blink 2s ease infinite;margin-right:6px;">●</span>`
+      : `<span style="color:#1a3a1a;margin-right:6px;">○</span>`;
+    const inner =
+      `<div class="gt-card-title">${dot}${esc(j.co)}</div>
+       <div class="gt-card-role">${esc(j.role)}</div>
+       <div class="gt-card-period">${esc(j.period)}</div>`;
+    await renderCard(inner);
+  }
+  await blank();
+  await addLine(`  ${gg('tip:')} ${gf('use')} ${gb('exp job <company>')} ${gf('for full details')}`);
+  await addLine(`  ${gf('keys:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>gb(k)).join(gf('  ·  '))}`);
+  await blank();
+}
+
+async function cmdExpJobCompany(query: string) {
+  const q = query.toLowerCase().trim();
+  const matches = JOBS.filter(j => j.coKey.includes(q) || j.co.toLowerCase().includes(q));
+  if (!matches.length) {
+    await blank();
+    await addLine(`  ${C('#e06c75','no match for')} ${gb(query)}`);
+    await addLine(`  ${gf('try:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>gb(k)).join('  ')}`);
+    await blank();
+    return;
+  }
+  await blank();
+  for (const j of matches) {
+    const dot = j.active
+      ? `<span style="color:#98c379;animation:blink 2s ease infinite;margin-right:6px;">●</span>`
+      : `<span style="color:#1a3a1a;margin-right:6px;">○</span>`;
+    const bullets = j.bullets.map(b =>
+      `<div class="gt-bullet">${esc(b)}</div>`
+    ).join('');
+    const inner =
+      `<div class="gt-card-title">${dot}${esc(j.co)}</div>
+       <div class="gt-card-role">${esc(j.role)}</div>
+       <div class="gt-card-period">${esc(j.period)}</div>
+       <div class="gt-card-divider"></div>
+       <div class="gt-card-stack"><span>stack: </span>${esc(j.stack)}</div>
+       <div class="gt-card-divider"></div>
+       <div class="gt-card-bullets">${bullets}</div>`;
+    await renderCard(inner);
+  }
+  await blank();
+}
+
+async function cmdExpStacks() {
+  await blank();
+  for (const [cat, val] of STACKS) {
+    const inner =
+      `<div class="gt-card-title" style="font-size:11px;letter-spacing:1px;">${esc(cat)}</div>
+       <div class="gt-card-divider"></div>
+       <div class="gt-card-stack">${esc(val)}</div>`;
+    await renderCard(inner);
+  }
+  await blank();
+}
+
+async function cmdExpYears() {
+  await blank();
+  const timeline: [string, string, string][] = [
+    ['Jan 2018', 'Platform Developer',   'Aleph Labs'],
+    ['Jan 2020', 'Full Stack Engineer',  'Nucleus Studio'],
+    ['Jan 2021', 'Full Stack Engineer',  'Oivan'],
+    ['Jan 2022', 'Senior SWE',           'PerxTech'],
+    ['Feb 2024', 'Senior SWE',           'Regask'],
+    ['Jul 2025', 'Solution Architect',   'Regask'],
+  ];
+  for (const [date, role, co] of timeline) {
+    await addLine(`  ${gf(date)}  ${gg('→')}  ${gm(role)}  ${gg('@')} ${gb(co)}`);
+  }
+  await blank();
+  await addLine(`  ${gg('─── 8 years of engineering ───')}`);
+  await blank();
+}
+
+async function cmdExp(args: string) {
+  const sub = args.trim().toLowerCase();
+  if (!sub || sub === 'jobs')   return cmdExpJobs();
+  if (sub === 'stacks')         return cmdExpStacks();
+  if (sub === 'years')          return cmdExpYears();
+  if (sub.startsWith('job '))   return cmdExpJobCompany(sub.slice(4));
+  return cmdExpJobCompany(sub);
+}
+
+async function cmdCerts() {
+  await blank();
+  for (const c of CERTS) {
+    const inner =
+      `<div class="gt-card-title">${esc(c.name)}</div>
+       <div class="gt-card-role">${esc(c.issuer)}</div>
+       <div class="gt-card-divider"></div>
+       <div style="font-size:10px;">${link(c.url, '↗ view credential')}</div>`;
+    await renderCard(inner);
+  }
+  await blank();
+}
+
+async function cmdLinks() {
+  await blank();
+  for (const l of LINKS) {
+    const inner =
+      `<div class="gt-card-title">${esc(l.label)}</div>
+       <div class="gt-card-divider"></div>
+       <div style="font-size:10px;">${link(l.url, l.disp + ' ↗')}</div>`;
+    await renderCard(inner);
+  }
+  await blank();
+}
+
+async function cmdDownload() {
+  await blank();
+  const files = [
+    { label:'CV / Resume',  file:'cv.pdf',           name:'Louis_Nguyen_Software_Engineer.pdf' },
+    { label:'Cover Letter', file:'cover-letter.pdf', name:'Louis_Huy_Nguyen_Cover_Letter.pdf'  },
+  ];
+  const rows = files.map(f =>
+    `<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+       <span style="color:#4a7a4a;font-size:10px;min-width:90px;">${esc(f.label)}</span>
+       <a href="/${f.file}" download="${f.name}"
+          style="color:#4a7a4a;text-decoration:underline;text-underline-offset:3px;font-size:10px;"
+          onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#4a7a4a'">↓ download</a>
+     </div>`
+  ).join('');
+  const inner =
+    `<div class="gt-card-title">Files</div>
+     <div class="gt-card-divider"></div>
+     ${rows}`;
+  await renderCard(inner);
+  await blank();
+}
+
+// ── execute ──────────────────────────────────────────────────
+async function execute(raw: string) {
+  const cmd = raw.trim().toLowerCase();
+  await echo(raw.trim());
+  if (!cmd) return;
+  if (cmd === 'clear') {
+    out.innerHTML = '';
+    setActiveCmd('');
+    return;
+  }
+  setActiveCmd(cmd.split(' ')[0]);
+  if (cmd === 'help')                          { await cmdHelp();        return; }
+  if (cmd === 'info')                          { await cmdInfo();        return; }
+  if (cmd === 'certs')                         { await cmdCerts();       return; }
+  if (cmd === 'links')                         { await cmdLinks();       return; }
+  if (cmd === 'download')                      { await cmdDownload();    return; }
+  if (cmd === 'exp' || cmd.startsWith('exp ')) { await cmdExp(cmd.slice(3)); return; }
+  await blank();
+  await addLine(`  ${C('#e06c75','command not found:')} ${gd(raw.trim())}  ${gg('— try')} ${gb('help')}`);
+  await blank();
+}
+
+// ── sidebar active state ─────────────────────────────────────
+function setActiveCmd(family: string) {
+  document.querySelectorAll<HTMLElement>('.gt-cmd-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.cmd === family);
+  });
+}
+
+// Sidebar click → fire command
+document.querySelectorAll<HTMLElement>('.gt-cmd-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const cmd = el.dataset.cmd!;
+    buf = cmd; render();
+    // short delay so user sees what was typed before execution
+    setTimeout(async () => {
+      const toRun = buf;
+      buf = ''; render();
+      await execute(toRun);
+    }, 80);
+  });
+});
+
+// ── autocomplete ─────────────────────────────────────────────
+const ALL_CMDS = [
+  'help','info','certs','links','download','clear',
+  'exp','exp jobs','exp stacks','exp years',
+  'exp job regask','exp job perxtech','exp job oivan','exp job nucleus','exp job aleph',
+];
+
+function getMatches(b: string) {
+  if (!b) return [];
+  return ALL_CMDS.filter(c => c.startsWith(b) && c !== b);
+}
+function ghostText(b: string) {
+  const ms = getMatches(b);
+  return ms.length === 1 ? ms[0].slice(b.length) : '';
+}
+
+function render() {
+  typed.textContent = buf;
+  animate(ghost, { opacity:[0.4, 1] }, { duration:0.12, easing:[0.16,1,0.3,1] });
+  ghost.textContent = ghostText(buf);
+}
+
+// ── keyboard ─────────────────────────────────────────────────
+async function handleKey(e: KeyboardEvent) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+    e.preventDefault();
+    out.innerHTML = '';
+    buf = ''; hIdx = -1;
+    setActiveCmd('');
+    render();
+    await boot();
+    return;
+  }
+  if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    buf += e.key; hIdx = -1; tabIdx = -1; tabBase = '';
+    animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
+    render();
+  } else if (e.key === 'Backspace') {
+    buf = buf.slice(0,-1); hIdx = -1; tabIdx = -1; tabBase = ''; render();
+  } else if (e.key === 'Enter') {
+    const cmd = buf;
+    if (cmd.trim()) hist.unshift(cmd.trim());
+    buf = ''; hIdx = -1; tabIdx = -1; tabBase = ''; render();
+    await execute(cmd);
+  } else if (e.key === 'Tab') {
+    e.preventDefault();
+    if (tabIdx === -1) tabBase = buf;
+    const ms = getMatches(tabBase);
+    if (!ms.length) { render(); return; }
+    tabIdx = (tabIdx + 1) % ms.length;
+    buf = ms[tabIdx];
+    render();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (hIdx < hist.length-1) { buf = hist[++hIdx]; render(); }
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    hIdx > 0 ? (buf = hist[--hIdx]) : (hIdx = -1, buf = '');
+    render();
+  }
+}
+
+window.addEventListener('keydown', handleKey);
+
+// ── mobile input ─────────────────────────────────────────────
+const mobileInput = document.getElementById('term-mobile-input') as HTMLInputElement;
+const inputArea   = document.getElementById('term-input-area')!;
+const tapHint     = document.getElementById('term-tap-hint')!;
+const isMobile    = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+if (isMobile()) {
+  tapHint.style.display = 'block';
+
+  [out, inputArea].forEach(el => {
+    el.addEventListener('click', () => {
+      mobileInput.style.pointerEvents = 'auto';
+      mobileInput.focus();
+      mobileInput.style.pointerEvents = 'none';
+    });
+  });
+
+  mobileInput.addEventListener('focus', () => { tapHint.style.display = 'none'; });
+  mobileInput.addEventListener('blur',  () => { if (!buf) tapHint.style.display = 'block'; });
+
+  mobileInput.addEventListener('input', () => {
+    const val = mobileInput.value;
+    if (!val) return;
+    buf += val;
+    mobileInput.value = '';
+    hIdx = -1; tabIdx = -1; tabBase = '';
+    animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
+    render();
+  });
+
+  mobileInput.addEventListener('keydown', (e) => {
+    e.stopPropagation();
+    if (['Backspace','Enter','Tab','ArrowUp','ArrowDown'].includes(e.key) ||
+        ((e.ctrlKey || e.metaKey) && e.key === 'l')) {
+      handleKey(e);
+    }
+  });
+}
+
+// ── boot sequence ─────────────────────────────────────────────
+async function boot() {
+  await addLine(`${gb('Louis Huy Nguyen')}  ${gg('·')}  ${gm('Software Architect')}  ${gg('·')}  ${gf('8+ yrs')}`);
+  await addLine(`${gd('Go')}  ${gg('·')}  ${gd('Ruby')}  ${gg('·')}  ${gd('Node.js')}  ${gg('·')}  ${gd('AWS')}  ${gg('·')}  ${gd('K8s')}  ${gg('·')}  ${gd('Azure')}`);
+  await blank();
+  await addLine(`  ${gg('type')} ${gb('help')} ${gg('to explore  ·  or click a command in the sidebar')}`);
+  await blank();
+}
+
+boot();
+```
+
+- [ ] **Step 2: Build and verify**
+
+```bash
+npm run build 2>&1 | tail -5
+```
+Expected: no TypeScript errors, build completes.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/components/Terminal.astro
+git commit -m "feat: terminal script — card rendering, commands, sidebar, keyboard, mobile"
+```
+
+---
+
+## Task 4: Mobile Responsive Styles
+
+Replace the `<style>` placeholder in Terminal.astro.
+
+**Files:**
+- Modify: `src/components/Terminal.astro` (`<style>` block only)
+
+- [ ] **Step 1: Replace the `<style>` placeholder with**
+
+```css
+/* Mobile overrides */
+@media (max-width: 767px) {
+  #term-output {
+    font-size: 12.5px !important;
+    padding: 10px 12px 6px !important;
+  }
+  #term-input-area {
+    padding: 8px 12px 12px !important;
+  }
+  #term-typed,
+  #term-ghost {
+    font-size: 14px !important;
+  }
+}
+```
+
+- [ ] **Step 2: Build and verify**
+
+```bash
+npm run build 2>&1 | tail -5
+```
+Expected: no errors.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/components/Terminal.astro
+git commit -m "feat: terminal mobile responsive styles"
+```
+
+---
+
+## Task 5: Dev Server Visual Check
+
+- [ ] **Step 1: Start the dev server**
+
+```bash
+npm run dev
+```
+Open `http://localhost:4321` (or whatever port Astro uses — it prints it on start).
+
+- [ ] **Step 2: Verify these things visually**
+
+| Check | Expected |
+|---|---|
+| Title bar | Traffic lights + `louishuyng — fish` tab + `louishuyng.dev` right-aligned |
+| Sidebar | PROFILE / WORK / FILES sections with command + description |
+| Boot output | Name, stack line, help hint |
+| Type `help` + Enter | Plain list of commands with green names |
+| Type `info` + Enter | Card block with name/role/location/exp/email rows |
+| Type `exp jobs` + Enter | Compact cards for each company |
+| Type `exp job regask` + Enter | Full card with stack + bullet points |
+| Type `exp stacks` + Enter | One card per category |
+| Type `exp years` + Enter | Timeline list |
+| Type `certs` + Enter | Cards with credential links |
+| Type `links` + Enter | Cards with social links |
+| Type `download` + Enter | Card with two download links |
+| Type `clear` + Enter | Output cleared, boot does not re-run |
+| Ctrl+L | Clears output, boot re-runs |
+| Tab key | Cycles autocomplete, ghost text visible |
+| ↑/↓ arrows | Navigates command history |
+| Sidebar click `exp` | Runs `exp jobs` |
+| Sidebar click `info` | Runs `info` |
+| Sidebar active state | Clicked command item gets green left border |
+| Mobile (resize < 768px) | Sidebar hidden, input bar full width |
+
+- [ ] **Step 3: Fix any visual issues found, then commit**
+
+```bash
+git add src/components/Terminal.astro src/styles/global.css
+git commit -m "fix: terminal visual polish after dev check"
+```
+
+---
+
+## Task 6: Production Build + Final Commit
+
+- [ ] **Step 1: Run a clean production build**
+
+```bash
+npm run build 2>&1
+```
+Expected: Astro outputs `dist/` with no errors or warnings about Terminal.astro.
+
+- [ ] **Step 2: Preview the production build**
+
+```bash
+npm run preview
+```
+Open the preview URL and repeat the visual checks from Task 5 Step 2.
+
+- [ ] **Step 3: Final commit**
+
+```bash
+git add -A
+git commit -m "feat: terminal redesign — retro green, sidebar+output, card blocks"
+```
