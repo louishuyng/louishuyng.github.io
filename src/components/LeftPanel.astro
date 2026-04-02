@@ -1,8 +1,9 @@
-<!-- Left identity panel — Vercel dark -->
+<!-- Left identity panel — Retro Green theme -->
 <aside id="left-panel" style="
   display:flex; flex-direction:column; justify-content:space-between;
   height:100%; padding:2.5rem 2.75rem;
-  background:#000000;
+  background:#030803;
+  border-right:1px solid #0f1f0f;
   overflow-y:auto; position:relative;
   scrollbar-width:none;
 ">
@@ -12,20 +13,20 @@
 <button id="lp-scroll-up" onclick="document.getElementById('left-panel').scrollBy({top:-160,behavior:'smooth'})" style="
   display:none; position:fixed; bottom:calc(50% + 24px); left:calc(19% - 22px);
   width:36px; height:36px; border-radius:50%;
-  background:#1a1a1a; border:1px solid #5B6AD0;
-  color:#5B6AD0; cursor:pointer; align-items:center; justify-content:center;
+  background:#0a180a; border:1px solid #98c379;
+  color:#98c379; cursor:pointer; align-items:center; justify-content:center;
   transition:all 0.2s; z-index:10; font-size:16px; line-height:1;
-  box-shadow:0 0 10px rgba(91,106,208,0.3);
+  box-shadow:0 0 10px rgba(152,195,121,0.2);
 ">↑</button>
 
 <!-- Scroll down arrow -->
 <button id="lp-scroll-dn" onclick="document.getElementById('left-panel').scrollBy({top:160,behavior:'smooth'})" style="
   display:none; position:fixed; bottom:calc(50% - 64px); left:calc(19% - 22px);
   width:36px; height:36px; border-radius:50%;
-  background:#1a1a1a; border:1px solid #5B6AD0;
-  color:#5B6AD0; cursor:pointer; align-items:center; justify-content:center;
+  background:#0a180a; border:1px solid #98c379;
+  color:#98c379; cursor:pointer; align-items:center; justify-content:center;
   transition:all 0.2s; z-index:10; font-size:16px; line-height:1;
-  box-shadow:0 0 10px rgba(91,106,208,0.3);
+  box-shadow:0 0 10px rgba(152,195,121,0.2);
 ">↓</button>
 
   <div style="position:relative;">
@@ -34,26 +35,26 @@
     <div id="lp-logo" style="opacity:0; display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem;">
       <span style="
         font-family:'JetBrains Mono'; font-size:11px;
-        letter-spacing:0.18em; color:#555; text-transform:uppercase;
-      ">louishuyng<span style="color:#5B6AD0; animation:blink 1s step-end infinite;">_</span></span>
+        letter-spacing:0.18em; color:#2a5a2a; text-transform:uppercase;
+      ">louishuyng<span style="color:#98c379; animation:blink 1s step-end infinite;">_</span></span>
 
       <a href="mailto:huynguyennbk@gmail.com" class="hire-btn" style="
         font-family:'DM Sans'; font-size:11px; font-weight:500;
         letter-spacing:0.06em; text-transform:uppercase;
-        color:#A1A1AA; background:transparent;
+        color:#4a7a4a; background:transparent;
         padding:6px 16px; text-decoration:none; border-radius:6px;
-        border:1px solid #333; transition:all 0.2s;
+        border:1px solid #1a3a1a; transition:all 0.2s;
       ">Hire me →</a>
     </div>
 
-    <!-- Availability — flat, no box -->
+    <!-- Availability -->
     <div id="lp-avail" style="opacity:0; display:inline-flex; align-items:center; gap:8px; margin-bottom:2.5rem;">
       <span style="
         width:7px; height:7px; border-radius:50%; flex-shrink:0;
-        background:#22c55e; box-shadow:0 0 6px rgba(34,197,94,0.8);
-        animation:breathe-bright 2.4s ease infinite;
+        background:#98c379; box-shadow:0 0 6px rgba(152,195,121,0.8);
+        animation:breathe 2.4s ease infinite;
       "></span>
-      <span style="font-family:'JetBrains Mono'; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#52525B;">
+      <span style="font-family:'JetBrains Mono'; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#2a5a2a;">
         Open to opportunities
       </span>
     </div>
@@ -62,29 +63,29 @@
     <h1 id="lp-name" style="opacity:1; line-height:0.9; margin-bottom:1.5rem;">
       <span id="name-line1" style="
         display:block; font-family:'JetBrains Mono',monospace; font-weight:700;
-        font-size:clamp(3.2rem,5.6vw,5.5rem); color:#FFFFFF; letter-spacing:-0.03em;
+        font-size:clamp(3.2rem,5.6vw,5.5rem); color:#98c379; letter-spacing:-0.03em;
       "></span>
       <span id="name-line2" style="
         display:block; font-family:'JetBrains Mono',monospace; font-weight:700;
-        font-size:clamp(3.2rem,5.6vw,5.5rem); color:#5B6AD0; letter-spacing:-0.03em;
+        font-size:clamp(3.2rem,5.6vw,5.5rem); color:#4a7a4a; letter-spacing:-0.03em;
       "></span>
     </h1>
 
     <!-- Divider -->
     <div id="lp-rule" style="
       opacity:0; height:1px; max-width:140px; margin-bottom:1.25rem;
-      background:linear-gradient(90deg, #333 0%, transparent 100%);
+      background:linear-gradient(90deg, #1a3a1a 0%, transparent 100%);
     "></div>
 
     <!-- Morphing role -->
     <div id="lp-role" style="opacity:0; position:relative; height:28px; overflow:hidden; margin-bottom:1.75rem;">
       <span id="morph-a" style="
         position:absolute; inset:0; display:flex; align-items:center;
-        font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em; color:#52525B;
+        font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em; color:#2a5a2a;
       ">Software Architect</span>
       <span id="morph-b" style="
         position:absolute; inset:0; display:flex; align-items:center;
-        font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em; color:#52525B;
+        font-family:'JetBrains Mono'; font-size:12.5px; letter-spacing:0.06em; color:#2a5a2a;
         transform:translateY(110%); opacity:0; filter:blur(4px);
       ">Cloud Engineer</span>
     </div>
@@ -92,20 +93,20 @@
     <!-- Bio -->
     <p id="lp-bio" style="
       opacity:0; font-family:'DM Sans'; font-size:17px; line-height:1.8; font-weight:400;
-      color:#71717A; max-width:300px; margin-bottom:2.5rem;
+      color:#2a5a2a; max-width:300px; margin-bottom:2.5rem;
     ">
-      <span id="bio-text"></span><span id="bio-cursor" style="color:#5B6AD0; animation:blink 1s step-end infinite; display:none;">▌</span>
+      <span id="bio-text"></span><span id="bio-cursor" style="color:#98c379; animation:blink 1s step-end infinite; display:none;">▌</span>
     </p>
 
-    <!-- Stats — flat, no box -->
+    <!-- Stats -->
     <div id="lp-stats" style="opacity:0; display:flex; gap:2.5rem; margin-bottom:2.5rem;">
       {[
         { n:'8+', l:'Years' },
         { n:'∞',  l:'Scale' },
       ].map(s => (
         <div>
-          <div style="font-family:'JetBrains Mono'; font-weight:700; font-size:2.2rem; color:#FFFFFF; line-height:1;">{s.n}</div>
-          <div style="font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:0.22em; text-transform:uppercase; color:#3F3F46; margin-top:6px;">{s.l}</div>
+          <div style="font-family:'JetBrains Mono'; font-weight:700; font-size:2.2rem; color:#98c379; line-height:1;">{s.n}</div>
+          <div style="font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:0.22em; text-transform:uppercase; color:#1a3a1a; margin-top:6px;">{s.l}</div>
         </div>
       ))}
     </div>
@@ -113,7 +114,7 @@
 
   <!-- Links -->
   <div id="lp-links" style="opacity:0;">
-    <div style="font-family:'JetBrains Mono'; font-size:8.5px; letter-spacing:0.26em; text-transform:uppercase; color:#3F3F46; margin-bottom:14px;">
+    <div style="font-family:'JetBrains Mono'; font-size:8.5px; letter-spacing:0.26em; text-transform:uppercase; color:#1a3a1a; margin-bottom:14px;">
       Find me at
     </div>
     <div style="display:flex; flex-direction:column; gap:9px;">
@@ -130,13 +131,13 @@
           class="lp-link"
           style="
             font-family:'DM Sans'; font-size:15px; font-weight:400;
-            color:#52525B; text-decoration:none;
+            color:#2a5a2a; text-decoration:none;
             display:flex; align-items:center; gap:10px;
             width:fit-content; transition:color 0.18s;
           "
         >
           <span class="lp-tick" style="
-            width:14px; height:1px; background:#333; flex-shrink:0;
+            width:14px; height:1px; background:#1a3a1a; flex-shrink:0;
             transition:width 0.25s cubic-bezier(0.16,1,0.3,1), background 0.18s;
           "></span>
           {l.label}
@@ -144,20 +145,24 @@
       ))}
     </div>
 
-    <div style="margin-top:2rem; font-family:'JetBrains Mono'; font-size:11px; color:#3F3F46; letter-spacing:0.03em;">
-      Type <span style="color:#5B6AD0;">help</span> in the terminal →
+    <div style="margin-top:2rem; font-family:'JetBrains Mono'; font-size:11px; color:#1a3a1a; letter-spacing:0.03em;">
+      Type <span style="color:#98c379;">help</span> in the terminal →
     </div>
   </div>
 </aside>
 
 <style>
-  .hire-btn:hover { background:#5B6AD0 !important; color:#fff !important; border-color:#5B6AD0 !important; }
-  .lp-link:hover  { color:#E4E4E7 !important; }
-  .lp-link:hover .lp-tick { width:28px !important; background:#5B6AD0 !important; }
+  .hire-btn:hover { background:#0f1f0f !important; color:#98c379 !important; border-color:#98c379 !important; }
+  .lp-link:hover  { color:#98c379 !important; }
+  .lp-link:hover .lp-tick { width:28px !important; background:#98c379 !important; }
 
   #lp-scroll-up, #lp-scroll-dn { pointer-events: auto; }
   @media (pointer: fine) {
-    #lp-scroll-up:hover, #lp-scroll-dn:hover { background: rgba(255,255,255,0.12) !important; color: #aaa !important; }
+    #lp-scroll-up:hover, #lp-scroll-dn:hover {
+      background: #0f1f0f !important;
+      color: #98c379 !important;
+      box-shadow: 0 0 16px rgba(152,195,121,0.4) !important;
+    }
   }
 
   /* ── Mobile: compact top bar ────────────────────────────── */
@@ -170,7 +175,8 @@
       flex-direction: column !important;
       justify-content: flex-start !important;
       overflow: hidden !important;
-      border-bottom: 1px solid #1a1a1a;
+      border-bottom: 1px solid #0f1f0f;
+      border-right: none;
     }
 
     /* First child becomes a single row: name left, hire-me right */
@@ -186,7 +192,7 @@
     #lp-avail, #lp-rule, #lp-role, #lp-bio,
     #lp-stats, #lp-links { display: none !important; }
 
-    /* Name on left, reorder before logo */
+    /* Name on left */
     #lp-name {
       order: 1 !important;
       margin-bottom: 0 !important;
@@ -293,9 +299,9 @@
     animate(bioEl, { opacity:[0,1] }, { duration:0.3, easing:ease });
     await typewriter(bioText, bioCur, [
       { text:'Senior SWE with ' },
-      { text:'8+ years', style:'color:#E4E4E7;font-weight:600;' },
+      { text:'8+ years', style:'color:#7ab87a;font-weight:600;' },
       { text:' designing scalable architectures and optimizing cloud solutions. Love solving complex problems that require ' },
-      { text:'architect mindsets', style:'color:#E4E4E7;font-weight:600;' },
+      { text:'architect mindsets', style:'color:#7ab87a;font-weight:600;' },
       { text:'.' },
     ], 22);
   }, 200);
@@ -335,11 +341,10 @@
   }
 
   panel.addEventListener('scroll', updateArrows, { passive: true });
-  // Check after animations complete
   setTimeout(updateArrows, 2500);
 
   [btnUp, btnDn].forEach(btn => {
-    btn.addEventListener('mouseover', () => { btn.style.background='#5B6AD0'; btn.style.color='#fff'; btn.style.boxShadow='0 0 16px rgba(91,106,208,0.6)'; });
-    btn.addEventListener('mouseout',  () => { btn.style.background='#1a1a1a'; btn.style.color='#5B6AD0'; btn.style.boxShadow='0 0 10px rgba(91,106,208,0.3)'; });
+    btn.addEventListener('mouseover', () => { btn.style.background='#0f1f0f'; btn.style.color='#98c379'; btn.style.boxShadow='0 0 16px rgba(152,195,121,0.4)'; });
+    btn.addEventListener('mouseout',  () => { btn.style.background='#0a180a'; btn.style.color='#98c379'; btn.style.boxShadow='0 0 10px rgba(152,195,121,0.2)'; });
   });
 </script>

@@ -143,11 +143,12 @@
   const echo = (cmd: string) =>
     addLine(`${gd('$')} ${gb(cmd)}`);
 
-  // Render a card block
-  async function renderCard(inner: string) {
+  // Render a card block; if coKey provided, card is clickable → exp job <coKey>
+  async function renderCard(inner: string, coKey?: string) {
     const card = document.createElement('div');
     card.className = 'gt-card';
     card.style.opacity = '0';
+    if (coKey) { card.dataset.cokey = coKey; card.style.cursor = 'pointer'; }
     card.innerHTML = inner;
     out.appendChild(card);
     await animate(card, { opacity:[0,1], x:[-6,0] },
@@ -273,8 +274,9 @@
       const inner =
         `<div class="gt-card-title">${dot}${esc(j.co)}</div>
          <div class="gt-card-role">${esc(j.role)}</div>
-         <div class="gt-card-period">${esc(j.period)}</div>`;
-      await renderCard(inner);
+         <div class="gt-card-period">${esc(j.period)}</div>
+         <div style="color:#1a3a1a;font-size:9px;margin-top:6px;">click to expand →</div>`;
+      await renderCard(inner, j.coKey);
     }
     await blank();
     await addLine(`  ${gg('tip:')} ${gf('use')} ${gb('exp job <company>')} ${gf('for full details')}`);
@@ -434,9 +436,18 @@
       setTimeout(async () => {
         const toRun = buf;
         buf = ''; render();
+        out.innerHTML = '';
         await execute(toRun);
       }, 80);
     });
+  });
+
+  // Clickable job cards in exp jobs output
+  out.addEventListener('click', async (e) => {
+    const card = (e.target as HTMLElement).closest<HTMLElement>('.gt-card[data-cokey]');
+    if (!card) return;
+    out.innerHTML = '';
+    await execute(`exp job ${card.dataset.cokey}`);
   });
 
   // ── autocomplete ─────────────────────────────────────────────
