@@ -101,7 +101,460 @@
 </div>
 
 <script>
-// PLACEHOLDER — filled in Task 3
+  import { animate } from 'motion';
+
+  const out     = document.getElementById('term-output')!;
+  const typed   = document.getElementById('term-typed')!;
+  const ghost   = document.getElementById('term-ghost')!;
+
+  let buf    = '';
+  let hist: string[] = [];
+  let hIdx   = -1;
+  let tabIdx = -1;
+  let tabBase = '';
+
+  // ── color helpers (green phosphor palette) ────────────────────
+  const esc  = (s: string) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const C    = (col: string, s: string) => `<span style="color:${col};">${esc(s)}</span>`;
+  const gb   = (s: string) => C('#98c379', s);   // bright green
+  const gm   = (s: string) => C('#7ab87a', s);   // mid green
+  const gd   = (s: string) => C('#4a7a4a', s);   // dim green
+  const gmu  = (s: string) => C('#3a6a3a', s);   // muted
+  const gf   = (s: string) => C('#2a5a2a', s);   // faint
+  const gg   = (s: string) => C('#1a3a1a', s);   // ghost
+  const link = (url: string, label: string) =>
+    `<a href="${esc(url)}" target="_blank" rel="noopener"
+       style="color:#4a7a4a;text-decoration:underline;text-underline-offset:3px;"
+       onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#4a7a4a'">${esc(label)}</a>`;
+
+  // ── line renderer ─────────────────────────────────────────────
+  async function addLine(html = '', delayS = 0) {
+    const div = document.createElement('div');
+    div.style.cssText = 'line-height:1.8; opacity:0; font-size:13px;';
+    div.innerHTML = html;
+    out.appendChild(div);
+    await animate(div, { opacity:[0,1], x:[-4,0] },
+      { duration:0.10, delay:delayS, easing:[0.16,1,0.3,1] }).finished;
+    out.scrollTop = out.scrollHeight;
+  }
+
+  const blank = () => addLine('');
+
+  // Prompt line: "$ command"
+  const echo = (cmd: string) =>
+    addLine(`${gd('$')} ${gb(cmd)}`);
+
+  // Render a card block
+  async function renderCard(inner: string) {
+    const card = document.createElement('div');
+    card.className = 'gt-card';
+    card.style.opacity = '0';
+    card.innerHTML = inner;
+    out.appendChild(card);
+    await animate(card, { opacity:[0,1], x:[-6,0] },
+      { duration:0.14, easing:[0.16,1,0.3,1] }).finished;
+    out.scrollTop = out.scrollHeight;
+  }
+
+  // ── data ─────────────────────────────────────────────────────
+  const JOBS = [
+    { role:'Solution Architect',       co:'Regask',        coKey:'regask',  period:'Jul 2025 → Present', active:true, stack:'Go · Kubernetes · Knative · Azure · Grafana', bullets:[
+      'Knative on K8s: throughput ↑40%, infra costs ↓30%',
+      'Grafana Cloud: SLO baselines + anomaly detection → proactive incident response',
+      'Redis improvement: 10K → 100K RPS (×10) for heavy write services',
+      'Internal dev portal: microservice catalog + DORA metrics for management',
+    ]},
+    { role:'Senior Software Engineer', co:'Regask',        coKey:'regask',  period:'Feb 2024 — Jul 2025', active:false, stack:'Go · Node.js · AKS · Auth0 · SAML · OIDC', bullets:[
+      'AKS: highly available, fault-tolerant system with redundancy + failover',
+      'Auth0 SSO (SAML + OIDC): security compliance + PKCE token exchange',
+      'Go rewrites of Node.js: 1.5GB → 400-500MB (↓50–60%) memory',
+      'Technical Solution Docs + ARD: structured code reviews across 5–7 engineers',
+    ]},
+    { role:'Senior Software Engineer', co:'PerxTech',      coKey:'perxtech', period:'Jan 2022 — Sept 2023', active:false, stack:'Ruby · Kong · PostgreSQL · AWS · ETL', bullets:[
+      'Led 5-person cross-functional team, aligned delivery + reduced overhead',
+      'Ruby servers: 10K req/s without infrastructure changes',
+      'Kong API Gateway: centralised routing, load balancing + access control',
+      'ETL pipeline: 5h → 15 min/GB — 95% reduction',
+    ]},
+    { role:'Full Stack Engineer',      co:'Oivan',          coKey:'oivan',   period:'Jan 2021 — Jan 2022', active:false, stack:'React · Node.js · PostgreSQL · Docker', bullets:[
+      'Frontend team leadership: project alignment + technical documentation',
+      'Microservice architecture documentation',
+      'Code quality via rigorous testing + optimisation',
+      'Query performance improvements, enhancing user experience',
+    ]},
+    { role:'Full Stack Engineer',      co:'Nucleus Studio', coKey:'nucleus', period:'Jan 2020 — Jan 2021', active:false, stack:'React Native · NestJS · Firebase · GCP · AWS', bullets:[
+      'Hybrid mobile app with React Native',
+      'NestJS backend architecture',
+      'Firebase, GCP + AWS integration',
+      'Livestream + video call features via RTC protocol',
+    ]},
+    { role:'Platform Developer',       co:'Aleph Labs',     coKey:'aleph',   period:'Jan 2018 — Jan 2020', active:false, stack:'Node.js · React · PostgreSQL · Microservices', bullets:[
+      'Authentication APIs: design + implementation for system security',
+      'Core front-end components for cross-team utilisation',
+      'Core SDK microservice maintained across multiple teams',
+    ]},
+  ];
+
+  const STACKS: [string, string][] = [
+    ['BACKEND',       'Go, Ruby, Node.js, NestJS'],
+    ['CLOUD',         'AWS, Azure, GCP'],
+    ['DEVOPS',        'Kubernetes, Knative, Terraform, Docker, ArgoCD'],
+    ['DATA',          'Kafka, Redis, PostgreSQL, ETL Pipelines'],
+    ['OBSERVABILITY', 'Grafana, SLO, Anomaly Detection, Prometheus'],
+    ['ARCHITECTURE',  'Microservices, API Design, Event-Driven, DDD'],
+    ['FRONTEND',      'React, React Native, Angular'],
+  ];
+
+  const CERTS = [
+    { name:'Claude Code In Action', issuer:'Anthropic / Skilljar', url:'https://verify.skilljar.com/c/jfnifed5mprf' },
+    { name:'Cloud Badges (AWS · Azure · GCP)', issuer:'Credly', url:'https://www.credly.com/users/nguyen-louis/badges#credly' },
+  ];
+
+  const LINKS = [
+    { label:'GitHub',       url:'https://github.com/louishuyng',                                          disp:'github.com/louishuyng' },
+    { label:'LinkedIn',     url:'https://www.linkedin.com/in/louishuyng/',                                disp:'linkedin.com/in/louishuyng' },
+    { label:'Raycast',      url:'https://www.raycast.com/louishuyng',                                     disp:'raycast.com/louishuyng' },
+    { label:'Certificates', url:'https://www.credly.com/users/nguyen-louis/badges#credly',                disp:'credly.com/users/nguyen-louis' },
+    { label:'Email',        url:'mailto:huynguyennbk@gmail.com',                                          disp:'huynguyennbk@gmail.com' },
+  ];
+
+  // ── command handlers ─────────────────────────────────────────
+
+  async function cmdHelp() {
+    await blank();
+    const rows: [string, string][] = [
+      ['help',              'Show this message'],
+      ['info',              'About Louis Huy Nguyen'],
+      ['exp jobs',          'List all positions'],
+      ['exp job <company>', 'Full detail for a company'],
+      ['exp stacks',        'Tech stack by category'],
+      ['exp years',         'Career timeline 2018 → present'],
+      ['certs',             'Professional certifications'],
+      ['links',             'GitHub · LinkedIn · Raycast · Certificates'],
+      ['download',          'Download CV / cover letter'],
+      ['clear',             'Clear terminal'],
+    ];
+    for (const [cmd, desc] of rows) {
+      await addLine(`  ${gb(cmd.padEnd(22))}  ${gf(desc)}`);
+    }
+    await blank();
+  }
+
+  async function cmdInfo() {
+    await blank();
+    const rows: [string, string][] = [
+      ['name',     'Louis Huy Nguyen'],
+      ['role',     'Software Architect'],
+      ['location', 'Vietnam'],
+      ['exp',      '8+ years'],
+      ['email',    'huynguyennbk@gmail.com'],
+    ];
+    const inner = rows.map(([k, v]) =>
+      `<div style="display:flex;gap:0;margin-bottom:3px;">
+         <span style="color:#2a5a2a;font-size:10.5px;min-width:80px;">${esc(k)}</span>
+         <span style="color:#98c379;font-size:10.5px;">${esc(v)}</span>
+       </div>`
+    ).join('') +
+    `<div class="gt-card-divider"></div>
+     <div style="color:#3a6a3a;font-size:10px;line-height:1.7;">
+       Senior SWE with 8+ years designing scalable architectures<br>
+       and optimizing cloud solutions. Passionate about solving<br>
+       complex problems that require architect mindsets.
+     </div>`;
+    await renderCard(inner);
+    await blank();
+  }
+
+  async function cmdExpJobs() {
+    await blank();
+    for (const j of JOBS) {
+      const dot = j.active
+        ? `<span style="color:#98c379;animation:blink 2s ease infinite;margin-right:6px;">●</span>`
+        : `<span style="color:#1a3a1a;margin-right:6px;">○</span>`;
+      const inner =
+        `<div class="gt-card-title">${dot}${esc(j.co)}</div>
+         <div class="gt-card-role">${esc(j.role)}</div>
+         <div class="gt-card-period">${esc(j.period)}</div>`;
+      await renderCard(inner);
+    }
+    await blank();
+    await addLine(`  ${gg('tip:')} ${gf('use')} ${gb('exp job <company>')} ${gf('for full details')}`);
+    await addLine(`  ${gf('keys:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>gb(k)).join(gf('  ·  '))}`);
+    await blank();
+  }
+
+  async function cmdExpJobCompany(query: string) {
+    const q = query.toLowerCase().trim();
+    const matches = JOBS.filter(j => j.coKey.includes(q) || j.co.toLowerCase().includes(q));
+    if (!matches.length) {
+      await blank();
+      await addLine(`  ${C('#e06c75','no match for')} ${gb(query)}`);
+      await addLine(`  ${gf('try:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>gb(k)).join('  ')}`);
+      await blank();
+      return;
+    }
+    await blank();
+    for (const j of matches) {
+      const dot = j.active
+        ? `<span style="color:#98c379;animation:blink 2s ease infinite;margin-right:6px;">●</span>`
+        : `<span style="color:#1a3a1a;margin-right:6px;">○</span>`;
+      const bullets = j.bullets.map(b =>
+        `<div class="gt-bullet">${esc(b)}</div>`
+      ).join('');
+      const inner =
+        `<div class="gt-card-title">${dot}${esc(j.co)}</div>
+         <div class="gt-card-role">${esc(j.role)}</div>
+         <div class="gt-card-period">${esc(j.period)}</div>
+         <div class="gt-card-divider"></div>
+         <div class="gt-card-stack"><span>stack: </span>${esc(j.stack)}</div>
+         <div class="gt-card-divider"></div>
+         <div class="gt-card-bullets">${bullets}</div>`;
+      await renderCard(inner);
+    }
+    await blank();
+  }
+
+  async function cmdExpStacks() {
+    await blank();
+    for (const [cat, val] of STACKS) {
+      const inner =
+        `<div class="gt-card-title" style="font-size:11px;letter-spacing:1px;">${esc(cat)}</div>
+         <div class="gt-card-divider"></div>
+         <div class="gt-card-stack">${esc(val)}</div>`;
+      await renderCard(inner);
+    }
+    await blank();
+  }
+
+  async function cmdExpYears() {
+    await blank();
+    const timeline: [string, string, string][] = [
+      ['Jan 2018', 'Platform Developer',   'Aleph Labs'],
+      ['Jan 2020', 'Full Stack Engineer',  'Nucleus Studio'],
+      ['Jan 2021', 'Full Stack Engineer',  'Oivan'],
+      ['Jan 2022', 'Senior SWE',           'PerxTech'],
+      ['Feb 2024', 'Senior SWE',           'Regask'],
+      ['Jul 2025', 'Solution Architect',   'Regask'],
+    ];
+    for (const [date, role, co] of timeline) {
+      await addLine(`  ${gf(date)}  ${gg('→')}  ${gm(role)}  ${gg('@')} ${gb(co)}`);
+    }
+    await blank();
+    await addLine(`  ${gg('─── 8 years of engineering ───')}`);
+    await blank();
+  }
+
+  async function cmdExp(args: string) {
+    const sub = args.trim().toLowerCase();
+    if (!sub || sub === 'jobs')   return cmdExpJobs();
+    if (sub === 'stacks')         return cmdExpStacks();
+    if (sub === 'years')          return cmdExpYears();
+    if (sub.startsWith('job '))   return cmdExpJobCompany(sub.slice(4));
+    return cmdExpJobCompany(sub);
+  }
+
+  async function cmdCerts() {
+    await blank();
+    for (const c of CERTS) {
+      const inner =
+        `<div class="gt-card-title">${esc(c.name)}</div>
+         <div class="gt-card-role">${esc(c.issuer)}</div>
+         <div class="gt-card-divider"></div>
+         <div style="font-size:10px;">${link(c.url, '↗ view credential')}</div>`;
+      await renderCard(inner);
+    }
+    await blank();
+  }
+
+  async function cmdLinks() {
+    await blank();
+    for (const l of LINKS) {
+      const inner =
+        `<div class="gt-card-title">${esc(l.label)}</div>
+         <div class="gt-card-divider"></div>
+         <div style="font-size:10px;">${link(l.url, l.disp + ' ↗')}</div>`;
+      await renderCard(inner);
+    }
+    await blank();
+  }
+
+  async function cmdDownload() {
+    await blank();
+    const files = [
+      { label:'CV / Resume',  file:'cv.pdf',           name:'Louis_Nguyen_Software_Engineer.pdf' },
+      { label:'Cover Letter', file:'cover-letter.pdf', name:'Louis_Huy_Nguyen_Cover_Letter.pdf'  },
+    ];
+    const rows = files.map(f =>
+      `<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+         <span style="color:#4a7a4a;font-size:10px;min-width:90px;">${esc(f.label)}</span>
+         <a href="/${f.file}" download="${f.name}"
+            style="color:#4a7a4a;text-decoration:underline;text-underline-offset:3px;font-size:10px;"
+            onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#4a7a4a'">↓ download</a>
+       </div>`
+    ).join('');
+    const inner =
+      `<div class="gt-card-title">Files</div>
+       <div class="gt-card-divider"></div>
+       ${rows}`;
+    await renderCard(inner);
+    await blank();
+  }
+
+  // ── execute ──────────────────────────────────────────────────
+  async function execute(raw: string) {
+    const cmd = raw.trim().toLowerCase();
+    await echo(raw.trim());
+    if (!cmd) return;
+    if (cmd === 'clear') {
+      out.innerHTML = '';
+      setActiveCmd('');
+      return;
+    }
+    setActiveCmd(cmd.split(' ')[0]);
+    if (cmd === 'help')                          { await cmdHelp();        return; }
+    if (cmd === 'info')                          { await cmdInfo();        return; }
+    if (cmd === 'certs')                         { await cmdCerts();       return; }
+    if (cmd === 'links')                         { await cmdLinks();       return; }
+    if (cmd === 'download')                      { await cmdDownload();    return; }
+    if (cmd === 'exp' || cmd.startsWith('exp ')) { await cmdExp(cmd.slice(3)); return; }
+    await blank();
+    await addLine(`  ${C('#e06c75','command not found:')} ${gd(raw.trim())}  ${gg('— try')} ${gb('help')}`);
+    await blank();
+  }
+
+  // ── sidebar active state ─────────────────────────────────────
+  function setActiveCmd(family: string) {
+    document.querySelectorAll<HTMLElement>('.gt-cmd-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.cmd === family);
+    });
+  }
+
+  // Sidebar click → fire command
+  document.querySelectorAll<HTMLElement>('.gt-cmd-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const cmd = el.dataset.cmd!;
+      buf = cmd; render();
+      setTimeout(async () => {
+        const toRun = buf;
+        buf = ''; render();
+        await execute(toRun);
+      }, 80);
+    });
+  });
+
+  // ── autocomplete ─────────────────────────────────────────────
+  const ALL_CMDS = [
+    'help','info','certs','links','download','clear',
+    'exp','exp jobs','exp stacks','exp years',
+    'exp job regask','exp job perxtech','exp job oivan','exp job nucleus','exp job aleph',
+  ];
+
+  function getMatches(b: string) {
+    if (!b) return [];
+    return ALL_CMDS.filter(c => c.startsWith(b) && c !== b);
+  }
+  function ghostText(b: string) {
+    const ms = getMatches(b);
+    return ms.length === 1 ? ms[0].slice(b.length) : '';
+  }
+
+  function render() {
+    typed.textContent = buf;
+    animate(ghost, { opacity:[0.4, 1] }, { duration:0.12, easing:[0.16,1,0.3,1] });
+    ghost.textContent = ghostText(buf);
+  }
+
+  // ── keyboard ─────────────────────────────────────────────────
+  async function handleKey(e: KeyboardEvent) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+      e.preventDefault();
+      out.innerHTML = '';
+      buf = ''; hIdx = -1;
+      setActiveCmd('');
+      render();
+      await boot();
+      return;
+    }
+    if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      buf += e.key; hIdx = -1; tabIdx = -1; tabBase = '';
+      animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
+      render();
+    } else if (e.key === 'Backspace') {
+      buf = buf.slice(0,-1); hIdx = -1; tabIdx = -1; tabBase = ''; render();
+    } else if (e.key === 'Enter') {
+      const cmd = buf;
+      if (cmd.trim()) hist.unshift(cmd.trim());
+      buf = ''; hIdx = -1; tabIdx = -1; tabBase = ''; render();
+      await execute(cmd);
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      if (tabIdx === -1) tabBase = buf;
+      const ms = getMatches(tabBase);
+      if (!ms.length) { render(); return; }
+      tabIdx = (tabIdx + 1) % ms.length;
+      buf = ms[tabIdx];
+      render();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (hIdx < hist.length-1) { buf = hist[++hIdx]; render(); }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      hIdx > 0 ? (buf = hist[--hIdx]) : (hIdx = -1, buf = '');
+      render();
+    }
+  }
+
+  window.addEventListener('keydown', handleKey);
+
+  // ── mobile input ─────────────────────────────────────────────
+  const mobileInput = document.getElementById('term-mobile-input') as HTMLInputElement;
+  const inputArea   = document.getElementById('term-input-area')!;
+  const tapHint     = document.getElementById('term-tap-hint')!;
+  const isMobile    = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  if (isMobile()) {
+    tapHint.style.display = 'block';
+
+    [out, inputArea].forEach(el => {
+      el.addEventListener('click', () => {
+        mobileInput.style.pointerEvents = 'auto';
+        mobileInput.focus();
+        mobileInput.style.pointerEvents = 'none';
+      });
+    });
+
+    mobileInput.addEventListener('focus', () => { tapHint.style.display = 'none'; });
+    mobileInput.addEventListener('blur',  () => { if (!buf) tapHint.style.display = 'block'; });
+
+    mobileInput.addEventListener('input', () => {
+      const val = mobileInput.value;
+      if (!val) return;
+      buf += val;
+      mobileInput.value = '';
+      hIdx = -1; tabIdx = -1; tabBase = '';
+      animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
+      render();
+    });
+
+    mobileInput.addEventListener('keydown', (e) => {
+      e.stopPropagation();
+      if (['Backspace','Enter','Tab','ArrowUp','ArrowDown'].includes(e.key) ||
+          ((e.ctrlKey || e.metaKey) && e.key === 'l')) {
+        handleKey(e);
+      }
+    });
+  }
+
+  // ── boot sequence ─────────────────────────────────────────────
+  async function boot() {
+    await addLine(`${gb('Louis Huy Nguyen')}  ${gg('·')}  ${gm('Software Architect')}  ${gg('·')}  ${gf('8+ yrs')}`);
+    await addLine(`${gd('Go')}  ${gg('·')}  ${gd('Ruby')}  ${gg('·')}  ${gd('Node.js')}  ${gg('·')}  ${gd('AWS')}  ${gg('·')}  ${gd('K8s')}  ${gg('·')}  ${gd('Azure')}`);
+    await blank();
+    await addLine(`  ${gg('type')} ${gb('help')} ${gg('to explore  ·  or click a command in the sidebar')}`);
+    await blank();
+  }
+
+  boot();
 </script>
 
 <style>
