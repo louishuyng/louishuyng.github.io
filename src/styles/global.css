@@ -88,7 +88,7 @@ body {
 
 /* Sidebar structural classes */
 .gt-section-label {
-  font-size: 8.5px;
+  font-size: 9px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #1a3a1a;
@@ -170,7 +170,7 @@ body {
 }
 .gt-card-stack {
   color: #2a5a2a;
-  font-size: 9.5px;
+  font-size: 10px;
 }
 .gt-card-stack span { color: #4a7a4a; }
 .gt-card-bullets { margin-top: 0; }
@@ -191,6 +191,6 @@ body {
 
 /* Hide sidebar on mobile */
 @media (max-width: 767px) {
-  #term-sidebar { display: none !important; }
-  #term-hints   { display: none !important; }
+  #term-sidebar { display: none; }
+  #term-hints   { display: none; }
 }
