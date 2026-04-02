@@ -83,3 +83,114 @@ body {
     rgba(0,0,0,0.022) 3px, rgba(0,0,0,0.022) 4px
   );
 }
+
+/* ── Green Terminal (gt-*) ───────────────────────────────────── */
+
+/* Sidebar structural classes */
+.gt-section-label {
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #1a3a1a;
+  margin-bottom: 8px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+.gt-section-label:first-child { margin-top: 0; }
+
+.gt-sidebar-divider {
+  height: 1px;
+  background: #0a180a;
+  margin: 8px 0;
+}
+
+.gt-cmd-item {
+  padding: 4px 8px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.1s, border-color 0.1s;
+}
+.gt-cmd-item:hover {
+  background: #0a180a;
+}
+.gt-cmd-item.active {
+  background: #0f1f0f;
+  border-left-color: #98c379;
+}
+.gt-cmd-name {
+  display: block;
+  font-size: 11px;
+  color: #4a7a4a;
+}
+.gt-cmd-item.active .gt-cmd-name { color: #98c379; }
+.gt-cmd-desc {
+  display: block;
+  font-size: 9px;
+  color: #1a3a1a;
+  margin-top: 1px;
+}
+.gt-cmd-item.active .gt-cmd-desc { color: #2a5a2a; }
+
+/* Blinking block cursor */
+.gt-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: #98c379;
+  box-shadow: 0 0 6px rgba(152,195,121,0.5);
+  vertical-align: middle;
+  border-radius: 1px;
+  flex-shrink: 0;
+  animation: blink 1.1s step-end infinite;
+}
+
+/* Result card */
+.gt-card {
+  background: #030803;
+  border: 1px solid #0f1f0f;
+  border-left: 2px solid #98c379;
+  border-radius: 0 5px 5px 0;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.gt-card-title {
+  color: #98c379;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+.gt-card-role  { color: #4a7a4a; font-size: 10px; margin-top: 2px; }
+.gt-card-period{ color: #2a5a2a; font-size: 10px; }
+.gt-card-divider {
+  height: 1px;
+  background: #0a180a;
+  margin: 6px 0;
+}
+.gt-card-stack {
+  color: #2a5a2a;
+  font-size: 9.5px;
+}
+.gt-card-stack span { color: #4a7a4a; }
+.gt-card-bullets { margin-top: 0; }
+.gt-bullet {
+  font-size: 10px;
+  color: #3a6a3a;
+  display: flex;
+  gap: 6px;
+  margin-top: 3px;
+}
+.gt-bullet::before { content: '→'; color: #2a5a2a; flex-shrink: 0; }
+
+/* Scrollbar for the output panel */
+#term-output::-webkit-scrollbar { width: 3px; }
+#term-output::-webkit-scrollbar-track { background: transparent; }
+#term-output::-webkit-scrollbar-thumb { background: #1a3a1a; border-radius: 2px; }
+#term-output::-webkit-scrollbar-thumb:hover { background: #98c379; }
+
+/* Hide sidebar on mobile */
+@media (max-width: 767px) {
+  #term-sidebar { display: none !important; }
+  #term-hints   { display: none !important; }
+}
