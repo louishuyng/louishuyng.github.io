@@ -1,562 +1,108 @@
-<!-- Zed One Dark terminal -->
-<div style="display:flex; flex-direction:column; height:100%; background:#282C34;">
+<!-- Retro Green terminal -->
+<div id="terminal-root" style="
+  display:flex; flex-direction:column; height:100%;
+  background:#050a05; font-family:'JetBrains Mono','Fira Code',monospace;
+  border-radius:8px; overflow:hidden;
+  border:1px solid #0f1f0f;
+  box-shadow:0 0 40px rgba(152,195,121,0.04),0 20px 60px rgba(0,0,0,0.5);
+">
 
-  <!-- Tab bar -->
+  <!-- Title bar -->
   <div style="
-    display:flex; align-items:stretch; min-width:0;
-    background:#21252B; border-bottom:1px solid #181A1F;
-    flex-shrink:0;
+    display:flex; align-items:center; gap:8px;
+    background:#060d06; border-bottom:1px solid #0f1f0f;
+    padding:0 14px; height:36px; flex-shrink:0;
   ">
-    <div style="display:flex;align-items:center;gap:1px;padding:0 10px;border-right:1px solid #181A1F;flex-shrink:0;">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4B5263" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4B5263" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <div style="display:flex;gap:6px;margin-right:8px;">
+      <div style="width:11px;height:11px;border-radius:50%;background:#ff5f57;"></div>
+      <div style="width:11px;height:11px;border-radius:50%;background:#febc2e;"></div>
+      <div style="width:11px;height:11px;border-radius:50%;background:#28c840;"></div>
     </div>
-    <!-- active tab dips to editor bg -->
     <div style="
-      display:flex; align-items:center; gap:6px;
-      padding:7px 18px; flex-shrink:0;
-      border-right:1px solid #181A1F;
-      border-bottom:2px solid #5B6AD0;
-      margin-bottom:-1px;
-      background:#282C34;
-    ">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5B6AD0" stroke-width="2" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-      <span style="font-family:'JetBrains Mono';font-size:12px;color:#ABB2BF;white-space:nowrap;">louishuyng — fish</span>
-    </div>
-    <div style="display:flex;align-items:center;padding:0 14px;color:#4B5263;font-size:18px;line-height:1;flex-shrink:0;">+</div>
-    <div style="flex:1;min-width:0;"></div>
-    <div style="display:flex;align-items:center;gap:10px;padding:0 14px;border-left:1px solid #181A1F;flex-shrink:0;">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4B5263" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="20" height="18" rx="1"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4B5263" stroke-width="1.8" stroke-linecap="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-    </div>
+      background:#050a05; color:#98c379; font-size:11px;
+      padding:3px 14px; border:1px solid #142014; border-bottom:none;
+      border-radius:5px 5px 0 0; margin-top:2px; white-space:nowrap;
+    ">louishuyng — fish</div>
+    <div style="margin-left:auto; color:#1a3a1a; font-size:10px; white-space:nowrap;">louishuyng.dev</div>
   </div>
 
-  <!-- Terminal output -->
-  <div id="term-output" style="
-    flex:1; overflow-y:scroll; overflow-x:hidden; padding:12px 14px 8px;
-    font-family:'JetBrains Mono'; font-size:13.5px; line-height:1.85;
-    color:#ABB2BF; background:#282C34; word-break:break-word;
-    -webkit-overflow-scrolling:touch;
-  "></div>
+  <!-- Body: sidebar + output -->
+  <div style="display:flex; flex:1; min-height:0;">
 
-  <!-- Input area -->
-  <div id="term-input-area" style="background:#282C34; padding:0 14px 10px; flex-shrink:0; border-top:1px solid #3E4451; position:relative;">
-    <!-- Hidden input captures mobile keyboard -->
+    <!-- Sidebar -->
+    <div id="term-sidebar" style="
+      width:140px; background:#030803; border-right:1px solid #0f1f0f;
+      padding:16px 10px; flex-shrink:0; overflow-y:auto;
+      display:flex; flex-direction:column;
+    ">
+      <div class="gt-section-label">PROFILE</div>
+      <div class="gt-cmd-item" data-cmd="info">
+        <span class="gt-cmd-name">info</span>
+        <span class="gt-cmd-desc">about me</span>
+      </div>
+      <div class="gt-cmd-item" data-cmd="links">
+        <span class="gt-cmd-name">links</span>
+        <span class="gt-cmd-desc">social &amp; contact</span>
+      </div>
+
+      <div class="gt-sidebar-divider"></div>
+
+      <div class="gt-section-label">WORK</div>
+      <div class="gt-cmd-item" data-cmd="exp">
+        <span class="gt-cmd-name">exp</span>
+        <span class="gt-cmd-desc">experience</span>
+      </div>
+      <div class="gt-cmd-item" data-cmd="certs">
+        <span class="gt-cmd-name">certs</span>
+        <span class="gt-cmd-desc">certifications</span>
+      </div>
+
+      <div class="gt-sidebar-divider"></div>
+
+      <div class="gt-section-label">FILES</div>
+      <div class="gt-cmd-item" data-cmd="download">
+        <span class="gt-cmd-name">download</span>
+        <span class="gt-cmd-desc">cv / cover letter</span>
+      </div>
+    </div>
+
+    <!-- Output area -->
+    <div id="term-output" style="
+      flex:1; overflow-y:auto; overflow-x:hidden;
+      padding:16px 18px 8px; word-break:break-word;
+      -webkit-overflow-scrolling:touch; min-width:0;
+      font-size:13px; line-height:1.8; color:#3a6a3a;
+    "></div>
+  </div>
+
+  <!-- Input bar -->
+  <div id="term-input-area" style="
+    background:#030803; border-top:1px solid #0f1f0f;
+    padding:8px 18px; flex-shrink:0; position:relative;
+    display:flex; align-items:center; gap:8px; min-height:44px;
+  ">
+    <!-- Hidden mobile input captures keyboard -->
     <input id="term-mobile-input" type="text"
       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
       style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;top:0;left:0;"
     />
-    <div id="term-sugg" style="
-      display:none; flex-wrap:wrap; gap:5px;
-      margin-bottom:7px; padding-top:7px;
-      border-top:1px solid #3E4451;
-    "></div>
-    <div style="display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono'; font-size:13.5px;">
-      <span style="color:#5B6AD0; flex-shrink:0; font-size:14px;">❯</span>
-      <div style="display:flex; align-items:center; flex:1; min-width:0;">
-        <span id="term-typed" style="color:#DDE1E8; white-space:pre;"></span>
-        <span id="term-ghost" style="color:#3E4451; white-space:pre;"></span>
-        <span id="term-cur" style="color:#5B6AD0; flex-shrink:0; animation:blink 1.1s step-end infinite;">█</span>
-      </div>
-      <!-- Mobile tap-to-type hint -->
-      <span id="term-tap-hint" style="
-        display:none; font-family:'JetBrains Mono'; font-size:11px;
-        color:#4B5263; flex-shrink:0; padding-right:4px;
-      ">tap to type</span>
+    <span style="color:#4a7a4a; font-size:12px; flex-shrink:0;">$</span>
+    <div style="display:flex; align-items:center; flex:1; min-width:0;">
+      <span id="term-typed" style="color:#98c379; white-space:pre; font-size:12px;"></span>
+      <span id="term-ghost" style="color:#1a3a1a; white-space:pre; font-size:12px;"></span>
+      <span id="term-cur" class="gt-cursor"></span>
     </div>
-  </div>
-
-  <!-- Status bar -->
-  <div style="
-    display:flex; align-items:center; gap:12px;
-    padding:3px 10px;
-    background:#21252B; border-top:1px solid #181A1F;
-    font-family:'JetBrains Mono'; font-size:10.5px; color:#5C6370;
-    flex-shrink:0; user-select:none; overflow:hidden;
-  ">
-    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5C6370" stroke-width="2" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
-      <span>try-fail-loop</span>
+    <span id="term-tap-hint" style="display:none; color:#1a3a1a; font-size:10px; flex-shrink:0; padding-right:4px;">tap to type</span>
+    <div id="term-hints" style="display:flex; gap:10px; color:#142014; font-size:9px; flex-shrink:0;">
+      <span>Tab</span><span>↑↓</span><span>Ctrl+L</span>
     </div>
-    <span class="sb-hint" style="color:#3E4451;">·</span>
-    <span class="sb-hint">Tab: autocomplete</span>
-    <span class="sb-hint" style="color:#3E4451;">·</span>
-    <span class="sb-hint">↑↓: history</span>
-    <span class="sb-hint" style="color:#3E4451;">·</span>
-    <span class="sb-hint">Ctrl+L: reset</span>
-    <div style="margin-left:auto;flex-shrink:0;"><span>utf-8</span></div>
   </div>
 </div>
 
 <script>
-  import { animate } from 'motion';
-
-  const out    = document.getElementById('term-output')!;
-  const typed  = document.getElementById('term-typed')!;
-  const ghost  = document.getElementById('term-ghost')!;
-  const suggEl = document.getElementById('term-sugg')!;
-
-  let buf   = '';
-  let hist: string[] = [];
-  let hIdx  = -1;
-  let tabIdx = -1;
-  let tabBase = '';
-
-  // ── color helpers ─────────────────────────────────────────────
-  const esc = (s: string) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const C = (col: string, s: string) => `<span style="color:${col};">${esc(s)}</span>`;
-  // Zed One Dark Warm — exact palette
-  const g  = (s: string) => C('#98C379', s);   // green
-  const bl = (s: string) => C('#61AFEF', s);   // blue
-  const p  = (s: string) => C('#C678DD', s);   // purple
-  const r  = (s: string) => C('#E06C75', s);   // red
-  const y  = (s: string) => C('#E5C07B', s);   // yellow
-  const cy = (s: string) => C('#56B6C2', s);   // cyan
-  const w  = (s: string) => C('#E2DDD8', s);   // bright
-  const d  = (s: string) => C('#5C5954', s);   // dim
-  const m  = (s: string) => C('#ABB2BF', s);   // normal
-  const cu = (s: string) => C('#5B6AD0', s);   // accent
-  const link = (url: string, label: string) =>
-    `<a href="${esc(url)}" target="_blank" rel="noopener" style="color:#61AFEF;text-decoration:underline;text-underline-offset:3px;" onmouseover="this.style.color='#98C379'" onmouseout="this.style.color='#61AFEF'">${esc(label)}</a>`;
-
-  // ── line renderer ─────────────────────────────────────────────
-  async function addLine(html = '', delayS = 0) {
-    const div = document.createElement('div');
-    div.style.cssText = 'line-height:1.85; opacity:0;';
-    div.innerHTML = html;
-    out.appendChild(div);
-    await animate(div, { opacity:[0,1], x:[-4,0] },
-      { duration:0.10, delay:delayS, easing:[0.16,1,0.3,1] }).finished;
-    out.scrollTop = out.scrollHeight;
-  }
-
-  const blank   = () => addLine('');
-  const sepLen  = () => Math.min(58, Math.floor((out.clientWidth - 28) / 8));
-  const sep     = () => addLine(`<span style="display:block;overflow:hidden;white-space:nowrap;color:#5C5954;user-select:none;line-height:1;">${'─'.repeat(80)}</span>`);
-  const divider = () => addLine(`<span style="display:block;overflow:hidden;white-space:nowrap;color:#3E4451;user-select:none;line-height:1;padding:10px 0;">${'─'.repeat(80)}</span>`);
-  const echo    = (cmd: string) => addLine(`${cu('❯')} ${m(cmd)}`);
-
-  // ── data ─────────────────────────────────────────────────────
-  const JOBS = [
-    { role:'Solution Architect',     co:'Regask',        coKey:'regask',  period:'Jul 2025 → Present', active:true, bullets:[
-      'Knative on K8s: throughput ↑40%, infra costs ↓30%',
-      'Grafana Cloud: SLO baselines + anomaly detection → proactive incident response',
-      'Redis improvement: 10K → 100K RPS (×10) for heavy write services',
-      'Internal dev portal: microservice catalog + DORA metrics for management',
-      'Infra/platform collaboration: tooling from planning to delivery',
-    ]},
-    { role:'Senior Software Engineer', co:'Regask',      coKey:'regask',  period:'Feb 2024 — Jul 2025', active:false, bullets:[
-      'AKS: highly available, fault-tolerant system with redundancy + failover',
-      'Auth0 SSO (SAML + OIDC): security compliance + PKCE token exchange',
-      'Go rewrites of Node.js: 1.5GB → 400-500MB (↓50–60%) memory',
-      'Technical Solution Docs + ARD: structured code reviews across 5–7 engineers',
-    ]},
-    { role:'Senior Software Engineer', co:'PerxTech',    coKey:'perxtech', period:'Jan 2022 — Sept 2023', active:false, bullets:[
-      'Led 5-person cross-functional team, aligned delivery + reduced overhead',
-      'Ruby servers: 10K req/s without infrastructure changes',
-      'Kong API Gateway: centralised routing, load balancing + access control',
-      'ETL pipeline: 5h → 15 min/GB — 95% reduction',
-    ]},
-    { role:'Full Stack Engineer',    co:'Oivan',          coKey:'oivan',   period:'Jan 2021 — Jan 2022', active:false, bullets:[
-      'Frontend team leadership: project alignment + technical documentation',
-      'Microservice architecture documentation',
-      'Code quality via rigorous testing + optimisation',
-      'Query performance improvements, enhancing user experience',
-    ]},
-    { role:'Full Stack Engineer',    co:'Nucleus Studio', coKey:'nucleus', period:'Jan 2020 — Jan 2021', active:false, bullets:[
-      'Hybrid mobile app with React Native',
-      'NestJS backend architecture',
-      'Firebase, GCP + AWS integration',
-      'Livestream + video call features via RTC protocol',
-    ]},
-    { role:'Platform Developer',     co:'Aleph Labs',     coKey:'aleph',   period:'Jan 2018 — Jan 2020', active:false, bullets:[
-      'Authentication APIs: design + implementation for system security',
-      'Core front-end components for cross-team utilisation',
-      'Core SDK microservice maintained across multiple teams',
-    ]},
-  ];
-
-  const STACKS: [string,string][] = [
-    ['BACKEND',       'Go · Ruby · Node.js · NestJS'],
-    ['CLOUD',         'AWS · Azure · GCP · Cloud Solutions'],
-    ['DEVOPS',        'Kubernetes · Knative · Terraform · DevOps'],
-    ['DATA',          'Kafka · Redis · PostgreSQL · Data Pipelines'],
-    ['OBSERVABILITY', 'Grafana · SLO · Anomaly Detection'],
-    ['ARCHITECTURE',  'Microservices · API Design · Event-Driven'],
-    ['FRONTEND',      'React Native · Angular · React'],
-  ];
-
-  const CERTS = [
-    { name:'Claude Code In Action', issuer:'Anthropic / Skilljar', url:'https://verify.skilljar.com/c/jfnifed5mprf' },
-    { name:'Cloud Badges (AWS · Azure · GCP)', issuer:'Credly', url:'https://www.credly.com/users/nguyen-louis/badges#credly' },
-  ];
-
-  const LINKS = [
-    { label:'GitHub',   url:'https://github.com/louishuyng',           disp:'github.com/louishuyng' },
-    { label:'LinkedIn', url:'https://www.linkedin.com/in/louishuyng/', disp:'linkedin.com/in/louishuyng' },
-    { label:'Raycast',  url:'https://www.raycast.com/louishuyng',      disp:'raycast.com/louishuyng' },
-    { label:'Certificates', url:'https://www.credly.com/users/nguyen-louis/badges#credly', disp:'credly.com/users/nguyen-louis' },
-    { label:'Email',    url:'mailto:huynguyennbk@gmail.com',           disp:'huynguyennbk@gmail.com' },
-  ];
-
-  // ── command handlers ─────────────────────────────────────────
-  async function cmdHelp() {
-    await blank();
-    await addLine(g('Commands'));
-    await sep();
-    const rows: [string,string][] = [
-      ['help',              'Show this message'],
-      ['info',              'About Louis Huy Nguyen'],
-      ['exp jobs',          'List all job titles'],
-      ['exp job <company>', 'Detailed view for a company'],
-      ['exp stacks',        'Tech stack by category'],
-      ['exp years',         'Career timeline 2018 → present'],
-      ['certs',             'Professional certifications'],
-      ['links',             'GitHub · LinkedIn · Raycast · Certificates'],
-      ['download',          'Download CV / cover letter'],
-      ['clear',             'Clear terminal'],
-    ];
-    for (const [cmd, desc] of rows) {
-      await addLine(`  ${p(cmd.padEnd(22))} ${d('─')}  ${m(desc)}`);
-    }
-    await blank();
-  }
-
-  async function cmdInfo() {
-    await blank();
-    await addLine(`${w('Louis Huy Nguyen')}  ${d('·')}  ${bl('Software Architect')}`);
-    await addLine(d('Vietnam  ·  huynguyennbk@gmail.com'));
-    await blank();
-    await addLine(m('Senior SWE with 8+ years designing scalable architectures'));
-    await addLine(m('and optimizing cloud solutions. Passionate about solving'));
-    await addLine(`${m('complex problems that require')} ${g('architect mindsets')}${m('.')}`);
-    await blank();
-  }
-
-  // exp jobs — titles only
-  async function cmdExpJobs() {
-    await blank();
-    await addLine(`${g('Experience')}  ${d('·')}  ${d('use')} ${p('exp job <company>')} ${d('for details')}`);
-    await sep();
-    for (const j of JOBS) {
-      const dot = j.active
-        ? `<span style="color:#98c379;animation:blink 2s ease infinite;">●</span>`
-        : `<span style="color:#3e4451;">○</span>`;
-      await addLine(`  ${dot}  ${j.active ? g(j.role) : m(j.role)}  ${d('@')} ${bl(j.co)}  ${d(j.period)}`);
-    }
-    await blank();
-    await addLine(`  ${d('Companies:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>p(k)).join(d('  ·  '))}`);
-    await blank();
-  }
-
-  // exp job <company> — detailed
-  async function cmdExpJobCompany(query: string) {
-    const q = query.toLowerCase().trim();
-    const matches = JOBS.filter(j => j.coKey.includes(q) || j.co.toLowerCase().includes(q));
-    if (!matches.length) {
-      await blank();
-      await addLine(`${r('no match for')} ${w(query)}`);
-      await addLine(`  ${d('try:')} ${[...new Set(JOBS.map(j=>j.coKey))].map(k=>p(k)).join('  ')}`);
-      await blank();
-      return;
-    }
-    await blank();
-    for (let i = 0; i < matches.length; i++) {
-      const j = matches[i];
-      const dot = j.active
-        ? `<span style="color:#98c379;animation:blink 2s ease infinite;">●</span>`
-        : `<span style="color:#3e4451;">○</span>`;
-      await addLine(`${dot} ${j.active ? g(j.role) : w(j.role)}`);
-      await addLine(`  ${d('@')} ${bl(j.co)}  ${d('·')}  ${d(j.period)}`);
-      await blank();
-      for (const bul of j.bullets) {
-        await addLine(`  ${d('▸')} ${m(bul)}`);
-      }
-      if (i < matches.length - 1) {
-        await blank();
-        await addLine(`  ${d('· · ·')}`);
-      }
-      await blank();
-    }
-  }
-
-  async function cmdExpStacks() {
-    await blank();
-    await addLine(g('Tech Stack'));
-    await sep();
-    for (const [cat, val] of STACKS) {
-      await addLine(`  ${cy(cat.padEnd(15))} ${d(val)}`);
-    }
-    await blank();
-  }
-
-  async function cmdExpYears() {
-    await blank();
-    await addLine(`  ${d('2018')} ${d('─────────────────────────────────')} ${g('now')}`);
-    await blank();
-    for (const [date, role, co] of [
-      ['Jan 2018','Platform Developer',   'Aleph Labs'],
-      ['Jan 2020','Full Stack Engineer',  'Nucleus Studio'],
-      ['Jan 2021','Full Stack Engineer',  'Oivan'],
-      ['Jan 2022','Senior SWE',           'PerxTech'],
-      ['Feb 2024','Senior SWE',           'Regask'],
-      ['Jul 2025','Solution Architect',   'Regask  ← current'],
-    ]) {
-      await addLine(`  ${d(date)}  ${p('→')}  ${w(role)}  ${d('@ ')}${bl(co)}`);
-    }
-    await blank();
-  }
-
-  async function cmdExp(args: string) {
-    const sub = args.trim().toLowerCase();
-    if (!sub || sub === 'jobs')      return cmdExpJobs();
-    if (sub === 'stacks')            return cmdExpStacks();
-    if (sub === 'years')             return cmdExpYears();
-    if (sub.startsWith('job '))      return cmdExpJobCompany(sub.slice(4));
-    // fallback: treat as company name
-    return cmdExpJobCompany(sub);
-  }
-
-  async function cmdCerts() {
-    await blank();
-    await addLine(g('Certifications'));
-    await sep();
-    for (const c of CERTS) {
-      await addLine(`  ${y('●')} ${w(c.name)}`);
-      await addLine(`    ${d(c.issuer)}  ${link(c.url, '↗ view credential')}`);
-      await blank();
-    }
-  }
-
-  async function cmdDownload() {
-    await blank();
-    await addLine(g('Download'));
-    await sep();
-    const files = [
-      { label:'CV / Resume',    file:'cv.pdf',           name:'Louis_Nguyen_Software_Engineer.pdf' },
-      { label:'Cover Letter',   file:'cover-letter.pdf', name:'Louis_Huy_Nguyen_Cover_Letter.pdf'  },
-    ];
-    for (const f of files) {
-      await addLine(`  ${p('●')} ${w(f.label.padEnd(14))}  <a href="/${f.file}" download="${f.name}" style="color:#61afef;text-decoration:underline;text-underline-offset:3px;" onmouseover="this.style.color='#98c379'" onmouseout="this.style.color='#61afef'">↓ download</a>`);
-    }
-    await blank();
-  }
-
-  async function cmdLinks() {
-    await blank();
-    await addLine(g('Links'));
-    await sep();
-    for (const l of LINKS) {
-      await addLine(`  ${p('●')} ${w(l.label.padEnd(10))}  ${link(l.url, l.disp + ' ↗')}`);
-    }
-    await blank();
-  }
-
-  // ── execute ──────────────────────────────────────────────────
-  async function withDivider(fn: () => Promise<void>) {
-    await fn();
-    await divider();
-    await blank();
-  }
-
-  async function execute(raw: string) {
-    const cmd = raw.trim().toLowerCase();
-    await echo(raw.trim());
-    if (!cmd) return;
-    if (cmd === 'clear') { out.innerHTML = ''; return; }
-    if (cmd === 'help')                          return withDivider(cmdHelp);
-    if (cmd === 'info')                          return withDivider(cmdInfo);
-    if (cmd === 'certs')                         return withDivider(cmdCerts);
-    if (cmd === 'links')                         return withDivider(cmdLinks);
-    if (cmd === 'download')                      return withDivider(cmdDownload);
-    if (cmd === 'exp' || cmd.startsWith('exp ')) return withDivider(() => cmdExp(cmd.slice(3)));
-    await blank();
-    await addLine(`${r('command not found:')} ${d(raw.trim())}  ${d('— try')} ${p('help')}`);
-    await blank();
-    await divider();
-    await blank();
-  }
-
-  // ── autocomplete ─────────────────────────────────────────────
-  const ALL = [
-    'help','info','certs','links','download','clear',
-    'exp','exp jobs','exp stacks','exp years',
-    'exp job regask','exp job perxtech','exp job oivan','exp job nucleus','exp job aleph',
-  ];
-
-  function getMatches(b: string) {
-    if (!b) return [];
-    return ALL.filter(c => c.startsWith(b) && c !== b);
-  }
-  function ghostText(b: string) {
-    const ms = getMatches(b);
-    return ms.length === 1 ? ms[0].slice(b.length) : '';
-  }
-  let suggTimer: ReturnType<typeof setTimeout> | null = null;
-
-  function showSugg(b: string) {
-    const ms = getMatches(b);
-    if (ms.length <= 1 || !b) { suggEl.style.display = 'none'; return; }
-    suggEl.innerHTML = ms.map(c =>
-      `<span class="sc" data-c="${esc(c)}" style="
-        font-family:'JetBrains Mono';font-size:11px;padding:3px 9px;
-        border:1px solid #38352F;color:#5B6AD0;cursor:pointer;background:#262624;
-        border-radius:4px;transition:all 0.18s;
-      ">${esc(c)}</span>`
-    ).join('');
-    suggEl.style.display = 'flex';
-    animate(suggEl, { opacity:[0,1], y:[4,0] }, { duration:0.22, easing:[0.16,1,0.3,1] });
-    suggEl.querySelectorAll<HTMLElement>('.sc').forEach(ch => {
-      ch.onmouseover = () => { ch.style.background='rgba(91,106,208,0.12)'; ch.style.borderColor='#5B6AD0'; };
-      ch.onmouseout  = () => { ch.style.background='#262624'; ch.style.borderColor='#38352F'; };
-      ch.onclick     = () => { buf = ch.dataset.c!; render(); };
-    });
-  }
-
-  function renderSugg(b: string) {
-    if (suggTimer) clearTimeout(suggTimer);
-    const ms = getMatches(b);
-    if (ms.length <= 1 || !b) { suggEl.style.display = 'none'; return; }
-    suggTimer = setTimeout(() => showSugg(b), 380);
-  }
-
-  function render() {
-    typed.textContent = buf;
-    // smooth ghost text transition
-    animate(ghost, { opacity:[0.4, 1] }, { duration: 0.12, easing: [0.16,1,0.3,1] });
-    ghost.textContent = ghostText(buf);
-    renderSugg(buf);
-  }
-
-  // ── keyboard ─────────────────────────────────────────────────
-  async function handleKey(e: KeyboardEvent) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
-      e.preventDefault();
-      out.innerHTML = '';
-      buf = ''; hIdx = -1; render();
-      suggEl.style.display = 'none';
-      boot();
-      return;
-    }
-    if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      buf += e.key; hIdx = -1; tabIdx = -1; tabBase = '';
-      animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
-      render();
-    } else if (e.key === 'Backspace') {
-      buf = buf.slice(0,-1); hIdx = -1; tabIdx = -1; tabBase = ''; render();
-    } else if (e.key === 'Enter') {
-      const cmd = buf;
-      if (cmd.trim()) hist.unshift(cmd.trim());
-      buf = ''; hIdx = -1; tabIdx = -1; tabBase = ''; render();
-      suggEl.style.display = 'none';
-      await execute(cmd);
-    } else if (e.key === 'Tab') {
-      e.preventDefault();
-      if (tabIdx === -1) tabBase = buf;
-      const ms = getMatches(tabBase);
-      if (!ms.length) { render(); return; }
-      tabIdx = (tabIdx + 1) % ms.length;
-      buf = ms[tabIdx];
-      render();
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (hIdx < hist.length-1) { buf = hist[++hIdx]; render(); }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      hIdx > 0 ? (buf = hist[--hIdx]) : (hIdx = -1, buf = '');
-      render();
-    }
-  }
-
-  window.addEventListener('keydown', handleKey);
-
-  // ── mobile input ─────────────────────────────────────────────
-  const mobileInput = document.getElementById('term-mobile-input') as HTMLInputElement;
-  const inputArea   = document.getElementById('term-input-area')!;
-  const tapHint     = document.getElementById('term-tap-hint')!;
-  const isMobile    = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-  if (isMobile()) {
-    tapHint.style.display = 'block';
-
-    // Tap anywhere in output or input area → focus hidden input
-    [out, inputArea].forEach(el => {
-      el.addEventListener('click', () => {
-        mobileInput.style.pointerEvents = 'auto';
-        mobileInput.focus();
-        mobileInput.style.pointerEvents = 'none';
-      });
-    });
-
-    mobileInput.addEventListener('focus', () => {
-      tapHint.style.display = 'none';
-    });
-    mobileInput.addEventListener('blur', () => {
-      if (!buf) tapHint.style.display = 'block';
-    });
-
-    // Capture input events (handles IME, paste, autocorrect etc.)
-    mobileInput.addEventListener('input', () => {
-      const val = mobileInput.value;
-      if (!val) return;
-      buf += val;
-      mobileInput.value = '';
-      hIdx = -1; tabIdx = -1; tabBase = '';
-      animate(typed, { scale:[1.02,1] }, { duration:0.09, easing:[0.16,1,0.3,1] });
-      render();
-    });
-
-    // Keydown for special keys only on mobile (input event handles character insertion)
-    mobileInput.addEventListener('keydown', (e) => {
-      e.stopPropagation(); // prevent window listener from firing too
-      if (['Backspace', 'Enter', 'Tab', 'ArrowUp', 'ArrowDown'].includes(e.key) ||
-          ((e.ctrlKey || e.metaKey) && e.key === 'l')) {
-        handleKey(e);
-      }
-    });
-  }
-
-  // ── boot ─────────────────────────────────────────────────────
-  const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
-
-  async function boot() {
-    const lines = [
-      `<img src="/avatar.webp" onerror="this.style.display='none'" style="width:250;height:180px;object-fit:cover;display:block;border-radius:4px;border:1px solid #3e4451;margin-bottom:4px;" />`,
-      ``,
-      `${bl('Software Architect')}  ${d('·')}  ${m('Vietnam')}  ${d('·')}  ${g('8+ yrs')}`,
-      `${bl('Go')}  ${d('·')}  ${r('Ruby')}  ${d('·')}  ${g('Node.js')}  ${d('·')}  ${y('AWS')}  ${d('·')}  ${p('K8s')}  ${d('·')}  ${cu('Azure')}`,
-      ``,
-      `${d('type')} ${p('help')} ${d('to explore')}`,
-    ];
-
-    for (const html of lines) {
-      await addLine(html);
-    }
-    await blank();
-    await sep();
-    await blank();
-  }
-
-  boot();
+// PLACEHOLDER — filled in Task 3
 </script>
 
 <style>
-  /* Mobile: hide keyboard hints, bigger touch targets */
-  @media (max-width: 767px) {
-    .sb-hint { display: none !important; }
-
-    #term-output {
-      font-size: 12.5px !important;
-      padding: 10px 12px 6px !important;
-    }
-
-    #term-input-area {
-      padding: 8px 12px 12px !important;
-    }
-
-    #term-input-area div[style*="gap:8px"] {
-      font-size: 14px !important;
-      min-height: 32px;
-    }
-  }
+/* PLACEHOLDER — filled in Task 4 */
 </style>
