@@ -1,42 +1,336 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
-import Cursor from '../components/Cursor.astro';
-import LeftPanel from '../components/LeftPanel.astro';
-import Terminal from '../components/Terminal.astro';
+
+const experiences = [
+  {
+    role: 'Solution Architect',
+    company: 'Regask',
+    period: 'Jul 2025 — Present',
+    stack: 'Go · Kubernetes · Knative · Azure · Grafana Cloud · Redis',
+    bullets: [
+      'Designed and evolved Kubernetes/Knative architecture for high-throughput services, improving throughput by 40% and reducing infrastructure cost by 30%.',
+      'Established Grafana Cloud observability with SLO baselines, alerting, and anomaly detection to improve incident response.',
+      'Optimized Redis-intensive write services from 10K to 100K requests per second through architecture and implementation improvements.',
+    ],
+  },
+  {
+    role: 'Senior Software Engineer',
+    company: 'Regask',
+    period: 'Feb 2024 — Jul 2025',
+    stack: 'Go · Node.js · AKS · Auth0 · SAML · OIDC',
+    bullets: [
+      'Built highly available AKS services with redundancy, failover strategy, and production-grade operational practices.',
+      'Implemented enterprise SSO flows using Auth0, SAML, OIDC, and PKCE to support security and compliance requirements.',
+      'Re-engineered selected Node.js services in Go, reducing memory usage from 1.5GB to approximately 400–500MB.',
+      'Produced technical solution documents and architecture decision records to align implementation across engineering teams.',
+    ],
+  },
+  {
+    role: 'Senior Software Engineer',
+    company: 'PerxTech',
+    period: 'Jan 2022 — Sep 2023',
+    stack: 'Ruby · Kong · PostgreSQL · AWS · ETL',
+    bullets: [
+      'Led a five-person cross-functional team, improving delivery alignment between product, engineering, and operations.',
+      'Optimized Ruby services to handle 10K requests per second without additional infrastructure investment.',
+      'Improved ETL pipeline performance from 5 hours to 15 minutes per GB through query, batching, and processing optimizations.',
+      'Supported API gateway adoption with Kong for centralized routing, load balancing, and access control.',
+    ],
+  },
+  {
+    role: 'Full Stack / Platform Engineer',
+    company: 'Oivan · Nucleus Studio · Aleph Labs',
+    period: '2018 — 2022',
+    stack: 'React · React Native · Node.js · NestJS · PostgreSQL · Firebase · GCP',
+    bullets: [
+      'Delivered production web and mobile applications, including national housing, creator platform, and banking-related systems.',
+      'Built authentication APIs, reusable frontend components, shared SDK services, and backend integrations used by multiple teams.',
+      'Improved frontend delivery practices, database query performance, testing discipline, and technical documentation.',
+    ],
+  },
+];
+
+const skills = [
+  ['Backend', 'Go, Ruby, Node.js, NestJS'],
+  ['Cloud', 'AWS, Azure, GCP'],
+  ['Platform', 'Kubernetes, Knative, Docker, ArgoCD'],
+  ['Data', 'Kafka, Redis, PostgreSQL, ETL'],
+  ['Architecture', 'Microservices, API Design, DDD, Event-driven systems'],
+  ['Observability', 'Grafana, Prometheus, SLOs, Anomaly Detection'],
+];
+
+const projects = [
+  {
+    name: 'Regask Platform',
+    company: 'Regask',
+    href: 'https://regask.com',
+    image: '/projects/regask.png',
+    summary: 'AI regulatory intelligence platform. Scope included cloud architecture, Kubernetes/Knative services, observability, SSO, and high-throughput backend systems.',
+    tags: ['Go', 'Kubernetes', 'Knative', 'Azure', 'Grafana'],
+  },
+  {
+    name: 'PerxTech Platform',
+    company: 'PerxTech',
+    href: 'https://perxtech.com',
+    image: '/projects/perxtech.png',
+    summary: 'Loyalty and customer engagement platform. Scope included Ruby service optimization, API gateway architecture, PostgreSQL performance, and ETL pipelines.',
+    tags: ['Ruby', 'Kong', 'AWS', 'PostgreSQL', 'ETL'],
+  },
+  {
+    name: 'Sakani Platform',
+    company: 'Oivan',
+    href: 'https://oivan.com/our-work/nhci-sakani-platform/',
+    image: '/projects/sakani.png',
+    summary: 'National housing platform by NHC. Scope included full-stack engineering, frontend delivery, backend integration, and performance improvements.',
+    tags: ['React', 'Node.js', 'PostgreSQL', 'Docker'],
+  },
+  {
+    name: 'Komi',
+    company: 'Nucleus Studio',
+    href: 'https://komi.io/',
+    image: '/projects/komi.png',
+    summary: 'Creator commerce and mobile-first product experience. Scope included React Native and NestJS features with Firebase, GCP, and AWS integrations.',
+    tags: ['React Native', 'NestJS', 'Firebase', 'GCP'],
+  },
+  {
+    name: 'UOB Bank Platform',
+    company: 'Aleph Labs',
+    href: 'https://www.uobgroup.com/',
+    image: '/projects/uob.png',
+    summary: 'Banking platform engineering. Scope included secure authentication APIs, reusable frontend components, and shared SDK microservices for multiple teams.',
+    tags: ['Node.js', 'React', 'Auth APIs', 'Microservices'],
+  },
+];
+
+const links = [
+  { label: 'Email', href: 'mailto:huynguyennbk@gmail.com' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/louishuyng/' },
+  { label: 'GitHub', href: 'https://github.com/louishuyng' },
+  { label: 'Certificates', href: 'https://www.credly.com/users/nguyen-louis/badges#credly' },
+];
 ---
 
 <Layout title="Louis Huy Nguyen — Software Architect">
-  <Cursor />
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <main class="site-shell">
+    <nav class="nav reveal" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Louis Huy Nguyen home">LHN</a>
+      <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a class="nav-cta" href="/cv.pdf" download="Louis_Nguyen_Software_Engineer.pdf">Resume</a>
+    </nav>
 
-  <div style="
-    display: grid;
-    grid-template-columns: 38% 62%;
-    height: 100svh;
-    overflow: hidden;
-  " id="layout">
+    <section id="top" class="hero section">
+      <div class="hero-copy">
+        <p class="eyebrow reveal">Software Architect · Backend & Cloud Engineering</p>
+        <h1 class="reveal delay-1">Building reliable platforms for high-growth product teams.</h1>
+        <p class="hero-text reveal delay-2">
+          I’m Louis Huy Nguyen, a software architect with 8+ years of experience designing backend,
+          cloud, and platform systems. I specialize in Go, Kubernetes, Azure, AWS, observability,
+          and performance optimization for production environments.
+        </p>
+        <div class="hero-stats reveal delay-2" aria-label="Career highlights">
+          <div><strong>100K</strong><span>RPS systems</span></div>
+          <div><strong>30%</strong><span>infra cost reduction</span></div>
+          <div><strong>8+</strong><span>years experience</span></div>
+        </div>
+        <div class="hero-actions reveal delay-3">
+          <a class="button primary" href="mailto:huynguyennbk@gmail.com?subject=Opportunity%20for%20Louis%20Huy%20Nguyen">Hire me</a>
+          <a class="button secondary" href="/cv.pdf" download="Louis_Nguyen_Software_Engineer.pdf">Download CV</a>
+          <a class="button ghost" href="/cover-letter.pdf" download="Louis_Huy_Nguyen_Cover_Letter.pdf">Cover letter</a>
+        </div>
+      </div>
 
-    <!-- Left: identity panel -->
-    <div style="overflow:hidden;">
-      <LeftPanel />
-    </div>
+      <aside class="hero-card reveal delay-2" aria-label="Candidate summary">
+        <img src="/hero-cloud.jpg" alt="Modern cloud infrastructure and server architecture" />
+        <div>
+          <span class="status"><span></span> Available</span>
+          <h2>Louis Huy Nguyen</h2>
+          <p>Software Architect focused on scalable backend, cloud infrastructure, and production reliability.</p>
+        </div>
+        <div class="quick-links">
+          {links.map((link) => (
+            <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{link.label}</a>
+          ))}
+        </div>
+      </aside>
+    </section>
 
-    <!-- Right: terminal -->
-    <div style="overflow:hidden; display:flex; flex-direction:column; min-height:0;">
-      <Terminal />
-    </div>
-  </div>
-</Layout>
+    <section id="projects" class="section split-section">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Selected projects</p>
+        <h2>Production systems with measurable impact.</h2>
+        <p>A concise view of product domains I have contributed to, with public references where available.</p>
+      </div>
+      <div class="project-grid">
+        {projects.map((project, index) => (
+          <a class={`project-card reveal delay-${Math.min(index % 3 + 1, 3)}`} href={project.href} target="_blank" rel="noopener">
+            <img src={project.image} alt={`${project.name} project preview`} loading="lazy" />
+            <div class="project-content">
+              <span>{project.company}</span>
+              <h3>{project.name}</h3>
+              <p>{project.summary}</p>
+              <div class="tags">
+                {project.tags.map((tag) => <em>{tag}</em>)}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
 
-<style>
-  /* ── Mobile: stack vertically ─────────────────────────── */
-  @media (max-width: 767px) {
-    #layout {
-      grid-template-columns: 1fr !important;
-      grid-template-rows: auto 1fr !important;
-      height: 100svh !important;
-      overflow: hidden !important;
+    <section id="experience" class="section split-section">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Experience</p>
+        <h2>Clear ownership, scale, and technical outcomes.</h2>
+        <p>Responsibilities, measurable results, and the technical stack behind each role.</p>
+      </div>
+      <div class="timeline">
+        {experiences.map((job, index) => (
+          <article class={`job-card reveal delay-${Math.min(index + 1, 3)}`}>
+            <div class="job-meta">
+              <span>{job.period}</span>
+              <strong>{job.company}</strong>
+            </div>
+            <div class="job-body">
+              <h3>{job.role}</h3>
+              <p class="stack">{job.stack}</p>
+              <ul>
+                {job.bullets.map((bullet) => <li>{bullet}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="skills" class="section split-section compact">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Skills</p>
+        <h2>Backend depth with practical platform breadth.</h2>
+      </div>
+      <div class="skill-grid">
+        {skills.map(([title, value], index) => (
+          <div class={`skill-card reveal delay-${Math.min(index % 3 + 1, 3)}`}>
+            <h3>{title}</h3>
+            <p>{value}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="contact" class="section contact reveal">
+      <p class="eyebrow">Ready for interviews</p>
+      <h2>Looking for a senior engineer who can own architecture and delivery?</h2>
+      <p>Send the role, team context, and timeline. I’ll reply with availability and relevant experience.</p>
+      <div class="hero-actions centered">
+        <a class="button primary" href="mailto:huynguyennbk@gmail.com?subject=Interview%20with%20Louis%20Huy%20Nguyen">Contact Louis</a>
+        <a class="button secondary" href="https://www.linkedin.com/in/louishuyng/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </section>
+  </main>
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach((el) => observer.observe(el));
+
+    const progress = document.getElementById('scroll-progress');
+    const nav = document.querySelector('.nav');
+    function updateScrollEffects() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? window.scrollY / max : 0;
+      progress.style.transform = `scaleX(${ratio})`;
+      nav.classList.toggle('is-scrolled', window.scrollY > 24);
+
+      if (!reduceMotion) {
+        document.querySelectorAll('[data-parallax]').forEach((el) => {
+          const speed = Number(el.dataset.parallax || 0);
+          el.style.transform = `translate3d(0, ${window.scrollY * speed}px, 0)`;
+        });
+      }
     }
-    html, body { height: 100svh; overflow: hidden; }
-  }
-</style>
+    updateScrollEffects();
+    window.addEventListener('scroll', updateScrollEffects, { passive: true });
+
+    document.querySelectorAll('.hero-card, .project-card, .job-card, .skill-card').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        if (reduceMotion) return;
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const rx = ((y / rect.height) - 0.5) * -4;
+        const ry = ((x / rect.width) - 0.5) * 4;
+        card.style.setProperty('--mx', `${x}px`);
+        card.style.setProperty('--my', `${y}px`);
+        if (card.classList.contains('project-card') || card.classList.contains('hero-card')) {
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-5px)`;
+        }
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+      let dx = mx, dy = my, rx = mx, ry = my;
+
+      window.addEventListener('pointermove', (event) => {
+        mx = event.clientX;
+        my = event.clientY;
+        document.body.style.setProperty('--spot-x', `${(mx / window.innerWidth) * 100}%`);
+        document.body.style.setProperty('--spot-y', `${(my / window.innerHeight) * 100}%`);
+        dot.style.opacity = '1';
+        ring.style.opacity = '1';
+      }, { passive: true });
+
+      function renderCursor() {
+        dx += (mx - dx) * 0.55;
+        dy += (my - dy) * 0.55;
+        rx += (mx - rx) * 0.16;
+        ry += (my - ry) * 0.16;
+        dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%, -50%)`;
+        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+        requestAnimationFrame(renderCursor);
+      }
+      renderCursor();
+
+      document.querySelectorAll('a, button, .project-card, .job-card, .skill-card').forEach((el) => {
+        el.addEventListener('pointerenter', () => ring.classList.add('is-hovering'));
+        el.addEventListener('pointerleave', () => ring.classList.remove('is-hovering'));
+      });
+      window.addEventListener('pointerdown', () => ring.classList.add('is-pressed'));
+      window.addEventListener('pointerup', () => ring.classList.remove('is-pressed'));
+
+      document.querySelectorAll('.button, .nav-links a, .nav-cta').forEach((el) => {
+        el.addEventListener('pointermove', (event) => {
+          const rect = el.getBoundingClientRect();
+          const x = (event.clientX - rect.left - rect.width / 2) * 0.18;
+          const y = (event.clientY - rect.top - rect.height / 2) * 0.22;
+          el.style.transform = `translate(${x}px, ${y}px)`;
+        });
+        el.addEventListener('pointerleave', () => {
+          el.style.transform = '';
+        });
+      });
+    }
+  </script>
+</Layout>

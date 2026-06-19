@@ -1,0 +1,40 @@
+<svg width="1100" height="1100" viewBox="0 0 1100 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="1100" rx="80" fill="#F6F2E9"/>
+  <circle cx="840" cy="210" r="230" fill="#E7F0FF"/>
+  <circle cx="214" cy="865" r="290" fill="#DFF4EE"/>
+  <rect x="118" y="156" width="864" height="700" rx="52" fill="#FFFDF8" stroke="#DDD8CD" stroke-width="4"/>
+  <rect x="164" y="214" width="772" height="84" rx="30" fill="#151515"/>
+  <circle cx="216" cy="256" r="12" fill="#EF4444"/>
+  <circle cx="254" cy="256" r="12" fill="#F59E0B"/>
+  <circle cx="292" cy="256" r="12" fill="#22C55E"/>
+  <rect x="744" y="244" width="136" height="24" rx="12" fill="#5D6675"/>
+
+  <rect x="188" y="346" width="245" height="300" rx="34" fill="#F1EEE7" stroke="#E2DED4" stroke-width="3"/>
+  <rect x="228" y="392" width="90" height="90" rx="24" fill="#DBEAFE"/>
+  <path d="M251 458V428L273 411L295 428V458H251Z" fill="#2563EB"/>
+  <rect x="228" y="526" width="156" height="18" rx="9" fill="#151515" opacity=".82"/>
+  <rect x="228" y="566" width="116" height="15" rx="7.5" fill="#777167"/>
+
+  <rect x="484" y="346" width="428" height="128" rx="34" fill="#E7F6F1" stroke="#CFE9E0" stroke-width="3"/>
+  <rect x="530" y="386" width="72" height="48" rx="16" fill="#0F766E"/>
+  <rect x="634" y="388" width="220" height="16" rx="8" fill="#0F766E" opacity=".9"/>
+  <rect x="634" y="424" width="154" height="14" rx="7" fill="#5E8E84"/>
+
+  <rect x="484" y="520" width="198" height="198" rx="34" fill="#EFF6FF" stroke="#D8E7FF" stroke-width="3"/>
+  <path d="M584 598C626 598 660 632 660 674H508C508 632 542 598 584 598Z" fill="#2563EB" opacity=".9"/>
+  <circle cx="584" cy="582" r="42" fill="#93C5FD"/>
+
+  <rect x="714" y="520" width="198" height="198" rx="34" fill="#FFF7ED" stroke="#F1DDC7" stroke-width="3"/>
+  <path d="M770 650L810 600L846 636L872 604" stroke="#EA580C" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="770" cy="650" r="10" fill="#EA580C"/>
+  <circle cx="810" cy="600" r="10" fill="#EA580C"/>
+  <circle cx="846" cy="636" r="10" fill="#EA580C"/>
+  <circle cx="872" cy="604" r="10" fill="#EA580C"/>
+
+  <path d="M432 496H484" stroke="#B8B1A6" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12"/>
+  <path d="M682 584H714" stroke="#B8B1A6" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12"/>
+  <path d="M582 520V474" stroke="#B8B1A6" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12"/>
+
+  <rect x="234" y="780" width="632" height="76" rx="38" fill="#151515"/>
+  <text x="550" y="827" text-anchor="middle" font-family="Instrument Sans, Arial, sans-serif" font-size="28" font-weight="700" fill="#FFFDF8">Cloud architecture · Backend systems · Reliability</text>
+</svg>
