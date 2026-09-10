@@ -131,6 +131,13 @@ const projects = [
     summary: 'Banking platform engineering. Scope included secure authentication APIs, reusable frontend components, and shared SDK microservices for multiple teams.',
     tags: ['Node.js', 'React', 'Auth APIs', 'Microservices'],
   },
+  {
+    name: 'ProductPine',
+    company: 'ProductPine',
+    href: 'https://productpine.com/en-NL',
+    summary: 'E-commerce platform. Scope included Shopify integration, automatic data reconciliation, idempotent two-way sync, core domain services, and pipeline monitoring.',
+    tags: ['Shopify', 'Webhooks', 'Data Pipelines', 'E-commerce'],
+  },
 ];
 
 const links = [
@@ -209,9 +216,9 @@ const links = [
           {projects.map((project, index) => (
             <a class={`project-card project-${index}`} href={project.href} target="_blank" rel="noopener">
               <div class="project-art" aria-hidden="true">
-                <span class="project-domain">{['REGULATORY INTELLIGENCE', 'CUSTOMER ENGAGEMENT', 'NATIONAL HOUSING', 'CREATOR COMMERCE', 'BANKING & FINANCE'][index]}</span>
-                <strong class="project-wordmark">{['RegAsk', 'perx', 'sakani', 'KOMI', 'UOB'][index]}</strong>
-                <span class="project-art-caption">{['Clarity at scale.', 'Every interaction counts.', 'A place to call home.', 'Creators. Connected.', 'Trust, by design.'][index]}</span>
+                <span class="project-domain">{['REGULATORY INTELLIGENCE', 'CUSTOMER ENGAGEMENT', 'NATIONAL HOUSING', 'CREATOR COMMERCE', 'BANKING & FINANCE', 'E-COMMERCE'][index]}</span>
+                <strong class="project-wordmark">{['RegAsk', 'perx', 'sakani', 'KOMI', 'UOB', 'ProductPine'][index]}</strong>
+                <span class="project-art-caption">{['Clarity at scale.', 'Every interaction counts.', 'A place to call home.', 'Creators. Connected.', 'Trust, by design.', 'Commerce, in sync.'][index]}</span>
                 <span class="project-open">↗</span>
               </div>
               <div class="project-content">
