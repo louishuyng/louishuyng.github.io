@@ -12,6 +12,31 @@ const { title } = Astro.props;
   <meta property="og:description" content="Software Architect with 8+ years designing reliable cloud, backend, and platform systems." />
   <meta property="og:type" content="website" />
   <title>{title}</title>
+  <script is:inline>
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+    let theme;
+    try { theme = localStorage.getItem('theme'); } catch { /* Storage may be unavailable in private browsers. */ }
+    if (theme !== 'light' && theme !== 'dark') theme = null;
+
+    function applyTheme() {
+      const dark = theme ? theme === 'dark' : systemTheme.matches;
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      document.getElementById('theme-toggle')?.setAttribute('aria-pressed', String(dark));
+    }
+    applyTheme();
+    systemTheme.addEventListener('change', applyTheme);
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('theme-toggle');
+      if (!toggle) return;
+      toggle.hidden = false;
+      applyTheme();
+      toggle.addEventListener('click', () => {
+        theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('theme', theme); } catch { /* Keep the choice for this page when storage is blocked. */ }
+        applyTheme();
+      });
+    });
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
