@@ -1,0 +1,6 @@
+---
+// Lucide outline set, inlined as a sprite in Layout.astro so there is no icon dependency.
+interface Props { name: string; size?: number; class?: string }
+const { name, size = 20, class: className } = Astro.props;
+---
+<svg class:list={['icon', className]} width={size} height={size} aria-hidden="true" focusable="false"><use href={`#i-${name}`} /></svg>

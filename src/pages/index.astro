@@ -1,5 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { Image } from 'astro:assets';
+import shotRegask from '../assets/projects/regask.png';
+import shotPerx from '../assets/projects/perxtech.png';
+import shotSakani from '../assets/projects/sakani.png';
+import shotKomi from '../assets/projects/komi.png';
+import shotUob from '../assets/projects/uob.jpg';
 import '../styles/global.css';
 
 const experiences = [
@@ -87,12 +94,12 @@ const experiences = [
 ];
 
 const skills = [
-  ['Languages', 'Go, Ruby, TypeScript, JavaScript'],
-  ['Cloud & Infrastructure', 'Azure, AWS, GCP, Kubernetes, Knative, Crossplane, Terraform'],
-  ['Architecture', 'Microservices, Event-driven Architecture, Temporal, API Design, gRPC, Data Pipelines'],
-  ['Platform & Operations', 'Kafka, Redis, Traefik, Backstage, DevOps'],
-  ['Observability', 'Grafana Cloud, Performance Baselines, SLOs, Anomaly Alerts'],
-  ['Security', 'SSO, Okta, SAML, OIDC, Scoped MCP Access'],
+  ['code', 'Languages', 'Go, Ruby, TypeScript, JavaScript'],
+  ['cloud', 'Cloud & Infrastructure', 'Azure, AWS, GCP, Kubernetes, Knative, Crossplane, Terraform'],
+  ['layers', 'Architecture', 'Microservices, Event-driven Architecture, Temporal, API Design, gRPC, Data Pipelines'],
+  ['server', 'Platform & Operations', 'Kafka, Redis, Traefik, Backstage, DevOps'],
+  ['activity', 'Observability', 'Grafana Cloud, Performance Baselines, SLOs, Anomaly Alerts'],
+  ['shield', 'Security', 'SSO, Okta, SAML, OIDC, Scoped MCP Access'],
 ];
 
 const projects = [
@@ -140,126 +147,140 @@ const projects = [
   },
 ];
 
+const shots: Record<string, ImageMetadata> = { 'Regask Platform': shotRegask, 'PerxTech Platform': shotPerx, 'Sakani Platform': shotSakani, 'Komi': shotKomi, 'UOB Bank Platform': shotUob };
+
+const logos: Record<string, string> = { Regask: '/companies/regask.svg', PerxTech: '/companies/perxtech.png', Oivan: '/companies/oivan.png', 'Nucleus Studio': '/companies/komi.svg', ProductPine: '/companies/productpine.svg', 'Aleph Labs': '/companies/aleph.png' };
+const stackChips = ['Go', 'TypeScript', 'Ruby', 'Kubernetes', 'Knative', 'Temporal', 'Kafka', 'Redis', 'Azure', 'AWS', 'GCP', 'Terraform', 'Crossplane', 'Grafana', 'Okta', 'gRPC', 'Traefik', 'Backstage'];
+const yearOf = (company: string) => (experiences.find((j) => j.company === company)?.period.match(/\d{4}/) ?? [''])[0];
+
 const links = [
-  { label: 'Email', href: 'mailto:huynguyennbk@gmail.com' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/louishuyng/' },
-  { label: 'GitHub', href: 'https://github.com/louishuyng' },
-  { label: 'Claude Code in Action', href: 'https://verify.skilljar.com/c/jfnifed5mprf' },
-  { label: 'Certificates', href: 'https://www.credly.com/users/nguyen-louis/badges#credly' },
+  { icon: 'mail', label: 'Email', href: 'mailto:huynguyennbk@gmail.com' },
+  { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/louishuyng/' },
+  { icon: 'github', label: 'GitHub', href: 'https://github.com/louishuyng' },
+  { icon: 'award', label: 'Claude Code in Action', href: 'https://verify.skilljar.com/c/jfnifed5mprf' },
+  { icon: 'award', label: 'Certificates', href: 'https://www.credly.com/users/nguyen-louis/badges#credly' },
 ];
 ---
 
-<Layout title="Louis Huy Nguyen — Solution Architect / Senior Software Engineer">
+<Layout title="Louis Huy Nguyen — Solution Architect">
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="site-shell" id="top">
-    <header class="nav">
-      <a class="brand" href="#top" aria-label="Louis Huy Nguyen home"><span class="brand-mark" aria-hidden="true">l.</span> louis nguyen<span class="brand-dot">®</span></a>
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#projects">Work</a><a href="#experience">Experience</a><a href="#skills">Expertise</a>
-      </nav>
-      <div class="nav-actions">
-        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" hidden>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" /></svg>
-        </button>
-        <a class="nav-cta" href="#contact">Let’s talk <span aria-hidden="true">↗</span></a>
-      </div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <aside class="side side-l" aria-label="Status">
+    <div><small>Local time</small><span><time data-clock>--:--</time> ICT</span></div>
+    <div><small>Availability</small><span><i class="dot"></i> Open to opportunities</span></div>
+    <div class="side-bottom"><small>Based in</small><span>Ho Chi Minh City, Vietnam</span><small class="coords">10.7769° N · 106.7009° E</small></div>
+  </aside>
+
+  <aside class="side side-r" aria-label="Links">
+    <div><button id="theme-toggle" class="side-btn" type="button" aria-label="Toggle theme" aria-pressed="false" hidden>Theme <Icon name="sun" size={12} class="icon-sun" /><Icon name="moon" size={12} class="icon-moon" /></button></div>
+    <div><small>Follow me</small>
+      <a href="https://github.com/louishuyng" target="_blank" rel="noopener">GitHub <Icon name="arrow-up-right" size={11} /></a>
+      <a href="https://www.linkedin.com/in/louishuyng/" target="_blank" rel="noopener">LinkedIn <Icon name="arrow-up-right" size={11} /></a>
+      <a href="https://www.raycast.com/louishuyng" target="_blank" rel="noopener">Raycast <Icon name="arrow-up-right" size={11} /></a>
+      <a href="https://www.credly.com/users/nguyen-louis/badges#credly" target="_blank" rel="noopener">Credly <Icon name="arrow-up-right" size={11} /></a>
+    </div>
+  </aside>
+
+  <main id="main" class="col">
+    <header id="top" class="intro">
+      <p class="meta-row"><span><i class="dot"></i> Open to opportunities</span><span><time data-clock>--:--</time> ICT · Vietnam</span><button id="theme-toggle-m" class="side-btn" type="button" aria-label="Toggle theme">Theme <Icon name="sun" size={12} class="icon-sun" /><Icon name="moon" size={12} class="icon-moon" /></button></p>
+      <h1>Louis Huy Nguyen</h1>
+      <p class="bio">I’m a <strong>Solution Architect</strong> at <a class="co" href="https://regask.com" target="_blank" rel="noopener"><img src="/companies/regask.svg" alt="" height="11" />Regask</a>, with 8+ years building <strong>event-driven platforms</strong> on Kubernetes, Azure and AWS. My focus is backend architecture, observability and infrastructure-as-code: systems that stay fast and stay up.</p>
+      <p class="actions"><a href="mailto:huynguyennbk@gmail.com">Email <Icon name="arrow-up-right" size={11} /></a><a href="/cv.pdf" download="Louis_Nguyen_Software_Engineer.pdf">Résumé <Icon name="download" size={11} /></a><a href="/cover-letter.pdf" download="Louis_Huy_Nguyen_Cover_Letter.pdf">Cover letter <Icon name="download" size={11} /></a></p>
     </header>
 
-    <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="status-dot"></span> Available for the right opportunity</p>
-          <h1 id="hero-title">Complex systems.<br /><span>Clear thinking.</span></h1>
-          <p class="hero-intro">I’m Louis, a solution architect.<br />I turn ambitious ideas into systems that hold up.</p>
-          <p class="hero-text">I build scalable, event-driven systems on Kubernetes, Azure, and AWS, with a focus on backend architecture, observability, and infrastructure-as-code. I also contribute to Raycast and Neovim.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
-            <a class="text-link" href="/cv.pdf" download="Louis_Nguyen_Software_Engineer.pdf">Download résumé <span aria-hidden="true">↓</span></a>
-          </div>
-          <div class="hero-caption"><span>8+ years building in production</span><span>Backend · Cloud · Platform</span></div>
-        </div>
-        <div class="system-art" role="group" aria-label="Architecture diagram connecting APIs, cloud infrastructure, and data around a reliable system core">
-          <div class="art-heading"><span>THE ART OF MAKING IT WORK</span><span aria-hidden="true">✳</span></div>
-          <svg class="system-orbits" viewBox="0 0 540 500" fill="none" aria-hidden="true">
-            <g>
-            <ellipse cx="270" cy="250" rx="211" ry="110" transform="rotate(-35 270 250)" />
-            <ellipse cx="270" cy="250" rx="211" ry="110" transform="rotate(35 270 250)" />
-            <ellipse cx="270" cy="250" rx="110" ry="211" />
-            <path d="M270 39V461M54 250H486" stroke-dasharray="3 8" />
-            <circle cx="270" cy="39" r="5" class="orbit-point" />
-            <circle cx="85" cy="345" r="6" class="orbit-point" />
-            <circle cx="454" cy="157" r="6" class="orbit-point" />
-            </g>
-          </svg>
-          <div class="system-core"><span aria-hidden="true">✳</span><strong>Built to<br />hold up.</strong></div>
-          <div class="system-node node-api"><span class="node-icon" aria-hidden="true">↗</span><div><small>THE CONNECTION</small><strong>Thoughtful APIs</strong></div></div>
-          <div class="system-node node-cloud"><span class="node-icon" aria-hidden="true">⌘</span><div><small>THE FOUNDATION</small><strong>Resilient cloud</strong></div></div>
-          <div class="system-node node-data"><span class="node-icon" aria-hidden="true">≋</span><div><small>THE FLOW</small><strong>Data at scale</strong></div></div>
-          <div class="art-footer">
-            <span>Architecture is a practice.<br />Reliability is the outcome.</span>
-            <label class="motion-control"><input type="checkbox" /> Pause motion</label>
-          </div>
-        </div>
-      </section>
-
-      <div class="company-strip" aria-label="Companies I have contributed to">
-        <p>Good work.<br /><span>Great teams.</span></p>
-        <span>RegAsk</span><span>perx</span><span>OIVAN</span><span>KOMI</span><span>UOB</span>
+    <section id="projects" class="sec">
+      <h2>Projects <a href="#all-projects">View all</a></h2>
+      <div class="carousel" tabindex="0" aria-label="Project screenshots, scroll horizontally">
+        {projects.filter((p) => shots[p.name]).map((project) => (
+          <a class="slide" href={project.href} target="_blank" rel="noopener">
+            <Image src={shots[project.name]} width={1040} alt={`${project.name} screenshot`} loading="lazy" />
+            <span class="slide-tag">{project.company}</span>
+            <span class="slide-cap"><strong>{project.name}</strong>{project.summary.split('. ')[0]}.</span>
+          </a>
+        ))}
       </div>
+      <div class="dots" aria-hidden="true">{projects.filter((p) => shots[p.name]).map(() => <i></i>)}</div>
+    </section>
 
-      <section id="projects" class="section">
-        <div class="section-heading">
-          <div><p class="eyebrow">Selected work</p><h2>Behind the product.<br /><span>Beyond the obvious.</span></h2></div>
-          <p>Real platforms. Real constraints.<br />A few places where I’ve made a difference.</p>
-        </div>
-        <div class="project-grid">
-          {projects.map((project, index) => (
-            <a class={`project-card project-${index}`} href={project.href} target="_blank" rel="noopener">
-              <div class="project-art" aria-hidden="true">
-                <span class="project-domain">{['REGULATORY INTELLIGENCE', 'CUSTOMER ENGAGEMENT', 'NATIONAL HOUSING', 'CREATOR COMMERCE', 'BANKING & FINANCE', 'E-COMMERCE'][index]}</span>
-                <strong class="project-wordmark">{['RegAsk', 'perx', 'sakani', 'KOMI', 'UOB', 'ProductPine'][index]}</strong>
-                <span class="project-art-caption">{['Clarity at scale.', 'Every interaction counts.', 'A place to call home.', 'Creators. Connected.', 'Trust, by design.', 'Commerce, in sync.'][index]}</span>
-                <span class="project-open">↗</span>
-              </div>
-              <div class="project-content">
-                <div class="project-title"><h3>{project.name}</h3><span>{project.company}</span></div>
-                <p>{project.summary}</p>
-                <div class="tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
+    <section id="experience" class="sec">
+      <h2>Experience</h2>
+      <ol class="rows">
+        {experiences.map((job) => (
+          <li>
+            <details>
+              <summary><span class="r-co">{job.company}</span><span class="r-role">{job.role}</span><span class="r-lead" aria-hidden="true"></span><span class="r-year">{job.period.includes('Present') ? 'Present' : job.period.slice(-4)}</span></summary>
+              <div class="r-body"><div><p class="r-stack">{job.stack}</p><ul>{job.bullets.map((b) => <li>{b}</li>)}</ul></div></div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </section>
 
-      <section class="impact-band" aria-label="Selected engineering outcomes">
-        <p>Less friction.<br /><strong>More impact.</strong></p>
-        <div><strong>10×</strong><span>Redis write throughput<br />10K → 100K requests / sec</span></div>
-        <div><strong>30%</strong><span>Lower infrastructure cost<br />Kubernetes / Knative at Regask</span></div>
-        <div><strong>20×</strong><span>Faster ETL processing<br />5 hours → 15 minutes / GB</span></div>
-      </section>
+    <section class="sec">
+      <h2>Highlights</h2>
+      <ol class="hl">
+        <li><span>10×</span><p>Write throughput, 10K to 100K requests per second, with Redis write-behind caching at Regask.</p></li>
+        <li><span>30%</span><p>Lower infrastructure cost after moving services to Knative on Kubernetes.</p></li>
+        <li><span>20×</span><p>Faster banking-data ETL at PerxTech, 5 hours down to 15 minutes per GB.</p></li>
+        <li><span>3.5×</span><p>Less memory per service after rewriting Node.js services in Go, 1.5 GB to 400 MB.</p></li>
+      </ol>
+    </section>
 
-      <section id="experience" class="section experience-section">
-        <div class="section-heading"><div><p class="eyebrow">The journey</p><h2>Built through<br /><span>experience.</span></h2></div><p>From shipping full-stack products<br />to shaping the systems underneath.</p></div>
-        <div class="timeline">
-          {experiences.map((job) => (
-            <article class="job">
-              <div class="job-meta"><p>{job.period}</p><strong>{job.company}</strong></div>
-              <div class="job-body"><h3>{job.role}</h3><p class="stack">{job.stack}</p><ul>{job.bullets.map((bullet) => <li>{bullet}</li>)}</ul></div>
-            </article>
-          ))}
-        </div>
-      </section>
+    <section id="expertise" class="sec two">
+      <div><h2>Now</h2>
+        <ul class="now-list">
+          <li><Icon name="layers" size={13} /> Architecting the Regask platform for the AI era: durable agent workflows on Temporal, scoped access to internal systems through MCP, and the cloud foundation they run on.</li>
+          <li><Icon name="user" size={13} /> Leading the engineering team through that shift: design reviews, technical solution documents, and a shared service catalogue so decisions outlive the people who made them.</li>
+          <li><Icon name="sparkles" size={13} /> Working AI into how we build, not just what we build: AI-assisted delivery with clear guardrails, measured against real outcomes.</li>
+        </ul>
+        <p class="now-sub">Also contributing to Raycast and Neovim.</p></div>
+      <div><h2>Stack</h2><p class="stack-row">{stackChips.map((c) => <span>{c}</span>)}</p></div>
+    </section>
 
-      <section id="skills" class="section expertise-section">
-        <div class="section-heading"><div><p class="eyebrow">My toolkit</p><h2>Deep in the backend.<br /><span>Fluent across the stack.</span></h2></div><a class="text-link" href="https://www.credly.com/users/nguyen-louis/badges#credly" target="_blank" rel="noopener">View certifications ↗</a></div>
-        <div class="skill-grid">{skills.map(([title, value]) => <div class="skill"><h3>{title}</h3><p>{value}</p></div>)}</div>
-      </section>
+    <section id="all-projects" class="sec">
+      <h2>All projects</h2>
+      <ol class="rows">
+        {projects.map((project) => (
+          <li><a class="row-link" href={project.href} target="_blank" rel="noopener"><span class="r-co">{project.name}</span><span class="r-role">{project.tags.slice(0, 3).join(' · ')}</span><span class="r-lead" aria-hidden="true"></span><span class="r-year">{yearOf(project.company)}</span></a></li>
+        ))}
+      </ol>
+    </section>
 
-      <section id="contact" class="contact">
-        <div><p class="eyebrow"><span class="status-dot"></span> Open to what’s next</p><h2>Good things start<br />with a <span>conversation.</span></h2><p>Have a challenging system, an ambitious team, or an interesting role?<br />I’d love to hear about it.</p><a class="button primary" href="mailto:huynguyennbk@gmail.com">Let’s build something <span aria-hidden="true">↗</span></a></div>
-        <span class="contact-art" aria-hidden="true">✳</span>
-      </section>
-    </main>
-    <footer><a class="brand" href="#top">louis nguyen<span class="brand-dot">®</span></a><div class="footer-links">{links.map(link => <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{link.label} ↗</a>)}<a href="/cover-letter.pdf" download="Louis_Huy_Nguyen_Cover_Letter.pdf">Cover letter ↓</a></div><span>© {new Date().getFullYear()}</span></footer>
-  </div>
+    <div class="dotgrid" aria-hidden="true"></div>
+
+    <footer id="contact" class="foot">
+      <div><small>Contact</small><p>Have a system that needs to hold up? Reach out by email or LinkedIn.</p><a class="mail" href="mailto:huynguyennbk@gmail.com">huynguyennbk@gmail.com</a></div>
+      <div><small>Elsewhere</small>{links.map((l) => <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label} <Icon name="arrow-up-right" size={11} /></a>)}</div>
+      <p class="copy">© {new Date().getFullYear()} Louis Huy Nguyen</p>
+    </footer>
+  </main>
+
+  <nav class="dock" aria-label="Sections">
+    <a href="#top">Home</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#expertise">Stack</a><a href="#contact">Contact</a>
+  </nav>
+
+  <script>
+    const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' });
+    const clocks = document.querySelectorAll('[data-clock]');
+    const tick = () => clocks.forEach((c) => (c.textContent = fmt.format(new Date())));
+    tick(); setInterval(tick, 15000);
+
+    // Mobile theme button mirrors the sidebar one (Layout.astro owns the toggle logic).
+    document.getElementById('theme-toggle-m')?.addEventListener('click', () => document.getElementById('theme-toggle')?.click());
+
+    const track = document.querySelector<HTMLElement>('.carousel');
+    const dots = [...document.querySelectorAll<HTMLElement>('.dots i')];
+    if (track && dots.length) {
+      const slides = [...track.children] as HTMLElement[];
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.intersectionRatio > 0.6) dots.forEach((d, i) => d.classList.toggle('on', slides[i] === e.target)); }), { root: track, threshold: [0.6] });
+      slides.forEach((s) => io.observe(s));
+    }
+
+    const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.dock a')];
+    const targets = navLinks.map((a) => document.querySelector<HTMLElement>(a.hash)).filter(Boolean) as HTMLElement[];
+    const spy = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) navLinks.forEach((a) => a.classList.toggle('active', a.hash === `#${e.target.id}`)); }), { rootMargin: '-35% 0px -55%' });
+    targets.forEach((t) => spy.observe(t));
+  </script>
 </Layout>
