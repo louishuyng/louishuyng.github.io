@@ -2,11 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import { Image } from 'astro:assets';
-import shotRegask from '../assets/projects/regask.png';
-import shotPerx from '../assets/projects/perxtech.png';
-import shotSakani from '../assets/projects/sakani.png';
-import shotKomi from '../assets/projects/komi.png';
-import shotUob from '../assets/projects/uob.jpg';
+import shotRegask from '../assets/projects/regask-site.png';
+import shotPerx from '../assets/projects/perxtech-site.png';
+import shotSakani from '../assets/projects/sakani-site.png';
+import shotKomi from '../assets/projects/komi-site.png';
+import shotUob from '../assets/projects/uob-site.png';
+import shotPine from '../assets/projects/productpine-site.png';
 import '../styles/global.css';
 
 const experiences = [
@@ -147,7 +148,7 @@ const projects = [
   },
 ];
 
-const shots: Record<string, ImageMetadata> = { 'Regask Platform': shotRegask, 'PerxTech Platform': shotPerx, 'Sakani Platform': shotSakani, 'Komi': shotKomi, 'UOB Bank Platform': shotUob };
+const shots: Record<string, ImageMetadata> = { 'Regask Platform': shotRegask, 'PerxTech Platform': shotPerx, 'Sakani Platform': shotSakani, 'Komi': shotKomi, 'UOB Bank Platform': shotUob, 'ProductPine': shotPine };
 
 const logos: Record<string, string> = { Regask: '/companies/regask.svg', PerxTech: '/companies/perxtech.png', Oivan: '/companies/oivan.png', 'Nucleus Studio': '/companies/komi.svg', ProductPine: '/companies/productpine.svg', 'Aleph Labs': '/companies/aleph.png' };
 const stackChips = ['Go', 'TypeScript', 'Ruby', 'Kubernetes', 'Knative', 'Temporal', 'Kafka', 'Redis', 'Azure', 'AWS', 'GCP', 'Terraform', 'Crossplane', 'Grafana', 'Okta', 'gRPC', 'Traefik', 'Backstage'];
@@ -165,6 +166,7 @@ const links = [
 <Layout title="Louis Huy Nguyen — Solution Architect">
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="glow" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"></div>
 
   <aside class="side side-l" aria-label="Status">
     <div><small>Local time</small><span><time data-clock>--:--</time> ICT</span></div>
@@ -192,16 +194,16 @@ const links = [
 
     <section id="projects" class="sec">
       <h2>Projects <a href="#all-projects">View all</a></h2>
-      <div class="carousel" tabindex="0" aria-label="Project screenshots, scroll horizontally">
-        {projects.filter((p) => shots[p.name]).map((project) => (
-          <a class="slide" href={project.href} target="_blank" rel="noopener">
-            <Image src={shots[project.name]} width={1040} alt={`${project.name} screenshot`} loading="lazy" />
+      <div class="carousel" aria-label="Project screenshots. Click to see the next one.">
+        {projects.filter((p) => shots[p.name]).map((project, i) => (
+          <figure class="slide">
+            <Image src={shots[project.name]} width={1040} alt={`${project.name} website`} loading={i === 0 ? 'eager' : 'lazy'} draggable="false" />
             <span class="slide-tag">{project.company}</span>
-            <span class="slide-cap"><strong>{project.name}</strong>{project.summary.split('. ')[0]}.</span>
-          </a>
+            <figcaption class="slide-cap"><strong>{project.name}</strong><span>{project.summary.split('. ')[0]}.</span><a href={project.href} target="_blank" rel="noopener">Visit <Icon name="arrow-up-right" size={11} /></a></figcaption>
+          </figure>
         ))}
       </div>
-      <div class="dots" aria-hidden="true">{projects.filter((p) => shots[p.name]).map(() => <i></i>)}</div>
+      <div class="dots" role="tablist" aria-label="Choose project">{projects.filter((p) => shots[p.name]).map((p, i) => <button type="button" role="tab" aria-label={p.name} aria-selected={i === 0 ? "true" : "false"}></button>)}</div>
     </section>
 
     <section id="experience" class="sec">
@@ -248,7 +250,7 @@ const links = [
       </ol>
     </section>
 
-    <div class="dotgrid" aria-hidden="true"></div>
+    <canvas class="dotgrid" aria-hidden="true"></canvas>
 
     <footer id="contact" class="foot">
       <div><small>Contact</small><p>Have a system that needs to hold up? Reach out by email or LinkedIn.</p><a class="mail" href="mailto:huynguyennbk@gmail.com">huynguyennbk@gmail.com</a></div>
@@ -270,12 +272,55 @@ const links = [
     // Mobile theme button mirrors the sidebar one (Layout.astro owns the toggle logic).
     document.getElementById('theme-toggle-m')?.addEventListener('click', () => document.getElementById('theme-toggle')?.click());
 
+    // Carousel: click a slide (or a dot) to advance; no drag.
     const track = document.querySelector<HTMLElement>('.carousel');
-    const dots = [...document.querySelectorAll<HTMLElement>('.dots i')];
-    if (track && dots.length) {
+    const dots = [...document.querySelectorAll<HTMLButtonElement>('.dots button')];
+    if (track) {
       const slides = [...track.children] as HTMLElement[];
-      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.intersectionRatio > 0.6) dots.forEach((d, i) => d.classList.toggle('on', slides[i] === e.target)); }), { root: track, threshold: [0.6] });
-      slides.forEach((s) => io.observe(s));
+      let current = 0;
+      const go = (i: number) => {
+        current = (i + slides.length) % slides.length;
+        track.scrollTo({ left: slides[current].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+        dots.forEach((d, j) => d.setAttribute('aria-selected', String(j === current)));
+      };
+      slides.forEach((sl, i) => sl.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) return; go(i === current ? current + 1 : i); }));
+      dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+      track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') go(current + 1); if (e.key === 'ArrowLeft') go(current - 1); });
+    }
+
+    // Custom cursor + reactive dot grid, fine pointers only.
+    const fine = matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cur = document.querySelector<HTMLElement>('.cursor');
+    const grid = document.querySelector<HTMLCanvasElement>('.dotgrid');
+    let mx = -100, my = -100;
+    if (fine && cur) {
+      document.documentElement.classList.add('has-cursor');
+      let cx = mx, cy = my;
+      window.addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; cur.classList.add('show'); });
+      document.addEventListener('pointerleave', () => cur.classList.remove('show'));
+      document.addEventListener('pointerover', (e) => cur.classList.toggle('big', !!(e.target as HTMLElement).closest('a, button, summary, .slide')));
+      const loop = () => { cx += (mx - cx) * .25; cy += (my - cy) * .25; cur.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`; requestAnimationFrame(loop); };
+      loop();
+    }
+    if (grid) {
+      const ctx = grid.getContext('2d')!;
+      const draw = () => {
+        const r = grid.getBoundingClientRect(), dpr = devicePixelRatio || 1;
+        if (grid.width !== Math.round(r.width * dpr)) { grid.width = Math.round(r.width * dpr); grid.height = Math.round(r.height * dpr); }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
+        const cs = getComputedStyle(document.documentElement);
+        const base = cs.getPropertyValue('--line-dot').trim(), hot = cs.getPropertyValue('--accent-2').trim();
+        const gap = 14, lx = mx - r.left, ly = my - r.top;
+        for (let y = gap / 2; y < r.height; y += gap) for (let x = gap / 2; x < r.width; x += gap) {
+          const d = Math.hypot(x - lx, y - ly), t = fine ? Math.max(0, 1 - d / 110) : 0;
+          ctx.fillStyle = t > .08 ? hot : base; ctx.globalAlpha = t > .08 ? .35 + t * .65 : 1;
+          ctx.beginPath(); ctx.arc(x, y, 1.2 + t * 2.2, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        if (fine) requestAnimationFrame(draw);
+      };
+      draw();
+      new ResizeObserver(draw).observe(grid);
     }
 
     const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.dock a')];
