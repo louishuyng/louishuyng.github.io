@@ -165,103 +165,132 @@ const links = [
 
 <Layout title="Louis Huy Nguyen — Solution Architect">
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="glow" aria-hidden="true"></div>
-  <div class="cursor" aria-hidden="true"></div>
 
-  <aside class="side side-l" aria-label="Status">
-    <div><small>Local time</small><span><time data-clock>--:--</time> ICT</span></div>
-    <div><small>Availability</small><span><i class="dot"></i> Open to opportunities</span></div>
-    <div class="side-bottom"><small>Based in</small><span>Ho Chi Minh City, Vietnam</span><small class="coords">10.7769° N · 106.7009° E</small></div>
-  </aside>
-
-  <aside class="side side-r" aria-label="Links">
-    <div><button id="theme-toggle" class="side-btn" type="button" aria-label="Toggle theme" aria-pressed="false" hidden>Theme <Icon name="sun" size={12} class="icon-sun" /><Icon name="moon" size={12} class="icon-moon" /></button></div>
-    <div><small>Follow me</small>
-      <a href="https://github.com/louishuyng" target="_blank" rel="noopener">GitHub <Icon name="arrow-up-right" size={11} /></a>
-      <a href="https://www.linkedin.com/in/louishuyng/" target="_blank" rel="noopener">LinkedIn <Icon name="arrow-up-right" size={11} /></a>
-      <a href="https://www.raycast.com/louishuyng" target="_blank" rel="noopener">Raycast <Icon name="arrow-up-right" size={11} /></a>
-      <a href="https://www.credly.com/users/nguyen-louis/badges#credly" target="_blank" rel="noopener">Credly <Icon name="arrow-up-right" size={11} /></a>
+  <header class="mast">
+    <div class="banner">
+      <div class="container banner-in">
+        <span>Open to opportunities</span>
+        <span><time data-clock>--:--</time> ICT, Ho Chi Minh City</span>
+      </div>
     </div>
-  </aside>
+    <nav class="bar" aria-label="Sections">
+      <div class="container bar-in">
+        <a class="wordmark" href="#top">Louis Huy Nguyen</a>
+        <div class="bar-links">
+          <a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#expertise">Stack</a><a href="#contact">Contact</a>
+        </div>
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle theme" aria-pressed="false" hidden><Icon name="sun" size={20} class="icon-sun" /><Icon name="moon" size={20} class="icon-moon" /></button>
+        <a class="btn bar-cta" href="mailto:huynguyennbk@gmail.com">Email</a>
+      </div>
+    </nav>
+  </header>
 
-  <main id="main" class="col">
-    <header id="top" class="intro">
-      <p class="meta-row"><span><i class="dot"></i> Open to opportunities</span><span><time data-clock>--:--</time> ICT · Vietnam</span><button id="theme-toggle-m" class="side-btn" type="button" aria-label="Toggle theme">Theme <Icon name="sun" size={12} class="icon-sun" /><Icon name="moon" size={12} class="icon-moon" /></button></p>
-      <h1>Louis Huy Nguyen</h1>
-      <p class="bio">I’m a <strong>Solution Architect</strong> at <a class="co" href="https://regask.com" target="_blank" rel="noopener"><img src="/companies/regask.svg" alt="" height="11" />Regask</a>. I help teams <strong>move fast on a robust architecture</strong>: a foundation strong enough that people build on it instead of around it. I spend as much time with stakeholders as with code, learning the <strong>domain</strong> well enough to design the model around it.</p>
-      <p class="actions"><a href="mailto:huynguyennbk@gmail.com">Email <Icon name="arrow-up-right" size={11} /></a><a href="/cv.pdf" download="Louis_Nguyen_Software_Engineer.pdf">Résumé <Icon name="download" size={11} /></a><a href="/cover-letter.pdf" download="Louis_Huy_Nguyen_Cover_Letter.pdf">Cover letter <Icon name="download" size={11} /></a></p>
-    </header>
+  <main id="main">
+    <section id="top" class="hero">
+      <div class="container">
+        <h1>Louis Huy Nguyen</h1>
+        <div class="hero-row">
+          <p class="lead">I’m a Solution Architect at <a href="https://regask.com" target="_blank" rel="noopener">Regask</a>.</p>
+          <p class="actions"><a class="btn btn--ink" href="mailto:huynguyennbk@gmail.com">Email</a><a class="btn" href="/cv.pdf" download="Louis_Nguyen_Software_Engineer.pdf">Résumé</a><a class="btn" href="/cover-letter.pdf" download="Louis_Huy_Nguyen_Cover_Letter.pdf">Cover letter</a></p>
+        </div>
+        <h2 id="all-projects" class="visually-hidden">All projects</h2>
+        <ol class="index">
+          {projects.map((project) => (
+            <li><a class="index-row" href={project.href} target="_blank" rel="noopener"><span class="index-name">{project.name}</span><span class="index-tags">{project.tags.slice(0, 3).join(', ')}</span><span class="index-co">{project.company}</span><span class="index-year num">{yearOf(project.company)}</span></a></li>
+          ))}
+        </ol>
+      </div>
+    </section>
 
     <section id="projects" class="sec">
-      <h2>Projects <a href="#all-projects">View all</a></h2>
-      <div class="carousel" aria-label="Project screenshots. Click to see the next one.">
+      <div class="container head-split">
+        <h2>Projects</h2>
+        <a href="#all-projects">View all</a>
+      </div>
+      <div class="carousel" tabindex="0" aria-label="Project screenshots. Click to see the next one.">
         {projects.filter((p) => shots[p.name]).map((project, i) => (
           <figure class="slide">
-            <Image src={shots[project.name]} width={1040} alt={`${project.name} website`} loading={i === 0 ? 'eager' : 'lazy'} draggable="false" />
-            <span class="slide-tag">{project.company}</span>
-            <figcaption class="slide-cap"><strong>{project.name}</strong><span>{project.summary.split('. ')[0]}.</span><a href={project.href} target="_blank" rel="noopener">Visit <Icon name="arrow-up-right" size={11} /></a></figcaption>
+            <div class="shot" data-slot={`project-${i + 1}`} data-kind="product" data-alt={`${project.name} website`}>
+              <Image src={shots[project.name]} widths={[720, 1440]} sizes="(min-width: 60rem) 50rem, 84vw" alt={`${project.name} website`} loading={i === 0 ? 'eager' : 'lazy'} draggable="false" />
+            </div>
+            <figcaption class="slide-cap">
+              <h3>{project.name}</h3>
+              <p>{project.summary.split('. ')[0]}.</p>
+              <p class="slide-meta"><span>{project.company}</span><a href={project.href} target="_blank" rel="noopener" aria-label={`Visit ${project.name}`}>Visit</a></p>
+            </figcaption>
           </figure>
         ))}
       </div>
-      <div class="dots" role="tablist" aria-label="Choose project">{projects.filter((p) => shots[p.name]).map((p, i) => <button type="button" role="tab" aria-label={p.name} aria-selected={i === 0 ? "true" : "false"}></button>)}</div>
+      <div class="container">
+        <div class="dots" role="tablist" aria-label="Choose project">{projects.filter((p) => shots[p.name]).map((p, i) => <button type="button" role="tab" aria-label={p.name} aria-selected={i === 0 ? "true" : "false"}>{i + 1}</button>)}</div>
+      </div>
+    </section>
+
+    <section class="band-ink">
+      <div class="container">
+        <p class="statement">I help teams move fast on a sound architecture: a foundation strong enough that people build on it instead of around it.</p>
+        <p class="lead">I spend as much time with stakeholders as with code, learning the domain well enough to design the model around it.</p>
+      </div>
     </section>
 
     <section id="experience" class="sec">
-      <h2>Experience</h2>
-      <ol class="rows">
-        {experiences.map((job) => (
-          <li>
-            <details>
-              <summary><span class="r-co">{job.company}</span><span class="r-role">{job.role}</span><span class="r-lead" aria-hidden="true"></span><span class="r-year">{job.period.includes('Present') ? 'Present' : job.period.slice(-4)}</span></summary>
-              <div class="r-body"><div><p class="r-stack">{job.stack}</p><ul>{job.bullets.map((b) => <li>{b}</li>)}</ul></div></div>
-            </details>
-          </li>
-        ))}
-      </ol>
+      <div class="container side">
+        <h2>Experience</h2>
+        <ol class="rows">
+          {experiences.map((job) => (
+            <li>
+              <details>
+                <summary><span class="r-co">{job.company}</span><span class="r-role">{job.role}</span><span class="r-year num">{job.period.includes('Present') ? 'Present' : job.period.slice(-4)}</span></summary>
+                <div class="r-body"><p class="r-stack">{job.stack.split(' · ').join(', ')}</p><ul>{job.bullets.map((b) => <li>{b}</li>)}</ul></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
 
-    <section class="sec">
-      <h2>Highlights</h2>
-      <ol class="hl">
-        <li><span>10×</span><p>Write throughput, 10K to 100K requests per second, with Redis write-behind caching at Regask.</p></li>
-        <li><span>30%</span><p>Lower infrastructure cost after moving services to Knative on Kubernetes.</p></li>
-        <li><span>20×</span><p>Faster banking-data ETL at PerxTech, 5 hours down to 15 minutes per GB.</p></li>
-        <li><span>3.5×</span><p>Less memory per service after rewriting Node.js services in Go, 1.5 GB to 400 MB.</p></li>
-      </ol>
+    <section class="sec sec-l">
+      <div class="container">
+        <h2>Highlights</h2>
+        <ol class="hl">
+          <li><span class="num">10×</span><p>Write throughput, 10K to 100K requests per second, with Redis write-behind caching at Regask.</p></li>
+          <li><span class="num">30%</span><p>Lower infrastructure cost after moving services to Knative on Kubernetes.</p></li>
+          <li><span class="num">20×</span><p>Faster banking-data ETL at PerxTech, 5 hours down to 15 minutes per GB.</p></li>
+          <li><span class="num">3.5×</span><p>Less memory per service after rewriting Node.js services in Go, 1.5 GB to 400 MB.</p></li>
+        </ol>
+      </div>
     </section>
 
-    <section id="expertise" class="sec two">
-      <div><h2>Now</h2>
+    <section id="expertise" class="sec">
+      <div class="container">
+        <h2>Now</h2>
         <ul class="now-list">
-          <li><Icon name="layers" size={13} /> Architecting the Regask platform for the AI era: durable agent workflows on Temporal, scoped access to internal systems through MCP, and the cloud foundation they run on.</li>
-          <li><Icon name="user" size={13} /> Leading the engineering team through that shift: design reviews, technical solution documents, and a shared service catalogue so decisions outlive the people who made them.</li>
-          <li><Icon name="sparkles" size={13} /> Working AI into how we build, not just what we build: AI-assisted delivery with clear guardrails, measured against real outcomes.</li>
+          <li><Icon name="layers" size={24} /><p>Architecting the Regask platform for the AI era: durable agent workflows on Temporal, scoped access to internal systems through MCP, and the cloud foundation they run on.</p></li>
+          <li><Icon name="user" size={24} /><p>Leading the engineering team through that shift: design reviews, technical solution documents, and a shared service catalogue so decisions outlive the people who made them.</p></li>
+          <li><Icon name="sparkles" size={24} /><p>Working AI into how we build, not just what we build: AI-assisted delivery with clear guardrails, measured against real outcomes.</p></li>
         </ul>
-        <p class="now-sub">Also contributing to Raycast and Neovim.</p></div>
-      <div><h2>Stack</h2><p class="stack-row">{stackChips.map((c) => <span>{c}</span>)}</p></div>
+        <p class="now-sub">Also contributing to Raycast and Neovim.</p>
+        <h2 class="stack-head">Stack</h2>
+        <ul class="stack">{stackChips.map((c) => <li>{c}</li>)}</ul>
+      </div>
     </section>
 
-    <section id="all-projects" class="sec">
-      <h2>All projects</h2>
-      <ol class="rows">
-        {projects.map((project) => (
-          <li><a class="row-link" href={project.href} target="_blank" rel="noopener"><span class="r-co">{project.name}</span><span class="r-role">{project.tags.slice(0, 3).join(' · ')}</span><span class="r-lead" aria-hidden="true"></span><span class="r-year">{yearOf(project.company)}</span></a></li>
-        ))}
-      </ol>
+    <section id="contact" class="close">
+      <div class="container">
+        <p class="statement">Have a system that needs to hold up?</p>
+        <p class="lead">Reach out by email or <a href="https://www.linkedin.com/in/louishuyng/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+        <a class="mail" href="mailto:huynguyennbk@gmail.com">huynguyennbk@gmail.com</a>
+      </div>
     </section>
-
-    <canvas class="dotgrid" aria-hidden="true"></canvas>
-
-    <footer id="contact" class="foot">
-      <div><small>Contact</small><p>Have a system that needs to hold up? Reach out by email or LinkedIn.</p><a class="mail" href="mailto:huynguyennbk@gmail.com">huynguyennbk@gmail.com</a></div>
-      <div><small>Elsewhere</small>{links.map((l) => <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label} <Icon name="arrow-up-right" size={11} /></a>)}</div>
-      <p class="copy">© {new Date().getFullYear()} Louis Huy Nguyen</p>
-    </footer>
   </main>
 
-  <nav class="dock" aria-label="Sections">
-    <a href="#top">Home</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#expertise">Stack</a><a href="#contact">Contact</a>
-  </nav>
+  <footer class="foot">
+    <div class="container foot-in">
+      <p>Based in Ho Chi Minh City, Vietnam, 10.7769° N, 106.7009° E.</p>
+      <p class="foot-links">{links.map((l) => <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label}</a>)}<a href="https://www.raycast.com/louishuyng" target="_blank" rel="noopener">Raycast</a></p>
+      <p class="copy">© {new Date().getFullYear()} Louis Huy Nguyen <button id="theme-toggle-m" class="text-btn" type="button">Switch theme</button></p>
+    </div>
+  </footer>
 
   <script>
     const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' });
@@ -269,63 +298,37 @@ const links = [
     const tick = () => clocks.forEach((c) => (c.textContent = fmt.format(new Date())));
     tick(); setInterval(tick, 15000);
 
-    // Mobile theme button mirrors the sidebar one (Layout.astro owns the toggle logic).
+    // Footer theme button mirrors the nav one (Layout.astro owns the toggle logic).
     document.getElementById('theme-toggle-m')?.addEventListener('click', () => document.getElementById('theme-toggle')?.click());
 
-    // Carousel: click a slide (or a dot) to advance; no drag.
+    // Carousel: click a slide (or a number) to advance; it also scrolls natively.
     const track = document.querySelector<HTMLElement>('.carousel');
     const dots = [...document.querySelectorAll<HTMLButtonElement>('.dots button')];
     if (track) {
       const slides = [...track.children] as HTMLElement[];
+      const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
       let current = 0;
+      const mark = (i: number) => { current = i; dots.forEach((d, j) => d.setAttribute('aria-selected', String(j === i))); };
       const go = (i: number) => {
-        current = (i + slides.length) % slides.length;
-        track.scrollTo({ left: slides[current].offsetLeft - track.offsetLeft, behavior: 'smooth' });
-        dots.forEach((d, j) => d.setAttribute('aria-selected', String(j === current)));
+        mark((i + slides.length) % slides.length);
+        track.scrollTo({ left: slides[current].offsetLeft - slides[0].offsetLeft, behavior });
       };
       slides.forEach((sl, i) => sl.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) return; go(i === current ? current + 1 : i); }));
       dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
-      track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') go(current + 1); if (e.key === 'ArrowLeft') go(current - 1); });
+      track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); go(current + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); } });
+      // A slide that fills most of the rail is the current one, so the numbers follow a swipe.
+      const seen = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) mark(slides.indexOf(e.target as HTMLElement)); }), { root: track, threshold: 0.9 });
+      slides.forEach((sl) => seen.observe(sl));
     }
 
-    // Custom cursor + reactive dot grid, fine pointers only.
-    const fine = matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const cur = document.querySelector<HTMLElement>('.cursor');
-    const grid = document.querySelector<HTMLCanvasElement>('.dotgrid');
-    let mx = -100, my = -100;
-    if (fine && cur) {
-      document.documentElement.classList.add('has-cursor');
-      let cx = mx, cy = my;
-      window.addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; cur.classList.add('show'); });
-      document.addEventListener('pointerleave', () => cur.classList.remove('show'));
-      document.addEventListener('pointerover', (e) => cur.classList.toggle('big', !!(e.target as HTMLElement).closest('a, button, summary, .slide')));
-      const loop = () => { cx += (mx - cx) * .25; cy += (my - cy) * .25; cur.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`; requestAnimationFrame(loop); };
-      loop();
-    }
-    if (grid) {
-      const ctx = grid.getContext('2d')!;
-      const draw = () => {
-        const r = grid.getBoundingClientRect(), dpr = devicePixelRatio || 1;
-        if (grid.width !== Math.round(r.width * dpr)) { grid.width = Math.round(r.width * dpr); grid.height = Math.round(r.height * dpr); }
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
-        const cs = getComputedStyle(document.documentElement);
-        const base = cs.getPropertyValue('--line-dot').trim(), hot = cs.getPropertyValue('--accent-2').trim();
-        const gap = 14, lx = mx - r.left, ly = my - r.top;
-        for (let y = gap / 2; y < r.height; y += gap) for (let x = gap / 2; x < r.width; x += gap) {
-          const d = Math.hypot(x - lx, y - ly), t = fine ? Math.max(0, 1 - d / 110) : 0;
-          ctx.fillStyle = t > .08 ? hot : base; ctx.globalAlpha = t > .08 ? .35 + t * .65 : 1;
-          ctx.beginPath(); ctx.arc(x, y, 1.2 + t * 2.2, 0, Math.PI * 2); ctx.fill();
-        }
-        ctx.globalAlpha = 1;
-        if (fine) requestAnimationFrame(draw);
-      };
-      draw();
-      new ResizeObserver(draw).observe(grid);
-    }
-
-    const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.dock a')];
-    const targets = navLinks.map((a) => document.querySelector<HTMLElement>(a.hash)).filter(Boolean) as HTMLElement[];
+    const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.bar-links a')];
+    const targets = [document.getElementById('top'), ...navLinks.map((a) => document.querySelector<HTMLElement>(a.hash))].filter(Boolean) as HTMLElement[];
     const spy = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) navLinks.forEach((a) => a.classList.toggle('active', a.hash === `#${e.target.id}`)); }), { rootMargin: '-35% 0px -55%' });
     targets.forEach((t) => spy.observe(t));
+
+    // The bar retracts under the banner on the way down and returns on the way up.
+    const mast = document.querySelector<HTMLElement>('.mast');
+    let lastY = scrollY;
+    addEventListener('scroll', () => { mast?.classList.toggle('is-away', scrollY > lastY && scrollY > 200); lastY = scrollY; }, { passive: true });
   </script>
 </Layout>

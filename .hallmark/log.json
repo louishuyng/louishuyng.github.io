@@ -1,0 +1,33 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page",
+  "shape": "Conversational FAQ",
+  "theme": "brutal",
+  "axes": "light/grotesk-heavy/chromatic-yellow",
+  "hero": "Index",
+  "nav": "banner over a retracting bar",
+  "footer": "colophon block",
+  "imagery": "screenshots 6 (the live sites)",
+  "photos": [],
+  "entry": "none",
+  "fingerprint": "draw aea077",
+  "sections": [
+   "Index hero",
+   "Rail",
+   "Statement band",
+   "Rows with disclosures",
+   "Bento figures",
+   "Rows and cells",
+   "Close band",
+   "Colophon"
+  ],
+  "signature": "his name set to the full measure over the six platforms as a boxed index",
+  "waived": [
+   "72"
+  ],
+  "prompt": "personal portfolio of a solution architect: recruiters and engineering leads read his work history, projects and measured results, then email him or download the resume",
+  "date": "2026-11-16"
+ }
+]
